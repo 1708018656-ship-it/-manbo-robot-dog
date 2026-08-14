@@ -3,6 +3,7 @@
 #include "CommTask.h"
 #include "SafetyTask.h"
 #include "ActionTask.h"
+#include "AudioTask.h"
 
 #define APP_TASK_COUNT 7U
 
@@ -92,8 +93,7 @@ static void AppTask_Action(uint32_t now_ms)
 
 static void AppTask_Audio(uint32_t now_ms)
 {
-    (void)now_ms;
-    /* TODO(phase-5): 迁移 SYN6288 帧队列和非阻塞 UART 发送。 */
+    AudioTask_Run(now_ms);
 }
 
 static void AppTask_Ui(uint32_t now_ms)

@@ -1,6 +1,7 @@
 #include "ActionTask.h"
 #include "Servo.h"
 #include "Timebase.h"
+#include "AudioTask.h"
 
 typedef struct
 {
@@ -158,6 +159,47 @@ static const PoseStep g_sleep_side_steps[] =
     { { 90U,165U,165U, 15U}, 1000U }
 };
 
+static const PoseStep g_declare_love_steps[] =
+{
+    { {135U,135U, 45U, 45U}, 250U },
+    { { 90U, 90U, 90U, 90U}, 200U },
+    { {135U, 90U, 45U, 90U}, 350U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
+static const PoseStep g_elements_steps[] =
+{
+    { {135U, 90U, 45U, 90U}, 500U },
+    { { 90U,135U, 90U, 45U}, 500U },
+    { { 45U, 90U,135U, 90U}, 500U },
+    { { 90U, 45U, 90U,135U}, 500U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
+static const PoseStep g_training_steps[] =
+{
+    { {135U, 90U, 90U, 90U}, 500U },
+    { {135U, 90U, 45U, 90U}, 500U },
+    { {135U, 45U, 45U,135U}, 500U },
+    { { 90U, 90U, 90U, 90U}, 250U },
+    { { 45U,135U,135U, 45U}, 250U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
+static const PoseStep g_world_light_steps[] =
+{
+    { { 90U,135U, 90U, 45U}, 500U },
+    { { 90U,135U, 90U, 45U}, 1500U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
+static const PoseStep g_wake_up_steps[] =
+{
+    { { 90U, 90U, 90U, 90U}, 250U },
+    { { 75U,105U,105U, 75U}, 300U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
 static ActionInstance g_action;
 
 static void Action_GetScript(ActionId action,
@@ -228,6 +270,26 @@ static void Action_GetScript(ActionId action,
         case ACTION_SLEEP_SIDE:
             *steps = g_sleep_side_steps;
             *step_count = (uint8_t)(sizeof(g_sleep_side_steps) / sizeof(g_sleep_side_steps[0]));
+            break;
+        case ACTION_DECLARE_LOVE:
+            *steps = g_declare_love_steps;
+            *step_count = (uint8_t)(sizeof(g_declare_love_steps) / sizeof(g_declare_love_steps[0]));
+            break;
+        case ACTION_ELEMENTS:
+            *steps = g_elements_steps;
+            *step_count = (uint8_t)(sizeof(g_elements_steps) / sizeof(g_elements_steps[0]));
+            break;
+        case ACTION_TRAINING:
+            *steps = g_training_steps;
+            *step_count = (uint8_t)(sizeof(g_training_steps) / sizeof(g_training_steps[0]));
+            break;
+        case ACTION_WORLD_LIGHT:
+            *steps = g_world_light_steps;
+            *step_count = (uint8_t)(sizeof(g_world_light_steps) / sizeof(g_world_light_steps[0]));
+            break;
+        case ACTION_WAKE_UP:
+            *steps = g_wake_up_steps;
+            *step_count = (uint8_t)(sizeof(g_wake_up_steps) / sizeof(g_wake_up_steps[0]));
             break;
         default:
             break;
@@ -317,6 +379,18 @@ void ActionTask_Run(uint32_t now_ms)
     g_action.step_deadline_ms = now_ms + step->duration_ms;
 }
 
+static uint8_t Action_RequestWithSpeech(ActionId action, const char *text)
+{
+    uint8_t accepted;
+
+    accepted = ActionTask_RequestMotion(action);
+    if (accepted != 0U)
+    {
+        AudioTask_RequestText(text);
+    }
+    return accepted;
+}
+
 uint8_t ActionTask_HandleCommand(uint8_t command)
 {
     switch (command)
@@ -354,6 +428,21 @@ uint8_t ActionTask_HandleCommand(uint8_t command)
             return ActionTask_RequestMotion(ACTION_SLEEP_SIDE);
         case 'q':
             return ActionTask_RequestMotion(ACTION_STAND);
+        case 'B':
+            return Action_RequestWithSpeech(ACTION_DECLARE_LOVE,
+                                            "[v12][m0][t5]wo ai ni");
+        case 'Y':
+            return Action_RequestWithSpeech(ACTION_ELEMENTS,
+                                            "[v12][m0][t5]yuan su");
+        case 'X':
+            return Action_RequestWithSpeech(ACTION_TRAINING,
+                                            "[v12][m0][t5]xiao xun lian");
+        case 'W':
+            return Action_RequestWithSpeech(ACTION_WORLD_LIGHT,
+                                            "[v12][m0][t5]shi jie zhi guang");
+        case 'U':
+            return Action_RequestWithSpeech(ACTION_WAKE_UP,
+                                            "[v12][m0][t5]xiao dai");
         default:
             return 0U;
     }

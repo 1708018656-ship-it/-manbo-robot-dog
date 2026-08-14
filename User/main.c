@@ -19,6 +19,7 @@
 #include "CommTask.h"
 #include "SafetyTask.h"
 #include "ActionTask.h"
+#include "AudioTask.h"
 
 /****************************************************
 *
@@ -60,6 +61,7 @@ int main(void)
 	CommTask_Init();        //第二阶段：初始化通信任务
 	SafetyTask_Init();     //第二阶段：初始化安全任务
 	ActionTask_Init();      //第三阶段：初始化 PoseStep 动作状态机
+	AudioTask_Init();       //第五阶段：初始化非阻塞语音任务
 	Servo_Init();		//�����ʼ��
 	hongwai_init();     //�����ʼ��
 	UltrasonicWave_Init(); //��������ʼ��

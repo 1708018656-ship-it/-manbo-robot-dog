@@ -861,6 +861,16 @@
               <FilePath>.\User\ActionTask.h</FilePath>
             </File>
             <File>
+              <FileName>AudioTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\AudioTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>AudioTask.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\AudioTask.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\main.c</FilePath>
