@@ -18,6 +18,7 @@
 #include "AppTask.h"
 #include "CommTask.h"
 #include "SafetyTask.h"
+#include "ActionTask.h"
 
 /****************************************************
 *
@@ -58,6 +59,7 @@ int main(void)
 	USART3_Init();		//语音识别串口初始化
 	CommTask_Init();        //绗簩闃舵锛氬垵濮嬪寲閫氫俊浠诲姟
 	SafetyTask_Init();     //绗簩闃舵锛氬垵濮嬪寲瀹夊叏浠诲姟
+	ActionTask_Init();      //绗笁闃舵锛氬垵濮嬪寲 PoseStep 鍔ㄤ綔鐘舵�佹満
 	Servo_Init();		//舵机初始化
 	hongwai_init();     //红外初始化
 	UltrasonicWave_Init(); //超声波初始化
@@ -88,6 +90,11 @@ int main(void)
 			move_mode = '5';
 			previous_mode = '5';
 		}
+		if (ActionTask_HandleCommand(move_mode) != 0U)
+		{
+			move_mode = '0';
+		}
+
 
 
 		//***体力值与开心值反应设置***//

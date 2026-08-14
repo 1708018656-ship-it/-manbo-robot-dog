@@ -1,4 +1,5 @@
 #include "SafetyTask.h"
+#include "ActionTask.h"
 
 #define SAFETY_FAULT_COMM_OVERFLOW 0x01U
 
@@ -26,11 +27,11 @@ void SafetyTask_Run(uint32_t now_ms)
 {
     (void)now_ms;
 
-    /*
-     * 第一阶段兼容策略：先锁存安全请求，具体舵机安全姿态由现有
-     * main.c/Mode.c 在消费请求后执行。后续动作状态机接入后，
-     * 这里将直接调用 ActionTask_AbortToSafeStop()。
-     */
+    if (g_stop_request != 0U)
+    {
+        ActionTask_AbortToSafeStop();
+        g_stop_request = 0U;
+    }
 }
 
 uint8_t SafetyTask_ConsumeStopRequest(void)

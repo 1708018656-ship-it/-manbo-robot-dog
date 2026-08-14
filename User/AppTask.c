@@ -2,6 +2,7 @@
 #include "Timebase.h"
 #include "CommTask.h"
 #include "SafetyTask.h"
+#include "ActionTask.h"
 
 #define APP_TASK_COUNT 7U
 
@@ -86,8 +87,7 @@ static void AppTask_Decision(uint32_t now_ms)
 
 static void AppTask_Action(uint32_t now_ms)
 {
-    (void)now_ms;
-    /* TODO(phase-2/3): 推进 PoseStep 动作实例，不调用阻塞延时。 */
+    ActionTask_Run(now_ms);
 }
 
 static void AppTask_Audio(uint32_t now_ms)

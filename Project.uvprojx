@@ -851,6 +851,16 @@
               <FilePath>.\User\SafetyTask.h</FilePath>
             </File>
             <File>
+              <FileName>ActionTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\ActionTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>ActionTask.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\ActionTask.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\main.c</FilePath>
