@@ -10,6 +10,8 @@ void USART3_Init(void);
 
 uint8_t USART3_GetRxFlag(void);
 uint8_t USART3_GetRxData(void);
+uint8_t USART3_ReadByte(uint8_t *value);
+uint8_t USART3_RxOverflowed(void);
 
 #endif
 

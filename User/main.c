@@ -16,6 +16,8 @@
 #include "Mode.h"
 #include "Timebase.h"
 #include "AppTask.h"
+#include "CommTask.h"
+#include "SafetyTask.h"
 
 /****************************************************
 *
@@ -54,6 +56,8 @@ int main(void)
 	USART1_Init();		//À¶ÑÀ´®¿Ú³õÊ¼»¯
 	USART2_Init();		//ÓïÒôºÏ³É´®¿Ú³õÊ¼»¯
 	USART3_Init();		//ÓïÒôÊ¶±ð´®¿Ú³õÊ¼»¯
+	CommTask_Init();        //ç¬¬äºŒé˜¶æ®µï¼šåˆå§‹åŒ–é€šä¿¡ä»»åŠ¡
+	SafetyTask_Init();     //ç¬¬äºŒé˜¶æ®µï¼šåˆå§‹åŒ–å®‰å…¨ä»»åŠ¡
 	Servo_Init();		//¶æ»ú³õÊ¼»¯
 	hongwai_init();     //ºìÍâ³õÊ¼»¯
 	UltrasonicWave_Init(); //³¬Éù²¨³õÊ¼»¯
@@ -79,6 +83,12 @@ int main(void)
 	{  
 		now_ms = Timebase_NowMs();
 		AppTask_Run(now_ms); //ç¬¬ä¸€é˜¶æ®µï¼šè¿è¡Œåˆ°æœŸçš„ç©ºä»»åŠ¡æ§½ä½
+		if (SafetyTask_ConsumeStopRequest() != 0U)
+		{
+			move_mode = '5';
+			previous_mode = '5';
+		}
+
 
 		//***ÌåÁ¦ÖµÓë¿ªÐÄÖµ·´Ó¦ÉèÖÃ***//
 		if(stamina>0)//ÌåÁ¦Öµ´óÓÚÁã²Å»áÌýÁî

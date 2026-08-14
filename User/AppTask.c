@@ -1,5 +1,7 @@
 #include "AppTask.h"
 #include "Timebase.h"
+#include "CommTask.h"
+#include "SafetyTask.h"
 
 #define APP_TASK_COUNT 7U
 
@@ -13,8 +15,7 @@ typedef struct
 } AppTaskSlot;
 
 /*
- * 第一阶段只建立调度入口，不迁移现有动作和传感器逻辑。
- * 后续阶段将这些空回调替换为 CommTask_Run、SafetyTask_Run 等模块。
+ * 第二阶段接入通信和安全任务；动作、传感器、音频和 UI 仍保持空槽位。
  */
 static void AppTask_Comm(uint32_t now_ms);
 static void AppTask_Safety(uint32_t now_ms);
@@ -63,14 +64,12 @@ void AppTask_Run(uint32_t now_ms)
 
 static void AppTask_Comm(uint32_t now_ms)
 {
-    (void)now_ms;
-    /* TODO(phase-2): 搬运 UART 环形缓冲区并发布命令事件。 */
+    CommTask_Run(now_ms);
 }
 
 static void AppTask_Safety(uint32_t now_ms)
 {
-    (void)now_ms;
-    /* TODO(phase-2): 处理急停、低电量、舵机故障和传感器故障。 */
+    SafetyTask_Run(now_ms);
 }
 
 static void AppTask_Sensor(uint32_t now_ms)

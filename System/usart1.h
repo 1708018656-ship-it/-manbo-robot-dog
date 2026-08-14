@@ -17,6 +17,8 @@ void USART1_Printf(char *format, ...);
 
 uint8_t USART1_GetRxFlag(void);
 uint8_t USART1_GetRxData(void);
+uint8_t USART1_ReadByte(uint8_t *value);
+uint8_t USART1_RxOverflowed(void);
 
 #endif
 

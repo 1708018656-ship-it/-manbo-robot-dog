@@ -671,6 +671,16 @@
               <FilePath>.\System\Timebase.h</FilePath>
             </File>
             <File>
+              <FileName>ByteRing.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\ByteRing.c</FilePath>
+            </File>
+            <File>
+              <FileName>ByteRing.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\ByteRing.h</FilePath>
+            </File>
+            <File>
               <FileName>usart1.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\System\usart1.c</FilePath>
@@ -819,6 +829,26 @@
               <FileName>AppTask.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\User\AppTask.h</FilePath>
+            </File>
+            <File>
+              <FileName>CommTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\CommTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>CommTask.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\CommTask.h</FilePath>
+            </File>
+            <File>
+              <FileName>SafetyTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\SafetyTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>SafetyTask.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\SafetyTask.h</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
