@@ -90,9 +90,9 @@ int main(void)
 	}
 		if(stamina==0)//体力值为0后，只接受睡觉指令
 	{
-		if(USART1_GetRxData()=='2'|USART3_GetRxData()=='2')
+		if (USART1_GetRxData() == '2' || USART3_GetRxData() == '2')
 		{mode_sleepwo();}
-		else if(USART1_GetRxData()=='p'|USART3_GetRxData()=='p')
+		else if (USART1_GetRxData() == 'p' || USART3_GetRxData() == 'p')
 		{mode_sleeppa();}
 	}
 		if(stamina>500)//体力值不大于1000
