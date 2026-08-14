@@ -66,6 +66,98 @@ static const PoseStep g_right_steps[] =
     { { 90U, 90U,  90U, 90U}, BASIC_ACTION_STEP_MS }
 };
 
+static const PoseStep g_swing_forward_back_steps[] =
+{
+    { {135U,135U, 45U, 45U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U },
+    { { 45U, 45U,135U,135U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U }
+};
+
+static const PoseStep g_swing_left_right_steps[] =
+{
+    { {135U,135U, 90U, 90U}, 150U },
+    { {135U,135U,135U,135U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U },
+    { { 45U, 45U, 90U, 90U}, 150U },
+    { { 45U, 45U, 45U, 45U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U }
+};
+
+static const PoseStep g_dance_steps[] =
+{
+    { {135U,135U,135U,135U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U },
+    { {135U,135U, 45U, 45U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U },
+    { { 45U, 45U, 90U, 90U}, 150U },
+    { { 45U, 45U, 45U, 45U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U },
+    { { 45U, 45U,135U,135U}, 150U },
+    { { 90U, 90U, 90U, 90U}, 150U }
+};
+
+static const PoseStep g_hello_steps[] =
+{
+    { { 70U,110U, 90U, 70U}, 120U },
+    { { 70U,170U, 90U, 10U}, 240U },
+    { {130U,170U, 90U, 10U}, 120U },
+    { {180U,170U, 90U, 10U}, 500U },
+    { {130U,170U, 90U, 10U}, 500U },
+    { {180U,170U, 90U, 10U}, 500U },
+    { {130U,170U, 90U, 10U}, 500U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
+static const PoseStep g_stretch_steps[] =
+{
+    { { 90U,155U, 90U, 25U}, 325U },
+    { { 70U,155U,110U, 25U}, 100U },
+    { { 70U,155U,110U, 25U}, 1000U },
+    { {130U,155U,110U, 25U}, 240U },
+    { {180U,155U,110U, 25U}, 500U },
+    { {130U,155U,110U, 25U}, 500U },
+    { {180U,155U,110U, 25U}, 500U },
+    { { 70U,155U,110U, 25U}, 250U }
+};
+
+static const PoseStep g_two_hands_steps[] =
+{
+    { { 90U, 20U, 20U, 90U}, 200U },
+    { { 90U, 90U, 90U, 90U}, 200U },
+    { {160U, 90U, 90U,160U}, 200U },
+    { { 90U, 90U, 90U, 90U}, 200U }
+};
+
+static const PoseStep g_lazy_steps[] =
+{
+    { {165U,127U, 15U, 53U}, 375U },
+    { {165U,127U, 15U, 53U}, 750U },
+    { { 90U, 90U, 90U, 90U}, 375U },
+    { { 90U, 90U, 90U, 90U}, 150U }
+};
+
+static const PoseStep g_head_up_steps[] =
+{
+    { { 70U, 90U,110U, 90U}, 200U },
+    { { 70U,155U,110U, 25U}, 650U },
+    { { 90U, 90U, 90U, 90U}, 250U }
+};
+
+static const PoseStep g_sleep_prone_steps[] =
+{
+    { {165U, 90U, 15U, 90U}, 750U },
+    { {165U, 15U, 15U,165U}, 750U },
+    { {165U, 15U, 15U,165U}, 1000U }
+};
+
+static const PoseStep g_sleep_side_steps[] =
+{
+    { { 90U, 90U,165U, 15U}, 750U },
+    { { 90U,165U,165U, 15U}, 750U },
+    { { 90U,165U,165U, 15U}, 1000U }
+};
+
 static ActionInstance g_action;
 
 static void Action_GetScript(ActionId action,
@@ -96,6 +188,46 @@ static void Action_GetScript(ActionId action,
         case ACTION_TURN_RIGHT:
             *steps = g_right_steps;
             *step_count = (uint8_t)(sizeof(g_right_steps) / sizeof(g_right_steps[0]));
+            break;
+        case ACTION_SWING_FORWARD_BACK:
+            *steps = g_swing_forward_back_steps;
+            *step_count = (uint8_t)(sizeof(g_swing_forward_back_steps) / sizeof(g_swing_forward_back_steps[0]));
+            break;
+        case ACTION_SWING_LEFT_RIGHT:
+            *steps = g_swing_left_right_steps;
+            *step_count = (uint8_t)(sizeof(g_swing_left_right_steps) / sizeof(g_swing_left_right_steps[0]));
+            break;
+        case ACTION_DANCE:
+            *steps = g_dance_steps;
+            *step_count = (uint8_t)(sizeof(g_dance_steps) / sizeof(g_dance_steps[0]));
+            break;
+        case ACTION_HELLO:
+            *steps = g_hello_steps;
+            *step_count = (uint8_t)(sizeof(g_hello_steps) / sizeof(g_hello_steps[0]));
+            break;
+        case ACTION_STRETCH:
+            *steps = g_stretch_steps;
+            *step_count = (uint8_t)(sizeof(g_stretch_steps) / sizeof(g_stretch_steps[0]));
+            break;
+        case ACTION_TWO_HANDS:
+            *steps = g_two_hands_steps;
+            *step_count = (uint8_t)(sizeof(g_two_hands_steps) / sizeof(g_two_hands_steps[0]));
+            break;
+        case ACTION_LAZY:
+            *steps = g_lazy_steps;
+            *step_count = (uint8_t)(sizeof(g_lazy_steps) / sizeof(g_lazy_steps[0]));
+            break;
+        case ACTION_HEAD_UP:
+            *steps = g_head_up_steps;
+            *step_count = (uint8_t)(sizeof(g_head_up_steps) / sizeof(g_head_up_steps[0]));
+            break;
+        case ACTION_SLEEP_PRONE:
+            *steps = g_sleep_prone_steps;
+            *step_count = (uint8_t)(sizeof(g_sleep_prone_steps) / sizeof(g_sleep_prone_steps[0]));
+            break;
+        case ACTION_SLEEP_SIDE:
+            *steps = g_sleep_side_steps;
+            *step_count = (uint8_t)(sizeof(g_sleep_side_steps) / sizeof(g_sleep_side_steps[0]));
             break;
         default:
             break;
@@ -200,6 +332,28 @@ uint8_t ActionTask_HandleCommand(uint8_t command)
             return ActionTask_RequestMotion(ACTION_TURN_LEFT);
         case 'r':
             return ActionTask_RequestMotion(ACTION_TURN_RIGHT);
+        case 'w':
+            return ActionTask_RequestMotion(ACTION_SWING_FORWARD_BACK);
+        case 'z':
+            return ActionTask_RequestMotion(ACTION_SWING_LEFT_RIGHT);
+        case 'd':
+            return ActionTask_RequestMotion(ACTION_DANCE);
+        case 'o':
+            return ActionTask_RequestMotion(ACTION_HELLO);
+        case 's':
+            return ActionTask_RequestMotion(ACTION_STRETCH);
+        case 'j':
+            return ActionTask_RequestMotion(ACTION_TWO_HANDS);
+        case 'y':
+            return ActionTask_RequestMotion(ACTION_LAZY);
+        case '1':
+            return ActionTask_RequestMotion(ACTION_HEAD_UP);
+        case 'p':
+            return ActionTask_RequestMotion(ACTION_SLEEP_PRONE);
+        case '2':
+            return ActionTask_RequestMotion(ACTION_SLEEP_SIDE);
+        case 'q':
+            return ActionTask_RequestMotion(ACTION_STAND);
         default:
             return 0U;
     }
