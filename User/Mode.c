@@ -22,7 +22,8 @@ extern uint16_t bz_flag;//避障标志位 ON/OFF 默认off
 extern uint16_t hw_flag;//红外标志位 ON/OFF 默认off
 extern int happiness; //开心指数
 extern int stamina;  //体力值
-char read[8]={0};  //朗读开心值或体力值的字符串变量
+#define STATUS_TEXT_BUFFER_SIZE 128U
+char read[STATUS_TEXT_BUFFER_SIZE]={0};  //朗读开心值或体力值的字符串变量
 extern uint16_t ff; //连续前进计数
 extern uint16_t bb; //连续后退计数
 extern uint16_t ll; //连续左转计数
@@ -418,7 +419,7 @@ void mode_happiness(void)//展示开心值
 {
 	OLED_ShowImage(0, 8, 128, 48, BMP1); //立正脸
 	OLED_happiness();
-	sprintf(read,"[v12][m0][t5]当前的开心值为%d",happiness);
+	snprintf(read, sizeof(read), "[v12][m0][t5]当前的开心值为%d", happiness);
 	SYN_FrameInfo(2,(u8*)read);Delay_s(4);
 	if(happiness>=60){
 		OLED_ShowImage(0, 8, 128, 48, BMP9); //开心脸
@@ -450,7 +451,7 @@ void mode_stamina(void)//展示体力值
 {
 	OLED_ShowImage(0, 8, 128, 48, BMP1); //立正脸
 	OLED_stamina();
-	sprintf(read,"[v12][m0][t5]当前的体力值为%d",stamina);
+	snprintf(read, sizeof(read), "[v12][m0][t5]当前的体力值为%d", stamina);
 	SYN_FrameInfo(2,(u8*)read);Delay_s(4);
 	if(stamina>=60){
 		OLED_ShowImage(0, 8, 128, 48, BMP9); //开心脸
@@ -482,7 +483,7 @@ void mode_index(void)//展示开心值和体力值
 	{OLED_ShowNum(64,16,100,3,OLED_8X16);}
 	else {OLED_ShowNum(64,16,stamina,2,OLED_8X16);}
 	OLED_UpdateArea(0,0,128,32);
-	sprintf(read,"[v12][m0][t5]当前的开心值为%d，体力值为%d",happiness,stamina);
+	snprintf(read, sizeof(read), "[v12][m0][t5]当前的开心值为%d，体力值为%d", happiness, stamina);
 	SYN_FrameInfo(2,(u8*)read);Delay_s(10);
 	previous_mode = move_mode;
 	move_mode = '0';
