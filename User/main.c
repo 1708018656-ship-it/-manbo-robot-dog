@@ -14,6 +14,8 @@
 #include "Hongwai.h"
 #include "UltrasonicWave.h"
 #include "Mode.h"
+#include "Timebase.h"
+#include "AppTask.h"
 
 /****************************************************
 *
@@ -44,6 +46,8 @@ uint16_t rr=0; //Á¬ÐøÓÒ×ª¼ÆÊý
 
 int main(void)
 {
+	uint32_t now_ms;
+
 	/*Ä£¿é³õÊ¼»¯*/
 	LED_Init();			//LED³õÊ¼»¯
 	OLED_Init();		//OLED³õÊ¼»¯
@@ -53,6 +57,8 @@ int main(void)
 	Servo_Init();		//¶æ»ú³õÊ¼»¯
 	hongwai_init();     //ºìÍâ³õÊ¼»¯
 	UltrasonicWave_Init(); //³¬Éù²¨³õÊ¼»¯
+	Timebase_Init();       //1msåä½œå¼è°ƒåº¦æ—¶åŸº
+	AppTask_Init();        //åˆå§‹åŒ–ä»»åŠ¡è°ƒåº¦éª¨æž¶
 	happiness=200;//³õÊ¼»¯¿ªÐÄÖ¸Êý
 	stamina=500;//³õÊ¼»¯ÌåÁ¦Öµ
 	bz_flag=0;//±ÜÕÏ±êÖ¾Î» ON/OFF Ä¬ÈÏoff
@@ -71,6 +77,9 @@ int main(void)
 	
 	while (1)
 	{  
+		now_ms = Timebase_NowMs();
+		AppTask_Run(now_ms); //ç¬¬ä¸€é˜¶æ®µï¼šè¿è¡Œåˆ°æœŸçš„ç©ºä»»åŠ¡æ§½ä½
+
 		//***ÌåÁ¦ÖµÓë¿ªÐÄÖµ·´Ó¦ÉèÖÃ***//
 		if(stamina>0)//ÌåÁ¦Öµ´óÓÚÁã²Å»áÌýÁî
 	{

@@ -661,6 +661,16 @@
               <FilePath>.\System\Delay.h</FilePath>
             </File>
             <File>
+              <FileName>Timebase.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\Timebase.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timebase.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\Timebase.h</FilePath>
+            </File>
+            <File>
               <FileName>usart1.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\System\usart1.c</FilePath>
@@ -800,6 +810,16 @@
         <Group>
           <GroupName>User</GroupName>
           <Files>
+            <File>
+              <FileName>AppTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\AppTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>AppTask.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\AppTask.h</FilePath>
+            </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
