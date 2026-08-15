@@ -851,14 +851,25 @@ void OLED_ShowImage(uint8_t X, uint8_t Y, uint8_t Width, uint8_t Height, const u
   * 返 回 值：无
   * 说    明：调用此函数后，要想真正地呈现在屏幕上，还需调用更新函数
   */
-void OLED_Printf(uint8_t X, uint8_t Y, uint8_t FontSize, char *format, ...)
+int OLED_Printf(uint8_t X, uint8_t Y, uint8_t FontSize, const char *format, ...)
 {
-	char String[30];						//定义字符数组
+	char String[30];
+	int written;						//定义字符数组
 	va_list arg;							//定义可变参数列表数据类型的变量arg
+	if (format == NULL)
+	{
+		return -1;
+	}
 	va_start(arg, format);					//从format开始，接收参数列表到arg变量
-	vsprintf(String, format, arg);			//使用vsprintf打印格式化字符串和参数列表到字符数组中
-	va_end(arg);							//结束变量arg
-	OLED_ShowString(X, Y, String, FontSize);//OLED显示字符数组（字符串）
+	written = vsnprintf(String, sizeof(String), format, arg);			//使用vsprintf打印格式化字符串和参数列表到字符数组中
+	va_end(arg);
+	if (written < 0)
+	{
+		String[0] = '\0';
+		return -1;
+	}							//结束变量arg
+	OLED_ShowString(X, Y, String, FontSize);
+	return written;//OLED显示字符数组（字符串）
 }
 
 /**

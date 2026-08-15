@@ -189,14 +189,30 @@ int fputc(int ch, FILE *f)
   * 参    数：... 可变的参数列表
   * 返 回 值：无
   */
-void Serial_Printf(char *format, ...)
+int Serial_Printf(const char *format, ...)
 {
-	char String[100];				//定义字符数组
-	va_list arg;					//定义可变参数列表数据类型的变量arg
-	va_start(arg, format);			//从format开始，接收参数列表到arg变量
-	vsprintf(String, format, arg);	//使用vsprintf打印格式化字符串和参数列表到字符数组中
-	va_end(arg);					//结束变量arg
-	Serial_SendString1(String);		//串口发送字符数组（字符串）
+	char String[100];
+	va_list arg;
+	int written;
+
+	if (format == NULL)
+	{
+		return -1;
+	}
+
+	va_start(arg, format);
+	written = vsnprintf(String, sizeof(String), format, arg);
+	va_end(arg);
+
+	if (written < 0)
+	{
+		String[0] = '\0';
+		return -1;
+	}
+
+	/* vsnprintf 始终保证 NUL 终止；written >= sizeof(String) 表示发生截断。 */
+	Serial_SendString1(String);
+	return written;
 }
 
 /**

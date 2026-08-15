@@ -31,3 +31,11 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/boundary_tests"
 
 "$BUILD_DIR/boundary_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  "$ROOT_DIR/tests/host/test_format_contract.c" \
+  -o "$BUILD_DIR/format_contract_tests"
+
+"$BUILD_DIR/format_contract_tests"

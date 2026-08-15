@@ -9,7 +9,7 @@ void Serial_SendArray(uint8_t *Array, uint16_t Length);
 void Serial_SendString1(char *String);
 //void Serial_SendString2(char *String);
 void Serial_SendNumber(uint32_t Number, uint8_t Length);
-void Serial_Printf(char *format, ...);
+int Serial_Printf(const char *format, ...);
 
 uint8_t Serial_GetRxFlag1(void);
 uint8_t Serial_GetRxData1(void);
