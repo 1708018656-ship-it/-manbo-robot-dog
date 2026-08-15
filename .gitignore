@@ -27,6 +27,7 @@
 *.bin
 
 # Build directories
+tests/host/build/
 Listings/
 Objects/
 DebugConfig/
