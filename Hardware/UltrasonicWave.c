@@ -41,36 +41,12 @@ void UltrasonicWave_Start(void)
 
 uint16_t UltrasonicWave_Getvalue(void)
 {
-	UltrasonicWave_Start();
-	Delay_ms(100);
-	return ((Time * 0.0001) * 34000) / 2;
+	/* Compatibility wrapper; SensorTask performs asynchronous ranging. */
+	return T;
 }
+
 void Bizhang(void)
 {
-	T=UltrasonicWave_Getvalue();
-	Delay_ms(10);
-	if(T>=15)
-	{
-		{
-		move_forward();
-		//Delay_ms(10);
-		cf++;
-		}
-	}
-	else
-	{
-		//move_behind();
-		T=UltrasonicWave_Getvalue();
-	while(T<15)
-	{	cf=0;  
-		move_right();//Ò»´ÎÔ¼30¡ã
-		move_right();
-		Delay_ms(10);
-		T=UltrasonicWave_Getvalue();
-		if(T>15)
-		{
-			break;
-		}
-	}	
-}
+	/* Compatibility wrapper; SensorTask owns obstacle avoidance. */
+	(void)T;
 }

@@ -4,6 +4,7 @@
 #include "SafetyTask.h"
 #include "ActionTask.h"
 #include "AudioTask.h"
+#include "SensorTask.h"
 
 #define APP_TASK_COUNT 7U
 
@@ -43,6 +44,8 @@ void AppTask_Init(void)
     uint8_t i;
     uint32_t now_ms = Timebase_NowMs();
 
+    SensorTask_Init();
+
     for (i = 0U; i < APP_TASK_COUNT; ++i)
     {
         g_tasks[i].next_deadline_ms = now_ms + g_tasks[i].period_ms;
@@ -76,8 +79,7 @@ static void AppTask_Safety(uint32_t now_ms)
 
 static void AppTask_Sensor(uint32_t now_ms)
 {
-    (void)now_ms;
-    /* TODO(phase-4): 迁移红外采样和超声波测距状态机。 */
+    SensorTask_Run(now_ms);
 }
 
 static void AppTask_Decision(uint32_t now_ms)

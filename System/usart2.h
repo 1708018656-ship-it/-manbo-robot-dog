@@ -7,7 +7,7 @@
 #define EN_USART2_RX 			1		//使能（1）/禁止（0）串口1接收
 	  	
 void USART2_Init(void);
-void USART2_SendString(u8 *DAT, u8 len);
+uint8_t USART2_SendString(u8 *DAT, u8 len);
 uint8_t USART2_GetRxFlag(void);
 uint8_t USART2_GetRxData(void);
 

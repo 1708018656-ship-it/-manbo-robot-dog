@@ -13,6 +13,7 @@
 #include "syn6288.h"
 #include "Hongwai.h"
 #include "UltrasonicWave.h"
+#include "SensorTask.h"
 #include "Mode.h"
 #include "Timebase.h"
 #include "AppTask.h"
@@ -146,18 +147,18 @@ int main(void)
 		}
 		
 	   //***超声避障模块设置***//
-		if(move_mode == 'x') //超声开
+		if(move_mode == 'x')
 		{
 			bz_flag=1;
+			SensorTask_SetEnabled(1U);
 		}
-		if(move_mode == 'c') //超声关
+		if(move_mode == 'c')
 		{
 			bz_flag=0;
+			SensorTask_SetEnabled(0U);
 			T=100;
 		}
-		if(bz_flag){
-		Bizhang();//打开超声避障模式
-		}
+		/* SensorTask runs from AppTask; no blocking Bizhang call here. */
 		
 		
 		//***互动设置***//

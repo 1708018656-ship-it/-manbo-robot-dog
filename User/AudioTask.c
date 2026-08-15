@@ -1,5 +1,6 @@
 #include "AudioTask.h"
 #include "stm32f10x.h"
+#include "usart2.h"
 #include "string.h"
 
 #define AUDIO_FRAME_CAPACITY 50U
@@ -66,14 +67,15 @@ void AudioTask_Run(uint32_t now_ms)
 {
     (void)now_ms;
 
-    if ((g_audio.active != 0U) &&
-        (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == SET))
+    if (g_audio.active != 0U)
     {
-        USART_SendData(USART2, g_audio.frame[g_audio.index]);
-        g_audio.index++;
-        if (g_audio.index >= g_audio.length)
+        if (USART2_SendString(&g_audio.frame[g_audio.index], 1U) != 0U)
         {
-            g_audio.active = 0U;
+            g_audio.index++;
+            if (g_audio.index >= g_audio.length)
+            {
+                g_audio.active = 0U;
+            }
         }
     }
 }

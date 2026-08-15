@@ -1,6 +1,6 @@
 #include "stm32f10x.h"                  // Device header
 //为超声避障服务
-extern uint16_t Time;
+extern volatile uint16_t Time;
 void Timer_Init(void)
 {
 	Time = 0;
@@ -29,9 +29,16 @@ void Timer_Init(void)
 	
 	NVIC_Init(&NVIC_InitStructure);
 	
-	TIM_Cmd(TIM2, ENABLE);		//打开定时器
-	
+		TIM_Cmd(TIM2, ENABLE);		//打开定时器
+
 }
+
+void Timer_Stop(void)
+{
+	TIM_Cmd(TIM2, DISABLE);
+	TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE);
+}
+
 void TIM2_IRQHandler()		//定时器2的中断函数，不懂直接套用
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
