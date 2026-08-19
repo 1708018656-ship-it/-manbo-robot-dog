@@ -910,6 +910,16 @@
               <FileType>5</FileType>
               <FilePath>.\User\stm32f10x_it.h</FilePath>
             </File>
+            <File>
+              <FileName>PerfProbe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\PerfProbe.c</FilePath>
+            </File>
+            <File>
+              <FileName>PerfProbe.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\PerfProbe.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

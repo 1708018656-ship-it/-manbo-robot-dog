@@ -5,6 +5,7 @@
 #include "ActionTask.h"
 #include "AudioTask.h"
 #include "SensorTask.h"
+#include "PerfProbe.h"
 
 #define APP_TASK_COUNT 7U
 
@@ -45,6 +46,7 @@ void AppTask_Init(void)
     uint32_t now_ms = Timebase_NowMs();
 
     SensorTask_Init();
+    PerfProbe_Init();
 
     for (i = 0U; i < APP_TASK_COUNT; ++i)
     {
@@ -62,7 +64,9 @@ void AppTask_Run(uint32_t now_ms)
                                  &g_tasks[i].next_deadline_ms,
                                  g_tasks[i].period_ms) != 0U)
         {
+            uint32_t start_cycles = PerfProbe_Begin();
             g_tasks[i].callback(now_ms);
+            PerfProbe_End((PerfProbeTaskId)i, start_cycles);
         }
     }
 }
