@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+/* Set to 1 only in a dedicated measurement build. */
+#ifndef PERF_PROBE_ENABLE
+#define PERF_PROBE_ENABLE 0
+#endif
+
 /*
  * Lightweight on-target task timing for Cortex-M3 firmware.
  * Results are raw core-cycle counts and must be converted with the actual

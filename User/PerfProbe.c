@@ -1,5 +1,7 @@
 #include "PerfProbe.h"
 
+#if PERF_PROBE_ENABLE
+
 /* Cortex-M3 CoreSight register addresses. */
 #define PERF_PROBE_DEMCR         (*(volatile uint32_t *)0xE000EDFCUL)
 #define PERF_PROBE_DWT_CTRL      (*(volatile uint32_t *)0xE0001000UL)
@@ -79,3 +81,22 @@ const PerfProbeStats *PerfProbe_Get(PerfProbeTaskId task_id)
 
     return &g_stats[(uint32_t)task_id];
 }
+
+#else
+
+void PerfProbe_Init(void) {}
+uint8_t PerfProbe_IsEnabled(void) { return 0U; }
+uint32_t PerfProbe_Begin(void) { return 0UL; }
+void PerfProbe_End(PerfProbeTaskId task_id, uint32_t start_cycles)
+{
+    (void)task_id;
+    (void)start_cycles;
+}
+void PerfProbe_Reset(void) {}
+const PerfProbeStats *PerfProbe_Get(PerfProbeTaskId task_id)
+{
+    (void)task_id;
+    return (const PerfProbeStats *)0;
+}
+
+#endif /* PERF_PROBE_ENABLE */

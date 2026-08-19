@@ -46,7 +46,9 @@ void AppTask_Init(void)
     uint32_t now_ms = Timebase_NowMs();
 
     SensorTask_Init();
+#if PERF_PROBE_ENABLE
     PerfProbe_Init();
+#endif
 
     for (i = 0U; i < APP_TASK_COUNT; ++i)
     {
@@ -64,9 +66,13 @@ void AppTask_Run(uint32_t now_ms)
                                  &g_tasks[i].next_deadline_ms,
                                  g_tasks[i].period_ms) != 0U)
         {
+#if PERF_PROBE_ENABLE
             uint32_t start_cycles = PerfProbe_Begin();
             g_tasks[i].callback(now_ms);
             PerfProbe_End((PerfProbeTaskId)i, start_cycles);
+#else
+            g_tasks[i].callback(now_ms);
+#endif
         }
     }
 }

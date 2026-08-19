@@ -5,7 +5,7 @@
 
 ## 已接入的测量能力
 
-`User/PerfProbe.c` 使用 Cortex-M3 的 DWT `CYCCNT` 计数器记录每个调度任务的周期数。`AppTask_Run()` 会为通信、安全、传感器、决策、动作、音频和 UI 任务分别累计调用次数、总周期数和最大周期数。
+`User/PerfProbe.c` 使用 Cortex-M3 的 DWT `CYCCNT` 计数器记录每个调度任务的周期数。为避免诊断能力侵占量产资源，`PERF_PROBE_ENABLE` 默认值为 `0`：量产构建不创建统计数组，也不会在调度器中调用采样函数。仅在专用测量构建把该宏设为 `1` 后，`AppTask_Run()` 才会为通信、安全、传感器、决策、动作、音频和 UI 任务分别累计调用次数、总周期数和最大周期数。
 
 | 枚举 | 调度任务 | 计划周期 | 关注指标 |
 |---|---|---:|---|
@@ -20,11 +20,12 @@
 ## 使用步骤
 
 1. 在 Keil MDK 中重新打开 `Project.uvprojx`，确认 `User/PerfProbe.c` 与 `User/PerfProbe.h` 已被登记到 **User** 组。
-2. 使用与实际目标板一致的优化级别构建并烧录固件。`PerfProbe_Init()` 会在 `AppTask_Init()` 内自动启用 DWT 周期计数器。
-3. 在调试器的 Watch 窗口调用 `PerfProbe_IsEnabled()`，确认返回 `1`。若返回 `0`，说明目标/调试配置未允许 DWT 计数，不能把后续统计当作有效数据。
-4. 运行预定义场景至少 60 秒：静止待机、连续蓝牙控制、连续语音命令、超声波避障、复杂动作和 OLED 高频刷新。
-5. 对每个任务 ID 调用 `PerfProbe_Get(id)`，记录 `sample_count`、`total_cycles` 和 `max_cycles`。平均周期数为 `total_cycles / sample_count`；在 72 MHz 下，微秒数约为 `cycles / 72`。
-6. 使用同一次构建产生的 Keil `.map` 文件记录 `Code`、`RO-data`、`RW-data` 和 `ZI-data`，并把资源数据与周期数据一起归档。
+2. 复制一个**测量构建**配置，在 C/C++ 宏定义中加入 `PERF_PROBE_ENABLE=1`；量产构建保持默认 `0`。这确保性能诊断不会以常驻 RAM、Flash 或调度调用开销换取便利。
+3. 使用与实际目标板一致的优化级别构建并烧录测量构建。`PerfProbe_Init()` 会在 `AppTask_Init()` 内自动启用 DWT 周期计数器。
+4. 在调试器的 Watch 窗口调用 `PerfProbe_IsEnabled()`，确认返回 `1`。若返回 `0`，说明目标/调试配置未允许 DWT 计数，不能把后续统计当作有效数据。
+5. 运行预定义场景至少 60 秒：静止待机、连续蓝牙控制、连续语音命令、超声波避障、复杂动作和 OLED 高频刷新。
+6. 对每个任务 ID 调用 `PerfProbe_Get(id)`，记录 `sample_count`、`total_cycles` 和 `max_cycles`。平均周期数为 `total_cycles / sample_count`；在 72 MHz 下，微秒数约为 `cycles / 72`。
+7. 使用同一次构建产生的 Keil `.map` 文件记录 `Code`、`RO-data`、`RW-data` 和 `ZI-data`，并把资源数据与周期数据一起归档。
 
 ## 建议的验收记录
 

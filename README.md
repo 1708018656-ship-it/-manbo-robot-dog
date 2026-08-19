@@ -158,7 +158,7 @@ manbo-robot-dog/
 
 ### 板上性能与资源验证
 
-为避免将源码估算误写成实测结论，主控工程已接入 `User/PerfProbe.c`：它使用 Cortex-M3 的 DWT 周期计数器，在协作式调度器中分别记录通信、安全、传感器、决策、动作、音频和 UI 任务的调用次数、累计周期数与最大周期数。请参阅 [板上性能测量协议](docs/on_target_performance_measurement.md)，在实际目标板上用 Keil Watch 窗口和同一次构建的 `.map` 文件记录性能基线。
+为避免将源码估算误写成实测结论，主控工程提供 `User/PerfProbe.c`，使用 Cortex-M3 的 DWT 周期计数器在协作式调度器中记录通信、安全、传感器、决策、动作、音频和 UI 任务的周期数据。**量产构建默认 `PERF_PROBE_ENABLE=0`，不分配统计数组也不插入采样调用；只有专用测量构建设置 `PERF_PROBE_ENABLE=1` 才启用诊断。** 请参阅 [板上性能测量协议](docs/on_target_performance_measurement.md)，在实际目标板上用 Keil Watch 窗口和同一次构建的 `.map` 文件记录性能基线。
 
 > DWT 采样是工程测量基础设施，不等同于已获得性能结论。旧动作路径、忙等串口和无界测距逻辑仍需完成迁移或单独测量后，才能声明端到端响应指标。
 
