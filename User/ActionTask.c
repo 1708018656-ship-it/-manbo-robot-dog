@@ -430,19 +430,19 @@ uint8_t ActionTask_HandleCommand(uint8_t command)
             return ActionTask_RequestMotion(ACTION_STAND);
         case 'B':
             return Action_RequestWithSpeech(ACTION_DECLARE_LOVE,
-                                            "[v12][m0][t5]wo ai ni");
+                                            "[v12][m0][t5]" "\xCE\xD2\xB0\xAE\xC4\xE3" /* GBK: 我爱你 */);
         case 'Y':
             return Action_RequestWithSpeech(ACTION_ELEMENTS,
-                                            "[v12][m0][t5]yuan su");
+                                            "[v12][m0][t5]" "\xD4\xAA\xCB\xD8\xD6\xDC\xC6\xDA\xB1\xED" /* GBK: 元素周期表 */);
         case 'X':
             return Action_RequestWithSpeech(ACTION_TRAINING,
-                                            "[v12][m0][t5]xiao xun lian");
+                                            "[v12][m0][t5]" "\xD0\xA3\xD1\xB5" /* GBK: 校训 */);
         case 'W':
             return Action_RequestWithSpeech(ACTION_WORLD_LIGHT,
-                                            "[v12][m0][t5]shi jie zhi guang");
+                                            "[v12][m0][t5]" "\xCE\xAA\xCA\xC0\xBD\xE7\xD6\xAE\xB9\xE2" /* GBK: 为世界之光 */);
         case 'U':
             return Action_RequestWithSpeech(ACTION_WAKE_UP,
-                                            "[v12][m0][t5]xiao dai");
+                                            "[v12][m0][t5]" "\xD0\xA1\xB4\xF4" /* GBK: 小呆 */);
         default:
             return 0U;
     }

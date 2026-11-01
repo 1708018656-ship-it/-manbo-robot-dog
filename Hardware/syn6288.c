@@ -1,11 +1,12 @@
 #include "syn6288.h"
 #include "usart2.h"
 #include "string.h"
-#include "delay.h"
+#include "Delay.h"
+#include "GbkText.h"
 //***语音合成***//
 
-#define SYN_FRAME_BUFFER_SIZE 50U
-#define SYN_MAX_TEXT_LENGTH   (SYN_FRAME_BUFFER_SIZE - 6U) /* 5-byte header + ECC */
+#define SYN_FRAME_BUFFER_SIZE SYN6288_FRAME_CAPACITY
+#define SYN_MAX_TEXT_LENGTH   SYN6288_MAX_TEXT_BYTES
 
 //Music:选择背景音乐。0:无背景音乐，1~15：选择背景音乐
 void SYN_FrameInfo(u8 Music, u8 *HZdata)
@@ -21,18 +22,15 @@ void SYN_FrameInfo(u8 Music, u8 *HZdata)
     return;
   }
 
-  HZ_Length = strlen((char *)HZdata);
-  if (HZ_Length > SYN_MAX_TEXT_LENGTH)
-  {
-    HZ_Length = SYN_MAX_TEXT_LENGTH;
-  }
+  /* GBK-safe: never split a double-byte character when truncating */
+  HZ_Length = (unsigned int)GbkText_SafeLength((const char *)HZdata, SYN_MAX_TEXT_LENGTH);
 
   /*****************帧固定配置信息**************************************/
   Frame_Info[0] = 0xFD;                  //构造帧头FD
   Frame_Info[1] = 0x00;                  //构造数据区吵度的高字节
-  Frame_Info[2] = HZ_Length + 3;         //构造数据区吵度的低字节
+  Frame_Info[2] = (unsigned char)(HZ_Length + 3U);         //构造数据区吵度的低字节
   Frame_Info[3] = 0x01;                  //构造命令字：合成播放命令
-  Frame_Info[4] = 0x01 | Music << 4;    //构造命令参数：背景音乐设定
+  Frame_Info[4] = (unsigned char)(0x01U | ((Music & 0x0FU) << 4));    //构造命令参数：背景音乐设定
 
   /*******************校验码计算***************************************/
   for (i = 0; i < 5; i++)

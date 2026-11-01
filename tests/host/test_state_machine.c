@@ -183,8 +183,8 @@ static void test_advanced_action_requests_speech(void)
                    "B maps to the declaration action");
     EXPECT_EQ_UINT(g_audio_requests, 1U,
                    "B requests one speech frame");
-    EXPECT_TRUE(strstr(g_last_audio, "wo ai ni") != NULL,
-                 "B speech text is queued");
+    EXPECT_TRUE(strstr(g_last_audio, "\xCE\xD2\xB0\xAE\xC4\xE3") != NULL,
+                 "B queues GBK Chinese speech (not pinyin)");
 
     EXPECT_EQ_UINT(ActionTask_HandleCommand('Y'), 1U,
                    "Y action can preempt B while audio is busy");

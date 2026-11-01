@@ -1,16 +1,16 @@
 #include "AudioTask.h"
 #include "stm32f10x.h"
 #include "usart2.h"
-#include "string.h"
+#include "GbkText.h"
 
-#define AUDIO_FRAME_CAPACITY 50U
-#define AUDIO_MAX_TEXT_LENGTH (AUDIO_FRAME_CAPACITY - 6U)
+#define AUDIO_FRAME_CAPACITY SYN6288_FRAME_CAPACITY
+#define AUDIO_MAX_TEXT_LENGTH SYN6288_MAX_TEXT_BYTES
 
 typedef struct
 {
     uint8_t frame[AUDIO_FRAME_CAPACITY];
-    uint8_t length;
-    uint8_t index;
+    uint16_t length;
+    uint16_t index;
     uint8_t active;
 } AudioFrame;
 
@@ -26,7 +26,7 @@ void AudioTask_Init(void)
 uint8_t AudioTask_RequestText(const char *text)
 {
     uint8_t text_length;
-    uint8_t i;
+    uint16_t i;
     uint8_t checksum;
 
     if ((text == 0) || (g_audio.active != 0U))
@@ -34,11 +34,8 @@ uint8_t AudioTask_RequestText(const char *text)
         return 0U;
     }
 
-    text_length = (uint8_t)strlen(text);
-    if (text_length > AUDIO_MAX_TEXT_LENGTH)
-    {
-        text_length = AUDIO_MAX_TEXT_LENGTH;
-    }
+    /* GBK-safe truncation; also avoids uint8_t overflow of strlen() */
+    text_length = (uint8_t)GbkText_SafeLength(text, AUDIO_MAX_TEXT_LENGTH);
 
     g_audio.frame[0] = 0xFDU;
     g_audio.frame[1] = 0x00U;
@@ -57,7 +54,7 @@ uint8_t AudioTask_RequestText(const char *text)
         checksum ^= g_audio.frame[5U + i];
     }
     g_audio.frame[5U + text_length] = checksum;
-    g_audio.length = (uint8_t)(text_length + 6U);
+    g_audio.length = (uint16_t)(text_length + SYN6288_FRAME_OVERHEAD);
     g_audio.index = 0U;
     g_audio.active = 1U;
     return 1U;

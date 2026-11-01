@@ -39,3 +39,12 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/format_contract_tests"
 
 "$BUILD_DIR/format_contract_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/System" \
+  "$ROOT_DIR/tests/host/test_gbk_text.c" \
+  -o "$BUILD_DIR/gbk_text_tests"
+
+"$BUILD_DIR/gbk_text_tests"
