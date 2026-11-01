@@ -2,6 +2,7 @@
 #include "Movement.h"
 #include "Delay.h"
 #include "BoardConfig.h"
+#include "ActionTask.h"
 //***红外悬崖检测***//
 extern uint8_t t1 ; //存储红外的信号 前
 extern uint8_t t2 ; //存储红外的信号 后
@@ -41,49 +42,40 @@ uint8_t hongwai_get_4(void) //右
 {
 	return GPIO_ReadInputDataBit(IR_RIGHT_PORT, IR_RIGHT_PIN);
 }
-void Edge_detect(void)
+/*
+ * 红外防跌落（非阻塞）。
+ * 原实现直接调用 move_behind()/move_forward() 等 Delay_ms 阻塞动作，
+ * 期间串口急停和其它任务都无法响应。现在只向 ActionTask 提交一个避险动作
+ * （ActionTask 支持抢占，正在前进时会立刻被替换），由调度器按步推进。
+ * 返回 1 表示本轮触发了避险，调用方应取消持续行走。
+ */
+uint8_t Edge_detect(void)
 {
-		t1=hongwai_get_1();
-		t2=hongwai_get_2();
-		t3=hongwai_get_3();
-		t4=hongwai_get_4();
-		if(t1==1)
-		{
-			move_behind();
+	t1 = hongwai_get_1();
+	t2 = hongwai_get_2();
+	t3 = hongwai_get_3();
+	t4 = hongwai_get_4();
 
-			t1=0;
-			
-		}
-
-		if(t2==1)
-		{
-			move_forward();
-
-
-			t2=0;
-		}
-
-
-		if(t3==1)
-		{
-		{
-			move_right_hw();
-            move_forward();
-			move_right_hw();
-			move_forward();
-
-			t3=0;
-		}
-		}
-		if(t4==1)
-		{
-		{
-			move_left_hw();
-            move_forward();
-			move_left_hw();
-			move_forward();
-
-			t4=0;
-		}
-		}
+	if (t1 == 1U)        /* 前方悬崖 -> 后退 */
+	{
+		(void)ActionTask_RequestMotion(ACTION_BACKWARD);
 	}
+	else if (t2 == 1U)   /* 后方悬崖 -> 前进 */
+	{
+		(void)ActionTask_RequestMotion(ACTION_FORWARD);
+	}
+	else if (t3 == 1U)   /* 左侧悬崖 -> 右转 */
+	{
+		(void)ActionTask_RequestMotion(ACTION_TURN_RIGHT);
+	}
+	else if (t4 == 1U)   /* 右侧悬崖 -> 左转 */
+	{
+		(void)ActionTask_RequestMotion(ACTION_TURN_LEFT);
+	}
+	else
+	{
+		return 0U;
+	}
+	t1 = 0U; t2 = 0U; t3 = 0U; t4 = 0U;
+	return 1U;
+}

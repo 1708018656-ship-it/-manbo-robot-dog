@@ -191,7 +191,7 @@ int main(void)
 			t1=0;t2=0;t3=0;t4=0;
 		}
 		if(hw_flag){
-			Edge_detect();//打开红外悬崖检测模式	
+			if (Edge_detect() != 0U) { continuous_cmd = 0U; } /* cliff: stop walking */
 		}
 		
 	   //***超声避障模块设置***//

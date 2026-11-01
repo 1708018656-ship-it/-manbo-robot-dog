@@ -70,7 +70,7 @@
 - [ ] 加 GCC + Makefile/CMake 构建（Keil 工程保留），链接脚本 `STM32F103C8Tx_FLASH.ld`
 - [ ] 超声波测距整数化、舵机角度斜坡限速、低电压检测（需 ADC 引脚，与 PCB 联动）
 - [ ] 加独立看门狗 IWDG
-- [ ] `Edge_detect()` 红外防跌落还是阻塞式动作 → 改成向 ActionTask 发请求，且优先级高于普通命令
+- [x] `Edge_detect()` 红外防跌落改为非阻塞：向 ActionTask 提交避险动作（可抢占正在进行的前进），并取消持续行走（11/01 完成）
 - [ ] MANBO_BOARD_V2：电池 ADC 采样 + 低电量处理
 
 ### 硬件（11/03）
