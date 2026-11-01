@@ -410,9 +410,7 @@ void mode_xiaodai(void)//语音唤醒小呆
 void OLED_happiness(void)//OLED展示开心值
 {
 	OLED_ShowChinese(0,0,"开心值，");
-	if(happiness==100)
-	{OLED_ShowNum(64,0,100,3,OLED_8X16);}
-	else {OLED_ShowNum(64,0,happiness,2,OLED_8X16);}
+	OLED_ShowNum(64,0,(uint32_t)happiness,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,16);
 }
 void mode_happiness(void)//展示开心值
@@ -442,9 +440,7 @@ void mode_happiness(void)//展示开心值
 void OLED_stamina(void)//OLED展示体力值
 {
 	OLED_ShowChinese(0,0,"体力值，");
-	if(stamina==100)
-	{OLED_ShowNum(64,0,100,3,OLED_8X16);}
-	else {OLED_ShowNum(64,0,stamina,2,OLED_8X16);}
+	OLED_ShowNum(64,0,(uint32_t)stamina,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,16);
 }
 void mode_stamina(void)//展示体力值
@@ -475,13 +471,9 @@ void mode_index(void)//展示开心值和体力值
 {
 	OLED_Clear();
 	OLED_ShowChinese(0,0,"开心值，");
-	if(happiness==100)
-	{OLED_ShowNum(64,0,100,3,OLED_8X16);}
-	else {OLED_ShowNum(64,0,happiness,2,OLED_8X16);}
+	OLED_ShowNum(64,0,(uint32_t)happiness,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_ShowChinese(0,16,"体力值，");
-	if(stamina==100)
-	{OLED_ShowNum(64,16,100,3,OLED_8X16);}
-	else {OLED_ShowNum(64,16,stamina,2,OLED_8X16);}
+	OLED_ShowNum(64,16,(uint32_t)stamina,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,32);
 	snprintf(read, sizeof(read), "[v12][m0][t5]当前的开心值为%d，体力值为%d", happiness, stamina);
 	SYN_FrameInfo(2,(u8*)read);Delay_s(10);

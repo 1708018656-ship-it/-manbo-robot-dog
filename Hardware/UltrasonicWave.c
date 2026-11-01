@@ -6,7 +6,7 @@
 extern uint16_t T;  //记录距离
 int cf=0;//记录重复次数 解决bug用
 
-uint16_t Time; //记录时间
+volatile uint16_t Time; /* written in TIM2 ISR; must match extern in Timer.c */ //记录时间
 void UltrasonicWave_Init(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	//开启GPIOA的时钟

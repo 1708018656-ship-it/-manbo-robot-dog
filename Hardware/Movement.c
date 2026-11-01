@@ -313,6 +313,7 @@ void move_head_up(void)//抬头
 	}
 }
 void move(uint16_t set1 , uint16_t set2 , uint16_t set3 , uint16_t set4 , uint16_t speed){
+	if (speed == 0U) { speed = 1U; } /* avoid divide-by-zero in 1000/speed */
 	angle_1 = Servo_GetAngle1();
 	angle_2 = Servo_GetAngle2();
 	angle_3 = Servo_GetAngle3();
