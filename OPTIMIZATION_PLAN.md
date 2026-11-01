@@ -47,13 +47,21 @@
 4. **修复：`syn6288.c` 包含 `"delay.h"`**，实际文件是 `Delay.h`，在 Linux / CI（大小写敏感）上编译失败。
 5. 新增主机测试 `tests/host/test_gbk_text.c`（13 项断言），并修正原测试中锁定拼音行为的断言。
 
+### 11/01（续）
+6. **修复：主循环命令分发顺序错误，非阻塞状态机被绕过**。`main.c` 先调 `ActionTask_HandleCommand()` 再读串口，于是新收到的运动命令在同一轮直接掉进旧的阻塞式 `mode_xxx()`（`Delay_ms` 步态），下一轮又被 ActionTask 再执行一次：等于每个动作跑两遍，PoseStep 重构对运动命令完全没生效，急停也要等阻塞动作结束。现在先读串口再分发，ActionTask 优先。
+7. 保留原版体验：前进/后退/转弯/摇摆/跳舞会一直重复，直到收到新命令（重构后变成只走一步）。
+8. 体力/开心值规则从旧 `mode_xxx()` 迁到 `User/PetStats.h`（数值与 Mode.c 一一对应），新增 20 项主机测试；每个命令对应的 OLED 表情保留。
+9. 删除没进工程的死代码：`Hardware/Serial.c/.h`（里面有重复的 `USART1_IRQHandler`，一旦加进工程就链接失败）、空的 `Hardware/Mode.c/.h`（会遮蔽 `User/Mode.h`）。
+10. 加 `.gitattributes` / `.editorconfig` 统一换行。
+11. **ASRPro 协议对齐**：`CMD_STAND='1'`（STM32 上是抬头）改成 `'q'`，`CMD_SIT='3'`（STM32 不处理）改成 `'s'`，握手改成 `'j'`（交替抬手），补全全部命令常量。新增 `docs/protocol.md` 作为唯一权威协议表。
+12. **ASRPro**：`delay(6000)` 阻塞改为 `millis()` 截止时间；非运动命令会取消待发送的停止命令；队列空指针保护；删除手工定义的 `__dso_handle`；`commands.h` 补 `<stdint.h>`（原来先包含它会编译失败）。
+
 ## 待办（按优先级）
 
 ### 固件（11/02）
-- [ ] ASRPro `commands.h` 中 `CMD_STAND='1'`、`CMD_SIT='3'` 等与 STM32 实际协议不一致 → 生成一份共享协议表，两端对齐
-- [ ] ASRPro 手工定义 `__dso_handle`、6 s 阻塞发送 → 改为非阻塞
 - [ ] 源码编码混用（UTF-8 / GBK / CRLF+LF 混排）→ 统一：注释 UTF-8，GBK 文本一律用转义；加 `.gitattributes` / `.editorconfig`
-- [ ] `Hardware/Serial.c`、空的 `Hardware/Mode.c/.h` 未进工程 → 删除或归档，避免误用
+- [ ] Mode.c 里运动类 `mode_xxx()` 已不再被调用 → 清理；把状态播报（K/T/Z）、`mode_nanshou` 里的 `Delay_s` 改为非阻塞
+- [ ] OLED 刷新移到 `AppTask_Ui`（脏标记），避免主循环里整屏软件 I2C 刷新
 - [ ] 加 GCC + Makefile/CMake 构建（Keil 工程保留），链接脚本 `STM32F103C8Tx_FLASH.ld`
 - [ ] 超声波测距整数化、舵机角度斜坡限速、低电压检测（需 ADC 引脚，与 PCB 联动）
 - [ ] 加独立看门狗 IWDG

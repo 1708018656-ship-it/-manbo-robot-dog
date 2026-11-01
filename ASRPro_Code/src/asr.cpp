@@ -17,10 +17,8 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 
-/* 外部依赖 */
-extern "C" {
-    void* __dso_handle = 0;
-}
+/* 注意：不要手工定义 __dso_handle。ESP32 Arduino 运行时已经提供，
+ * 重复定义会导致链接错误或破坏全局对象析构。 */
 
 /* ASR Pro库函数声明 (假设这些函数由ASR Pro SDK提供) */
 extern "C" {
@@ -44,6 +42,9 @@ HardwareSerial Serial2(2);  // 使用UART2
 
 /* 私有函数声明 --------------------------------------------------------------*/
 static void ASR_ProcessCommand(uint32_t snid);
+static void ASR_ServicePendingStop(void);
+static bool s_StopPending = false;
+static uint32_t s_StopDeadlineMs = 0;
 static bool ASR_SendCommandWithDelay(char cmd, uint32_t delay_ms);
 static void ASR_ErrorHandler(const char* error_msg);
 
@@ -92,6 +93,13 @@ void ASR_Process(void)
 {
     uint32_t snid;
     
+    // 到期后自动发送停止命令（非阻塞，替代原来的 delay(6000)）
+    ASR_ServicePendingStop();
+
+    if (g_MessageQueue == NULL) {
+        return;
+    }
+
     // 检查消息队列
     if (xQueueReceive(g_MessageQueue, &snid, 0) == pdTRUE) {
         g_CurrentSnid = snid;
@@ -111,6 +119,11 @@ void ASR_Process(void)
  */
 bool ASR_HandleCommand(uint32_t snid)
 {
+    if (g_MessageQueue == NULL) {
+        ASR_ErrorHandler("ASR not initialised");
+        return false;
+    }
+
     // 将命令放入队列
     if (xQueueSend(g_MessageQueue, &snid, 0) != pdTRUE) {
         ASR_ErrorHandler("Message queue full");
@@ -249,6 +262,8 @@ static void ASR_ProcessCommand(uint32_t snid)
         if (snid >= ASR_ID_FORWARD && snid <= ASR_ID_DANCE) {
             ASR_SendCommandWithDelay(cmd, ASR_ACTION_DELAY);
         } else {
+            // 非运动命令取消待发送的停止，避免它打断新动作
+            s_StopPending = false;
             ASR_SendCommand(cmd);
         }
     }
@@ -266,12 +281,20 @@ static bool ASR_SendCommandWithDelay(char cmd, uint32_t delay_ms)
     if (!ASR_SendCommand(cmd)) {
         return false;
     }
-    
-    // 延迟
-    delay(delay_ms);
-    
-    // 发送停止命令
-    return ASR_SendCommand(CMD_STOP);
+
+    // 记录截止时间，由 ASR_Process() 到期后发送停止命令。
+    // 新的运动命令会刷新截止时间；期间仍能及时处理新的识别结果。
+    s_StopDeadlineMs = millis() + delay_ms;
+    s_StopPending = true;
+    return true;
+}
+
+static void ASR_ServicePendingStop(void)
+{
+    if (s_StopPending && (int32_t)(millis() - s_StopDeadlineMs) >= 0) {
+        s_StopPending = false;
+        (void)ASR_SendCommand(CMD_STOP);
+    }
 }
 
 /**
