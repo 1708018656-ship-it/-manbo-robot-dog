@@ -11,6 +11,8 @@
 #include "usart3.h"
 #include "syn6288.h"
 #include "stdio.h"
+#include "ActionTask.h"
+#include "AudioTask.h"
 //***各种状态执行函数***//
 //想让动作执行一次后停止，就在末尾加上“	move_mode = '0';”，否则动作持续反复执行，
 
@@ -413,27 +415,22 @@ void OLED_happiness(void)//OLED展示开心值
 	OLED_ShowNum(64,0,(uint32_t)happiness,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,16);
 }
-void mode_happiness(void)//展示开心值
+void mode_happiness(void)//展示开心值（非阻塞：一次语音 + 一个动作，不再 Delay_s）
 {
+	const char *tail = "";
 	OLED_ShowImage(0, 8, 128, 48, BMP1); //立正脸
-	OLED_happiness();
-	snprintf(read, sizeof(read), "[v12][m0][t5]当前的开心值为%d", happiness);
-	SYN_FrameInfo(2,(u8*)read);Delay_s(4);
-	if(happiness>=60){
+	if (happiness >= 60) {
 		OLED_ShowImage(0, 8, 128, 48, BMP9); //开心脸
-		OLED_happiness();
-		SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]和主人在一起真开心");
-		move_shake_qianhou();
-		move_shake_qianhou();Delay_s(4);
-	}
-	else if(happiness<=10){
+		tail = "，和主人在一起真开心";
+		(void)ActionTask_RequestMotion(ACTION_SWING_FORWARD_BACK);
+	} else if (happiness <= 10) {
 		OLED_ShowImage(0, 8, 128, 48, BMP2);
-		OLED_happiness();
-		SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]陪小呆玩一会叭");
-		if (rand()%2) //随机产生两种动作中的一种
-			{move_sleep_p();}
-		else{move_sleep_w();}
-	}Delay_s(3);
+		tail = "，陪小呆玩一会叭";
+		(void)ActionTask_RequestMotion((rand() % 2) ? ACTION_SLEEP_PRONE : ACTION_SLEEP_SIDE);
+	}
+	OLED_happiness();
+	snprintf(read, sizeof(read), "[v12][m0][t5]当前的开心值为%d%s", happiness, tail);
+	(void)AudioTask_RequestText(read);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
@@ -443,27 +440,22 @@ void OLED_stamina(void)//OLED展示体力值
 	OLED_ShowNum(64,0,(uint32_t)stamina,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,16);
 }
-void mode_stamina(void)//展示体力值
+void mode_stamina(void)//展示体力值（非阻塞）
 {
+	const char *tail = "";
 	OLED_ShowImage(0, 8, 128, 48, BMP1); //立正脸
-	OLED_stamina();
-	snprintf(read, sizeof(read), "[v12][m0][t5]当前的体力值为%d", stamina);
-	SYN_FrameInfo(2,(u8*)read);Delay_s(4);
-	if(stamina>=60){
+	if (stamina >= 60) {
 		OLED_ShowImage(0, 8, 128, 48, BMP9); //开心脸
-		OLED_stamina();
-		SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]小呆精力满满，和我一起玩叭");
-		move_shake_qianhou();
-		move_shake_qianhou();Delay_s(6);
-	}
-	else if(stamina<=10){
+		tail = "，小呆精力满满，和我一起玩叭";
+		(void)ActionTask_RequestMotion(ACTION_SWING_FORWARD_BACK);
+	} else if (stamina <= 10) {
 		OLED_ShowImage(0, 8, 128, 48, BMP2);
-		OLED_stamina();
-		SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]让小呆休息一下叭");
-		if (rand()%2) //随机产生两种动作中的一种
-			{move_sleep_p();}
-		else{move_sleep_w();}
-	}Delay_s(4);
+		tail = "，让小呆休息一下叭";
+		(void)ActionTask_RequestMotion((rand() % 2) ? ACTION_SLEEP_PRONE : ACTION_SLEEP_SIDE);
+	}
+	OLED_stamina();
+	snprintf(read, sizeof(read), "[v12][m0][t5]当前的体力值为%d%s", stamina, tail);
+	(void)AudioTask_RequestText(read);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
@@ -476,7 +468,7 @@ void mode_index(void)//展示开心值和体力值
 	OLED_ShowNum(64,16,(uint32_t)stamina,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,32);
 	snprintf(read, sizeof(read), "[v12][m0][t5]当前的开心值为%d，体力值为%d", happiness, stamina);
-	SYN_FrameInfo(2,(u8*)read);Delay_s(10);
+	(void)AudioTask_RequestText(read); /* 非阻塞，原来 Delay_s(10) */
 	previous_mode = move_mode;
 	move_mode = '0';
 }

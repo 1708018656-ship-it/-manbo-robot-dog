@@ -65,7 +65,9 @@
 
 ### 固件（11/02）
 - [ ] 源码编码混用（UTF-8 / GBK / CRLF+LF 混排）→ 统一：注释 UTF-8，GBK 文本一律用转义；加 `.gitattributes` / `.editorconfig`
-- [ ] Mode.c 里运动类 `mode_xxx()` 已不再被调用 → 清理；把状态播报（K/T/Z）、`mode_nanshou` 里的 `Delay_s` 改为非阻塞
+- [x] 状态播报 K/T/Z 改为非阻塞（11/01）：原来最长 `Delay_s(10)`+阻塞摇摆，期间连急停都不响应；现在合并成一句语音交给 AudioTask，动作交给 ActionTask。也避免了阻塞驱动和 AudioTask 同时往 USART2 写导致语音帧交错
+- [ ] Mode.c 剩余阻塞：`mode_nanshou`、`mode_xiaodai`、开机问候、体力为 0 时的睡觉；运动类 `mode_xxx()` 已不再被调用 → 清理
+- [ ] 全部阻塞清掉后再加 IWDG（现在加会被长延时误复位）
 - [ ] OLED 刷新移到 `AppTask_Ui`（脏标记），避免主循环里整屏软件 I2C 刷新
 - [x] GCC 构建（11/01 完成，Keil 工程保留）：`Makefile`、`gcc/STM32F103C8Tx.ld`、`gcc/startup_stm32f103xb.c`（向量表照搬 Keil 启动文件）；`make V2=1` 切新 PCB 引脚。本地用 clang+lld 试链接：只缺 newlib/libgcc 提供的符号，代码段约 35 KB / 64 KB。CI 在 GitHub 上用真正的 arm-none-eabi-gcc 编两种板型并上传 .hex。
 - [x] 修复老版 CMSIS `core_cm3.c` 的 `strex*` 内联汇编约束（`"=r"`→`"=&r"`），新版 GCC 会报 "registers may not be the same"
