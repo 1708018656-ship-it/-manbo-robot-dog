@@ -55,6 +55,11 @@
 10. 加 `.gitattributes` / `.editorconfig` 统一换行。
 11. **ASRPro 协议对齐**：`CMD_STAND='1'`（STM32 上是抬头）改成 `'q'`，`CMD_SIT='3'`（STM32 不处理）改成 `'s'`，握手改成 `'j'`（交替抬手），补全全部命令常量。新增 `docs/protocol.md` 作为唯一权威协议表。
 12. **ASRPro**：`delay(6000)` 阻塞改为 `millis()` 截止时间；非运动命令会取消待发送的停止命令；队列空指针保护；删除手工定义的 `__dso_handle`；`commands.h` 补 `<stdint.h>`（原来先包含它会编译失败）。
+13. CI：GitHub Actions 每次推送跑主机测试 + `tools/check_firmware_syntax.sh`（clang 对 Keil 工程全部 27 个 C 文件做 Cortex-M3 语法检查，隐式函数声明直接报错）。
+14. 换行符统一单独一个提交（`2b6f8bf`，无代码改动），后面的提交 diff 保持干净。
+15. **修复：`Time` 在 `UltrasonicWave.c` 定义为普通变量，`Timer.c` 却声明为 `extern volatile`**：两个编译单元限定符不一致，超声波读数可能被编译器缓存。
+16. **修复：体力/开心值在 OLED 上只显示 2 位**（体力 350 会显示成 "50"），统一 3 位。`move()` 加 `speed==0` 保护。
+17. 新增 `User/BoardConfig.h`：默认保持原版引脚；定义 `MANBO_BOARD_V2` 后切到新 PCB 引脚（红外迁到 PB12–PB15，PA4 用于电池电压采样）。红外驱动改为用宏。
 
 ## 待办（按优先级）
 
@@ -65,6 +70,8 @@
 - [ ] 加 GCC + Makefile/CMake 构建（Keil 工程保留），链接脚本 `STM32F103C8Tx_FLASH.ld`
 - [ ] 超声波测距整数化、舵机角度斜坡限速、低电压检测（需 ADC 引脚，与 PCB 联动）
 - [ ] 加独立看门狗 IWDG
+- [ ] `Edge_detect()` 红外防跌落还是阻塞式动作 → 改成向 ActionTask 发请求，且优先级高于普通命令
+- [ ] MANBO_BOARD_V2：电池 ADC 采样 + 低电量处理
 
 ### 硬件（11/03）
 - [ ] KiCad 8 工程：STM32F103C8T6 最小系统板（Blue Pill）插座式扩展底板

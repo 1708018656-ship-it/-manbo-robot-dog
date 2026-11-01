@@ -1,42 +1,45 @@
 #include "stm32f10x.h"                  // Device header
 #include "Movement.h"
 #include "Delay.h"
-//***ºìÍâĞüÑÂ¼ì²â***//
-extern uint8_t t1 ; //´æ´¢ºìÍâµÄĞÅºÅ Ç°
-extern uint8_t t2 ; //´æ´¢ºìÍâµÄĞÅºÅ ºó
-extern uint8_t t3 ; //´æ´¢ºìÍâµÄĞÅºÅ ×ó
-extern uint8_t t4 ; //´æ´¢ºìÍâµÄĞÅºÅ ÓÒ
-void hongwai_init(void) //ºìÍâ³õÊ¼»¯ ÊäÈëÒı½ÅÏÂÀ­ÊäÈë 
+#include "BoardConfig.h"
+//***çº¢å¤–æ‚¬å´–æ£€æµ‹***//
+extern uint8_t t1 ; //å­˜å‚¨çº¢å¤–çš„ä¿¡å· å‰
+extern uint8_t t2 ; //å­˜å‚¨çº¢å¤–çš„ä¿¡å· å
+extern uint8_t t3 ; //å­˜å‚¨çº¢å¤–çš„ä¿¡å· å·¦
+extern uint8_t t4 ; //å­˜å‚¨çº¢å¤–çš„ä¿¡å· å³
+void hongwai_init(void) //çº¢å¤–åˆå§‹åŒ–ï¼Œä¸‹æ‹‰è¾“å…¥ï¼ˆå¸¸æ€ä¸º 0ï¼Œæ£€æµ‹åˆ°æ‚¬å´–ä¸º 1ï¼‰
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	
-	
-	/*GPIO³õÊ¼»¯*/                                        
 	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;//¾Í±ßÔµ¼ì²â¶øÑÔ IPD±íÊ¾³£Ì¬Îª0
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5| GPIO_Pin_11 | GPIO_Pin_12;
+
+	RCC_APB2PeriphClockCmd(IR_GPIO_CLK, ENABLE);
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);		
-    GPIO_ResetBits(GPIOA,GPIO_Pin_4);
-	GPIO_ResetBits(GPIOA,GPIO_Pin_5);
-	GPIO_ResetBits(GPIOA,GPIO_Pin_11);
-	GPIO_ResetBits(GPIOA,GPIO_Pin_12);
+
+	GPIO_InitStructure.GPIO_Pin = IR_FRONT_PIN;
+	GPIO_Init(IR_FRONT_PORT, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = IR_BACK_PIN;
+	GPIO_Init(IR_BACK_PORT, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = IR_LEFT_PIN;
+	GPIO_Init(IR_LEFT_PORT, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = IR_RIGHT_PIN;
+	GPIO_Init(IR_RIGHT_PORT, &GPIO_InitStructure);
 }
 
-uint8_t hongwai_get_1(void) //Ç°
+uint8_t hongwai_get_1(void) //å‰
 {
-	return GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_11);
+	return GPIO_ReadInputDataBit(IR_FRONT_PORT, IR_FRONT_PIN);
 }
-uint8_t hongwai_get_2(void)//ºó
+uint8_t hongwai_get_2(void) //å
 {
-	return GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_4);
+	return GPIO_ReadInputDataBit(IR_BACK_PORT, IR_BACK_PIN);
 }
-uint8_t hongwai_get_3(void)//×ó
+uint8_t hongwai_get_3(void) //å·¦
 {
-	return GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_12);
+	return GPIO_ReadInputDataBit(IR_LEFT_PORT, IR_LEFT_PIN);
 }
-uint8_t hongwai_get_4(void)//ÓÒ
+uint8_t hongwai_get_4(void) //å³
 {
-	return GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5);
+	return GPIO_ReadInputDataBit(IR_RIGHT_PORT, IR_RIGHT_PIN);
 }
 void Edge_detect(void)
 {
