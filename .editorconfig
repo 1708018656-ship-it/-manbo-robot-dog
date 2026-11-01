@@ -1,0 +1,18 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Firmware sources: keep CRLF for Keil. Some legacy files are still GBK
+# (SYN6288 needs GBK text); new GBK strings must be written as \x escapes.
+[*.{c,h,s}]
+end_of_line = crlf
+indent_style = space
+indent_size = 4
+
+[*.{sh,py,md,yml,yaml}]
+end_of_line = lf
+indent_style = space
+indent_size = 2

@@ -21,6 +21,7 @@
 #include "SafetyTask.h"
 #include "ActionTask.h"
 #include "AudioTask.h"
+#include "PetStats.h"
 
 /****************************************************
 *
@@ -48,6 +49,27 @@ uint16_t ff=0; //Á¬ĞøÇ°½ø¼ÆÊı
 uint16_t bb=0; //Á¬ĞøºóÍË¼ÆÊı
 uint16_t ll=0; //Á¬Ğø×ó×ª¼ÆÊı
 uint16_t rr=0; //Á¬ĞøÓÒ×ª¼ÆÊı
+static uint8_t continuous_cmd = 0U; /* gait that repeats until a new command */
+static uint16_t gait_repeat = 0U;   /* same gait back-to-back counter */
+
+/* OLED face per command, same faces the legacy mode_xxx() functions used. */
+static void Face_ShowForCommand(uint8_t cmd)
+{
+	switch (cmd)
+	{
+		case 'f': case 'b': case 'l': case 'r':
+			OLED_ShowImage(0, 0, 128, 64, BMP2); break;
+		case 'w': case 'z': case 'd':
+			OLED_ShowImage(0, 0, 128, 64, BMP5); break;
+		case '5': case 'q': case '1':
+			OLED_ShowImage(0, 0, 128, 64, BMP1); break;
+		case 's': case 'o': case 'y':
+			OLED_ShowImage(0, 0, 128, 64, BMP12); break;
+		default:
+			break;
+	}
+	LED13_Turn();
+}
 
 int main(void)
 {
@@ -91,27 +113,53 @@ int main(void)
 		if (SafetyTask_ConsumeStopRequest() != 0U)
 		{
 			move_mode = '5';
-			previous_mode = '5';
+			continuous_cmd = 0U;
 		}
-		if (ActionTask_HandleCommand(move_mode) != 0U)
+
+		/* Read the newest command BEFORE dispatching, so motion commands go
+		 * to the non-blocking ActionTask first. Previously the byte was read
+		 * after dispatch and fell straight into the blocking legacy mode_xxx()
+		 * chain below, which bypassed the PoseStep state machine and then ran
+		 * the gait a second time on the next loop. */
+		if (stamina > 0)
 		{
-			move_mode = '0';
+			move_mode1 = USART1_GetRxData();
+			move_mode3 = USART3_GetRxData();
+			if (USART1_GetRxFlag()) {          /* Bluetooth has priority over voice */
+				move_mode = move_mode1;
+			}
+			else if (USART3_GetRxFlag()) {
+				move_mode = move_mode3;
+			}
 		}
 
-
-
-		//***ÌåÁ¦ÖµÓë¿ªĞÄÖµ·´Ó¦ÉèÖÃ***//
-		if(stamina>0)//ÌåÁ¦Öµ´óÓÚÁã²Å»áÌıÁî
-	{
-		move_mode1 = USART1_GetRxData();		//»ñÈ¡À¶ÑÀ´®¿Ú½ÓÊÕµÄÊı¾İ
-		move_mode3 = USART3_GetRxData();		//»ñÈ¡ÓïÒôÊ¶±ğ´®¿Ú½ÓÊÕµÄÊı¾İ
-		if (USART1_GetRxFlag()) {//ÉèÖÃÀ¶ÑÀ½ÓÊÕÓÅÏÈ¼¶´óÓÚÓïÒôÊ¶±ğ
-			move_mode = move_mode1;
+		if (move_mode != '0')
+		{
+			if (ActionTask_HandleCommand(move_mode) != 0U)
+			{
+				PetStats_Apply(move_mode, previous_mode, &gait_repeat, &stamina, &happiness);
+				Face_ShowForCommand(move_mode);
+				continuous_cmd = PetStats_IsContinuous(move_mode) ? move_mode : 0U;
+				previous_mode = move_mode;
+				move_mode = '0';
+			}
+			else
+			{
+				continuous_cmd = 0U;   /* any other new command stops walking */
+			}
 		}
-		else if (USART3_GetRxFlag()){
-			move_mode = move_mode3;
+		else if ((continuous_cmd != 0U) && (stamina > 0) &&
+		         (ActionTask_IsActive() == 0U))
+		{
+			/* Legacy behaviour: keep walking / dancing until a new command. */
+			if (ActionTask_HandleCommand(continuous_cmd) != 0U)
+			{
+				PetStats_Apply(continuous_cmd, previous_mode, &gait_repeat, &stamina, &happiness);
+				previous_mode = continuous_cmd;
+			}
 		}
-	}
+
+		//***ä½“åŠ›å€¼ä¸å¼€å¿ƒå€¼ååº”è®¾ç½®***//
 		if(stamina<0)//ÌåÁ¦ÖµĞ¡ÓÚ0£¬Ö´ĞĞ¡°ÄÑÊÜ¡±×´Ì¬
 	{
 		mode_nanshou();

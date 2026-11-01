@@ -48,3 +48,12 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/gbk_text_tests"
 
 "$BUILD_DIR/gbk_text_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/User" \
+  "$ROOT_DIR/tests/host/test_pet_stats.c" \
+  -o "$BUILD_DIR/pet_stats_tests"
+
+"$BUILD_DIR/pet_stats_tests"

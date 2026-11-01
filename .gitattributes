@@ -1,0 +1,13 @@
+# Normalise line endings in the repo; Keil on Windows still gets CRLF on checkout.
+* text=auto
+*.c   text eol=crlf
+*.h   text eol=crlf
+*.s   text eol=crlf
+*.uvprojx text eol=crlf
+*.uvoptx  text eol=crlf
+*.sh  text eol=lf
+*.py  text eol=lf
+*.md  text eol=lf
+*.zip binary
+*.pdf binary
+*.png binary
