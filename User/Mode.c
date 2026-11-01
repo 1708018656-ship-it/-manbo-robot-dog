@@ -317,11 +317,11 @@ void mode_sleepwo(void)//卧下睡觉
 			stamina =100;
 			happiness +=15;
 }
-void mode_nanshou(void)//难受
+void mode_nanshou(void)//难受（非阻塞）
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP2); //前进脸	
-	move_sleep_w();
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]呜呜");Delay_s(1);
+	OLED_ShowImage(0, 0, 128, 64, BMP2); //前进脸
+	(void)ActionTask_RequestMotion(ACTION_SLEEP_SIDE);
+	(void)AudioTask_RequestText("[v12][m0][t5]呜呜");
 	previous_mode = move_mode;
 	move_mode = '0';
 }
@@ -401,11 +401,10 @@ void mode_world(void)//世界之光
 	previous_mode = move_mode;
 	move_mode = '0';
 }
-void mode_xiaodai(void)//语音唤醒小呆
+void mode_xiaodai(void)//语音唤醒小呆（非阻塞）
 {
 	OLED_ShowImage(0, 0, 128, 64, BMP1); //立正脸
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]我在");
-	Delay_s(1);
+	(void)AudioTask_RequestText("[v12][m0][t5]我在");
 	previous_mode = move_mode;
 	move_mode = '0';
 }

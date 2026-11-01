@@ -121,15 +121,19 @@ int main(void)
 		 * after dispatch and fell straight into the blocking legacy mode_xxx()
 		 * chain below, which bypassed the PoseStep state machine and then ran
 		 * the gait a second time on the next loop. */
-		if (stamina > 0)
 		{
+			/* 浣撳姏 <= 0 鏃跺彧鎺ュ彈鐫¤鍛戒护锛涘瓧鑺傜収甯稿彇鍑猴紝閬垮厤鏃ф暟鎹湪鎭㈠浣撳姏鍚庤閲嶆斁 */
+			uint8_t rx = 0U;
 			move_mode1 = USART1_GetRxData();
 			move_mode3 = USART3_GetRxData();
 			if (USART1_GetRxFlag()) {          /* Bluetooth has priority over voice */
-				move_mode = move_mode1;
+				rx = move_mode1;
 			}
 			else if (USART3_GetRxFlag()) {
-				move_mode = move_mode3;
+				rx = move_mode3;
+			}
+			if ((rx != 0U) && ((stamina > 0) || (rx == '2') || (rx == 'p'))) {
+				move_mode = rx;
 			}
 		}
 
@@ -164,13 +168,6 @@ int main(void)
 	{
 		mode_nanshou();
 		stamina=0;
-	}
-		if(stamina==0)//体力值为0后，只接受睡觉指令
-	{
-		if (USART1_GetRxData() == '2' || USART3_GetRxData() == '2')
-		{mode_sleepwo();}
-		else if (USART1_GetRxData() == 'p' || USART3_GetRxData() == 'p')
-		{mode_sleeppa();}
 	}
 		if(stamina>500)//体力值不大于1000
 		{stamina=500;}
