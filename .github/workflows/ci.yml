@@ -13,3 +13,22 @@ jobs:
         run: bash tests/host/run_tests.sh
       - name: Firmware syntax check (clang, Cortex-M3)
         run: bash tools/check_firmware_syntax.sh
+
+  arm-gcc-build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        board: ["0", "1"]   # 0 = original wiring, 1 = MANBO_BOARD_V2 PCB
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ARM GCC
+        run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
+      - name: Build firmware
+        run: make -j"$(nproc)" V2=${{ matrix.board }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manbo-firmware-v2-${{ matrix.board }}
+          path: |
+            build/manbo.hex
+            build/manbo.bin
+            build/manbo.map

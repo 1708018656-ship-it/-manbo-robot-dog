@@ -67,7 +67,9 @@
 - [ ] 源码编码混用（UTF-8 / GBK / CRLF+LF 混排）→ 统一：注释 UTF-8，GBK 文本一律用转义；加 `.gitattributes` / `.editorconfig`
 - [ ] Mode.c 里运动类 `mode_xxx()` 已不再被调用 → 清理；把状态播报（K/T/Z）、`mode_nanshou` 里的 `Delay_s` 改为非阻塞
 - [ ] OLED 刷新移到 `AppTask_Ui`（脏标记），避免主循环里整屏软件 I2C 刷新
-- [ ] 加 GCC + Makefile/CMake 构建（Keil 工程保留），链接脚本 `STM32F103C8Tx_FLASH.ld`
+- [x] GCC 构建（11/01 完成，Keil 工程保留）：`Makefile`、`gcc/STM32F103C8Tx.ld`、`gcc/startup_stm32f103xb.c`（向量表照搬 Keil 启动文件）；`make V2=1` 切新 PCB 引脚。本地用 clang+lld 试链接：只缺 newlib/libgcc 提供的符号，代码段约 35 KB / 64 KB。CI 在 GitHub 上用真正的 arm-none-eabi-gcc 编两种板型并上传 .hex。
+- [x] 修复老版 CMSIS `core_cm3.c` 的 `strex*` 内联汇编约束（`"=r"`→`"=&r"`），新版 GCC 会报 "registers may not be the same"
+- [ ] 11/02 待确认：CI 上 GCC 实际构建通过（需要先推到 GitHub）
 - [ ] 超声波测距整数化、舵机角度斜坡限速、低电压检测（需 ADC 引脚，与 PCB 联动）
 - [ ] 加独立看门狗 IWDG
 - [x] `Edge_detect()` 红外防跌落改为非阻塞：向 ActionTask 提交避险动作（可抢占正在进行的前进），并取消持续行走（11/01 完成）
