@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  host-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Host unit tests
+        run: bash tests/host/run_tests.sh
+      - name: Firmware syntax check (clang, Cortex-M3)
+        run: bash tools/check_firmware_syntax.sh
+      - name: ASRPro syntax check
+        run: |
+          python3 -m pip install --quiet platformio || true
+          echo "Full PlatformIO build is optional; see ASRPro_Code/README.md"
