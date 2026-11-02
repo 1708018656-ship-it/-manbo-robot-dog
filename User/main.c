@@ -122,6 +122,7 @@ int main(void)
 	/*进入默认状态*/
 	OLED_Clear();
 	OLED_ShowImage(0, 0, 128, 64, BMP1); //立正
+	OLED_Update();          /* boot: show the face now (normally AppTask_Ui refreshes) */
  
 /**************语音合成芯片设置命令*********************/
 //选择背景音乐2。(0：无背景音乐  1-15：背景音乐可选)
@@ -129,7 +130,13 @@ int main(void)
 //v[0~16]:0朗读音量为静音，16朗读音量最大
 //t[0~5]:0朗读语速最慢，5朗读语速最快
 
-	SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]\xCD\xFA\xCD\xFA" /* [v12][m0][t5]旺旺 */);Delay_s(1);//唤醒后狗叫一声,音量12适合演示，10适合调试
+	/* After a watchdog reset skip the 1 s greeting: recover quickly, and do
+	 * not bark on every reset if something keeps tripping the watchdog. */
+	if (Watchdog_CausedLastReset() == 0U)
+	{
+		SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]\xCD\xFA\xCD\xFA" /* 旺旺 */);
+		Delay_s(1);   //唤醒后狗叫一声,音量12适合演示，10适合调试
+	}
 	
 	Watchdog_Init();       /* after all blocking start-up code */
 
