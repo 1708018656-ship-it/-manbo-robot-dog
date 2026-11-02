@@ -68,13 +68,16 @@ def check_placement(placed, board_w, board_h, edge=0.5):
     for ref, (x1, y1, x2, y2) in boxes:
         if x1 < edge or y1 < edge or x2 > board_w - edge or y2 > board_h - edge:
             errs.append("%s body outside board (%.1f,%.1f)-(%.1f,%.1f)" % (ref, x1, y1, x2, y2))
-    for i in range(len(boxes)):
-        for j in range(i + 1, len(boxes)):
-            a, b = boxes[i][1], boxes[j][1]
+    # courtyard = body + 0.25 mm (same as the F.CrtYd rectangle written to the
+    # board and what KiCad's courtyards_overlap rule checks)
+    m = 0.25
+    crt = [(r, (b[0] - m, b[1] - m, b[2] + m, b[3] + m)) for r, b in boxes]
+    for i in range(len(crt)):
+        for j in range(i + 1, len(crt)):
+            a, b = crt[i][1], crt[j][1]
             if a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]:
                 ov = (min(a[2], b[2]) - max(a[0], b[0])) * (min(a[3], b[3]) - max(a[1], b[1]))
-                if ov > 0.05:
-                    errs.append("overlap %s / %s (%.1f mm2)" % (boxes[i][0], boxes[j][0], ov))
+                errs.append("courtyard overlap %s / %s (%.2f mm2)" % (crt[i][0], crt[j][0], ov))
     # pad-to-pad clearance between different nets
     pads = []
     for pl in placed:

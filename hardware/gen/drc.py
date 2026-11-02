@@ -90,7 +90,7 @@ def _dist(a, b):
     if ka == "circle" and kb == "circle":
         return math.hypot(a.geom[0] - b.geom[0], a.geom[1] - b.geom[1]) - a.r - b.r
     if ka == "circle":
-        a, b = b, a
+        a, b, ka, kb = b, a, kb, ka
     if kb == "circle":   # rect vs circle
         rx, ry, w, h = a.geom
         x, y = b.geom
