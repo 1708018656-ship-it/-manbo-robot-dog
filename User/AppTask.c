@@ -7,6 +7,7 @@
 #include "SensorTask.h"
 #include "BatteryTask.h"
 #include "PerfProbe.h"
+#include "OLED.h"
 
 #define APP_TASK_COUNT 7U
 
@@ -38,7 +39,7 @@ static AppTaskSlot g_tasks[APP_TASK_COUNT] =
     { AppTask_Decision, 1U, 0U },
     { AppTask_Action,   1U, 0U },
     { AppTask_Audio,   10U, 0U },
-    { AppTask_Ui,      50U, 0U }
+    { AppTask_Ui,      10U, 0U }
 };
 
 void AppTask_Init(void)
@@ -114,5 +115,5 @@ static void AppTask_Audio(uint32_t now_ms)
 static void AppTask_Ui(uint32_t now_ms)
 {
     (void)now_ms;
-    /* TODO(phase-3): 使用脏标记限频刷新 OLED 和 LED。 */
+    OLED_UpdateStep();   /* one 128-byte page per 10 ms tick */
 }

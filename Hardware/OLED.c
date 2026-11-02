@@ -69,6 +69,9 @@
   */
 uint8_t OLED_DisplayBuf[8][128];
 
+/* Bit n set = page n of OLED_DisplayBuf changed but not yet sent. */
+static volatile uint8_t g_oled_dirty_pages = 0U;
+
 /*********************全局变量*/
 
 
@@ -411,6 +414,32 @@ void OLED_Update(void)
 		OLED_WriteData(OLED_DisplayBuf[j], 128);
 	}
 }
+
+/**
+  * 函    数：非阻塞刷新：每次只把一个有改动的页（128 字节）写到屏幕
+  * 说    明：由 AppTask_Ui 每 10 ms 调用一次；整屏最多 80 ms 刷完，
+  *           主循环每次只被占用约 1/8 帧的 I2C 时间，而不是整帧。
+  */
+void OLED_UpdateStep(void)
+{
+	uint8_t j;
+	for (j = 0; j < 8; j ++)
+	{
+		if ((g_oled_dirty_pages & (1U << j)) != 0U)
+		{
+			g_oled_dirty_pages &= (uint8_t)~(1U << j);
+			OLED_SetCursor(j, 0);
+			OLED_WriteData(OLED_DisplayBuf[j], 128);
+			return;
+		}
+	}
+}
+
+uint8_t OLED_IsUpdatePending(void)
+{
+	return (g_oled_dirty_pages != 0U) ? 1U : 0U;
+}
+
 
 /**
   * 函    数：将OLED显存数组部分更新到OLED屏幕
@@ -814,6 +843,15 @@ void OLED_ShowImage(uint8_t X, uint8_t Y, uint8_t Width, uint8_t Height, const u
 	/*将图像所在区域清空*/
 	OLED_ClearArea(X, Y, Width, Height);
 	
+	/* Mark touched pages first (the loop below may return early at the screen edge).
+	 * The I2C transfer is deferred: AppTask_Ui pushes one dirty page per tick. */
+	{
+		uint8_t first = Y / 8U;
+		uint8_t last = (uint8_t)((Y + Height - 1U) / 8U);
+		if (last > 7U) { last = 7U; }
+		for (j = first; j <= last; j++) { g_oled_dirty_pages |= (uint8_t)(1U << j); }
+	}
+	
 	/*遍历指定图像涉及的相关页*/
 	/*(Height - 1) / 8 + 1的目的是Height / 8并向上取整*/
 	for (j = 0; j < (Height - 1) / 8 + 1; j ++)
@@ -836,7 +874,7 @@ void OLED_ShowImage(uint8_t X, uint8_t Y, uint8_t Width, uint8_t Height, const u
 			OLED_DisplayBuf[Y / 8 + j + 1][X + i] |= Image[j * Width + i] >> (8 - Y % 8);
 		}
 	}
-	OLED_Update();
+
 }
 
 /**

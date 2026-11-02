@@ -25,6 +25,8 @@ void OLED_Init(void);
 
 /*更新函数*/
 void OLED_Update(void);
+void OLED_UpdateStep(void);        /* non-blocking: one dirty page per call */
+uint8_t OLED_IsUpdatePending(void);
 void OLED_UpdateArea(uint8_t X, uint8_t Y, uint8_t Width, uint8_t Height);
 
 /*显存控制函数*/
