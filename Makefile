@@ -15,7 +15,7 @@ TARGET  := $(BUILD)/manbo
 # Same C files as Project.uvprojx; the Keil startup .s is ARMCC-only, so the
 # GCC build uses gcc/startup_stm32f103xb.c instead.
 SRCS := $(shell grep -oP '(?<=<FilePath>)[^<]+\.c(?=</FilePath>)' Project.uvprojx | tr '\\' '/' | sed 's|^\./||')
-SRCS += gcc/startup_stm32f103xb.c
+SRCS += gcc/startup_stm32f103xb.c gcc/syscalls.c
 
 DEFS := -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD
 ifeq ($(V2),1)
