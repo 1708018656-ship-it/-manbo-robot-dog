@@ -11,6 +11,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Host unit tests
         run: bash tests/host/run_tests.sh
+      - name: Source encoding check (UTF-8, GBK only as \x escapes)
+        run: python3 tools/fix_encoding.py --check User/*.[ch] System/*.[ch] Hardware/*.[ch]
       - name: Firmware syntax check (clang, Cortex-M3)
         run: bash tools/check_firmware_syntax.sh
 

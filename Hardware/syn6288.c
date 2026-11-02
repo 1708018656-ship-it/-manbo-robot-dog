@@ -3,18 +3,18 @@
 #include "string.h"
 #include "Delay.h"
 #include "GbkText.h"
-//***ÓïÒôºÏ³É***//
+//***è¯­éŸ³åˆæˆ***//
 
 #define SYN_FRAME_BUFFER_SIZE SYN6288_FRAME_CAPACITY
 #define SYN_MAX_TEXT_LENGTH   SYN6288_MAX_TEXT_BYTES
 
-//Music:Ñ¡Ôñ±³¾°ÒôÀÖ¡£0:ÎŞ±³¾°ÒôÀÖ£¬1~15£ºÑ¡Ôñ±³¾°ÒôÀÖ
+//Music:é€‰æ‹©èƒŒæ™¯éŸ³ä¹ã€‚0:æ— èƒŒæ™¯éŸ³ä¹ï¼Œ1~15ï¼šé€‰æ‹©èƒŒæ™¯éŸ³ä¹
 void SYN_FrameInfo(u8 Music, u8 *HZdata)
 {
-  /****************ĞèÒª·¢ËÍµÄÎÄ±¾**********************************/
+  /****************éœ€è¦å‘é€çš„æ–‡æœ¬**********************************/
   unsigned char Frame_Info[SYN_FRAME_BUFFER_SIZE];
   unsigned int HZ_Length;
-  unsigned char ecc = 0;                 //¶¨ÒåĞ£Ñé×Ö½Ú
+  unsigned char ecc = 0;                 //å®šä¹‰æ ¡éªŒå­—èŠ‚
   unsigned int i = 0;
 
   if (HZdata == 0)
@@ -25,14 +25,14 @@ void SYN_FrameInfo(u8 Music, u8 *HZdata)
   /* GBK-safe: never split a double-byte character when truncating */
   HZ_Length = (unsigned int)GbkText_SafeLength((const char *)HZdata, SYN_MAX_TEXT_LENGTH);
 
-  /*****************Ö¡¹Ì¶¨ÅäÖÃĞÅÏ¢**************************************/
-  Frame_Info[0] = 0xFD;                  //¹¹ÔìÖ¡Í·FD
-  Frame_Info[1] = 0x00;                  //¹¹ÔìÊı¾İÇø³³¶ÈµÄ¸ß×Ö½Ú
-  Frame_Info[2] = (unsigned char)(HZ_Length + 3U);         //¹¹ÔìÊı¾İÇø³³¶ÈµÄµÍ×Ö½Ú
-  Frame_Info[3] = 0x01;                  //¹¹ÔìÃüÁî×Ö£ººÏ³É²¥·ÅÃüÁî
-  Frame_Info[4] = (unsigned char)(0x01U | ((Music & 0x0FU) << 4));    //¹¹ÔìÃüÁî²ÎÊı£º±³¾°ÒôÀÖÉè¶¨
+  /*****************å¸§å›ºå®šé…ç½®ä¿¡æ¯**************************************/
+  Frame_Info[0] = 0xFD;                  //æ„é€ å¸§å¤´FD
+  Frame_Info[1] = 0x00;                  //æ„é€ æ•°æ®åŒºåµåº¦çš„é«˜å­—èŠ‚
+  Frame_Info[2] = (unsigned char)(HZ_Length + 3U);         //æ„é€ æ•°æ®åŒºåµåº¦çš„ä½å­—èŠ‚
+  Frame_Info[3] = 0x01;                  //æ„é€ å‘½ä»¤å­—ï¼šåˆæˆæ’­æ”¾å‘½ä»¤
+  Frame_Info[4] = (unsigned char)(0x01U | ((Music & 0x0FU) << 4));    //æ„é€ å‘½ä»¤å‚æ•°ï¼šèƒŒæ™¯éŸ³ä¹è®¾å®š
 
-  /*******************Ğ£ÑéÂë¼ÆËã***************************************/
+  /*******************æ ¡éªŒç è®¡ç®—***************************************/
   for (i = 0; i < 5; i++)
   {
     ecc = ecc ^ Frame_Info[i];
@@ -43,7 +43,7 @@ void SYN_FrameInfo(u8 Music, u8 *HZdata)
     ecc = ecc ^ HZdata[i];
   }
 
-  /*******************·¢ËÍÖ¡ĞÅÏ¢***************************************/
+  /*******************å‘é€å¸§ä¿¡æ¯***************************************/
   memcpy(&Frame_Info[5], HZdata, HZ_Length);
   Frame_Info[5 + HZ_Length] = ecc;
   USART2_SendString(Frame_Info, 5 + HZ_Length + 1);
@@ -51,12 +51,12 @@ void SYN_FrameInfo(u8 Music, u8 *HZdata)
 
 
 /***********************************************************
-* Ãû    ³Æ£º YS_SYN_Set(u8 *Info_data)
-* ¹¦    ÄÜ£º Ö÷º¯Êı	³ÌĞòÈë¿Ú
-* Èë¿Ú²ÎÊı£º *Info_data:¹Ì¶¨µÄÅäÖÃĞÅÏ¢±äÁ¿
-* ³ö¿Ú²ÎÊı£º
-* Ëµ    Ã÷£º±¾º¯ÊıÓÃÓÚÅäÖÃ£¬Í£Ö¹ºÏ³É¡¢ÔİÍ£ºÏ³ÉµÈÉèÖÃ £¬Ä¬ÈÏ²¨ÌØÂÊ9600bps¡£
-* µ÷ÓÃ·½·¨£ºÍ¨¹ı¶¨ÒåµÄÏà¹ØÊı×é½øĞĞÅäÖÃ¡£
+* å    ç§°ï¼š YS_SYN_Set(u8 *Info_data)
+* åŠŸ    èƒ½ï¼š ä¸»å‡½æ•°	ç¨‹åºå…¥å£
+* å…¥å£å‚æ•°ï¼š *Info_data:å›ºå®šçš„é…ç½®ä¿¡æ¯å˜é‡
+* å‡ºå£å‚æ•°ï¼š
+* è¯´    æ˜ï¼šæœ¬å‡½æ•°ç”¨äºé…ç½®ï¼Œåœæ­¢åˆæˆã€æš‚åœåˆæˆç­‰è®¾ç½® ï¼Œé»˜è®¤æ³¢ç‰¹ç‡9600bpsã€‚
+* è°ƒç”¨æ–¹æ³•ï¼šé€šè¿‡å®šä¹‰çš„ç›¸å…³æ•°ç»„è¿›è¡Œé…ç½®ã€‚
 **********************************************************/
 void YS_SYN_Set(u8 *Info_data)
 {

@@ -3,8 +3,8 @@
 #include "stdio.h"	
 #include "stm32f10x.h"   
 
-#define USART1_REC_LEN  			200  	//¶¨Òå×î´ó½ÓÊÕ×Ö½ÚÊı 200
-#define EN_USART1_RX 			1		//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
+#define USART1_REC_LEN  			200  	//å®šä¹‰æœ€å¤§æ¥æ”¶å­—èŠ‚æ•° 200
+#define EN_USART1_RX 			1		//ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
 	  	
 void USART1_Init(void);
 void USART1_SendByte(uint8_t Byte);

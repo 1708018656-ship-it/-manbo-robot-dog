@@ -2,27 +2,27 @@
 #include "Delay.h"
 #include "Timer.h"
 #include "Movement.h"
-//***³¬Éù±ÜÕÏ***//
-extern uint16_t T;  //¼ÇÂ¼¾àÀë
-int cf=0;//¼ÇÂ¼ÖØ¸´´ÎÊı ½â¾öbugÓÃ
+//***è¶…å£°é¿éšœ***//
+extern uint16_t T;  //è®°å½•è·ç¦»
+int cf=0;//è®°å½•é‡å¤æ¬¡æ•° è§£å†³bugç”¨
 
-volatile uint16_t Time; /* written in TIM2 ISR; must match extern in Timer.c */ //¼ÇÂ¼Ê±¼ä
+volatile uint16_t Time; /* written in TIM2 ISR; must match extern in Timer.c */ //è®°å½•æ—¶é—´
 void UltrasonicWave_Init(void)
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	//¿ªÆôGPIOAµÄÊ±ÖÓ
-	/*GPIO³õÊ¼»¯*/ 
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	//å¼€å¯GPIOAçš„æ—¶é’Ÿ
+	/*GPIOåˆå§‹åŒ–*/ 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);					//½«PA0 TRIG
+	GPIO_Init(GPIOA, &GPIO_InitStructure);					//å°†PA0 TRIG
 	
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);					//½«PA1 ECHO
+	GPIO_Init(GPIOA, &GPIO_InitStructure);					//å°†PA1 ECHO
 
 	GPIO_ResetBits(GPIOA, GPIO_Pin_0);
 	
@@ -30,13 +30,13 @@ void UltrasonicWave_Init(void)
 }
 void UltrasonicWave_Start(void)
 {
-	//¸ø´¥·¢ĞÅºÅ
+	//ç»™è§¦å‘ä¿¡å·
 	GPIO_SetBits(GPIOA, GPIO_Pin_0);
 	Delay_us(45);
 	GPIO_ResetBits(GPIOA, GPIO_Pin_0);
 
 	
-	Timer_Init();  //¼ÆÊ± ·µ»ØÊ±¼ä¼ÆËã¾àÀë
+	Timer_Init();  //è®¡æ—¶ è¿”å›æ—¶é—´è®¡ç®—è·ç¦»
 }
 
 uint16_t UltrasonicWave_Getvalue(void)

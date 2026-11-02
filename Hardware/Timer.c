@@ -1,35 +1,35 @@
 #include "stm32f10x.h"                  // Device header
-//Îª³¬Éù±ÜÕÏ·şÎñ
+//ä¸ºè¶…å£°é¿éšœæœåŠ¡
 extern volatile uint16_t Time;
 void Timer_Init(void)
 {
 	Time = 0;
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//Ñ¡ÔñAPB1×ÜÏßÏÂµÄ¶¨Ê±Æ÷Timer2
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);	//é€‰æ‹©APB1æ€»çº¿ä¸‹çš„å®šæ—¶å™¨Timer2
 	
-	TIM_InternalClockConfig(TIM2);		//TIM2Ê¹ÓÃÄÚ²¿Ê±ÖÓ
+	TIM_InternalClockConfig(TIM2);		//TIM2ä½¿ç”¨å†…éƒ¨æ—¶é’Ÿ
 	
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;		//¼ÆÊıÄ£Ê½£¬´Ë´¦ÎªÏòÉÏ¼ÆÊı
+	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;		//è®¡æ•°æ¨¡å¼ï¼Œæ­¤å¤„ä¸ºå‘ä¸Šè®¡æ•°
 	TIM_TimeBaseInitStructure.TIM_Period = 7200-1;		//ARR 1 = 0.0001S
 	TIM_TimeBaseInitStructure.TIM_Prescaler = 0;		//PSC
-	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;		//¸ß¼¶¼ÆÊ±Æ÷ÌØÓĞ£¬ÖØ¸´¼ÆÊı
+	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;		//é«˜çº§è®¡æ—¶å™¨ç‰¹æœ‰ï¼Œé‡å¤è®¡æ•°
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
 	
 	TIM_ClearFlag(TIM2, TIM_FLAG_Update);
-	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);		//Ê¹ÄÜÖĞ¶Ï
+	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);		//ä½¿èƒ½ä¸­æ–­
 	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	
 	NVIC_InitTypeDef NVIC_InitStructure;
-	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;		//ÖĞ¶ÏÍ¨µÀÑ¡Ôñ
+	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;		//ä¸­æ–­é€šé“é€‰æ‹©
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		//ÓÅÏÈ¼¶£¬Í¬ÉÏ
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		//ä¼˜å…ˆçº§ï¼ŒåŒä¸Š
 	
 	NVIC_Init(&NVIC_InitStructure);
 	
-		TIM_Cmd(TIM2, ENABLE);		//´ò¿ª¶¨Ê±Æ÷
+		TIM_Cmd(TIM2, ENABLE);		//æ‰“å¼€å®šæ—¶å™¨
 
 }
 
@@ -39,7 +39,7 @@ void Timer_Stop(void)
 	TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE);
 }
 
-void TIM2_IRQHandler()		//¶¨Ê±Æ÷2µÄÖĞ¶Ïº¯Êı£¬²»¶®Ö±½ÓÌ×ÓÃ
+void TIM2_IRQHandler()		//å®šæ—¶å™¨2çš„ä¸­æ–­å‡½æ•°ï¼Œä¸æ‡‚ç›´æ¥å¥—ç”¨
 {
 	if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
 	{
@@ -48,6 +48,6 @@ void TIM2_IRQHandler()		//¶¨Ê±Æ÷2µÄÖĞ¶Ïº¯Êı£¬²»¶®Ö±½ÓÌ×ÓÃ
 		{
 			Time ++;
 		}
-		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);		//Çå¿Õ±êÖ¾Î»
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);		//æ¸…ç©ºæ ‡å¿—ä½
 	}
 }

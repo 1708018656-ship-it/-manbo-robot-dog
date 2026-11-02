@@ -5,8 +5,8 @@ charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-# Firmware sources: keep CRLF for Keil. Some legacy files are still GBK
-# (SYN6288 needs GBK text); new GBK strings must be written as \x escapes.
+# Firmware sources: keep CRLF for Keil. All sources are UTF-8; text sent to
+# SYN6288 / OLED font keys must be GBK bytes written as \x escapes (tools/fix_encoding.py).
 [*.{c,h,s}]
 end_of_line = crlf
 indent_style = space

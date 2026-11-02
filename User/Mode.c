@@ -13,35 +13,35 @@
 #include "stdio.h"
 #include "ActionTask.h"
 #include "AudioTask.h"
-//***¸÷ÖÖ×´Ì¬Ö´ĞĞº¯Êı***//
-//ÏëÈÃ¶¯×÷Ö´ĞĞÒ»´ÎºóÍ£Ö¹£¬¾ÍÔÚÄ©Î²¼ÓÉÏ¡°	move_mode = '0';¡±£¬·ñÔò¶¯×÷³ÖĞø·´¸´Ö´ĞĞ£¬
+//***å„ç§çŠ¶æ€æ‰§è¡Œå‡½æ•°***//
+//æƒ³è®©åŠ¨ä½œæ‰§è¡Œä¸€æ¬¡ååœæ­¢ï¼Œå°±åœ¨æœ«å°¾åŠ ä¸Šâ€œ	move_mode = '0';â€ï¼Œå¦åˆ™åŠ¨ä½œæŒç»­åå¤æ‰§è¡Œï¼Œ
 
-extern uint8_t move_mode1 ;//ÓÃÓÚ½ÓÊÕÀ¶ÑÀ´®¿ÚÊı¾İµÄ±äÁ¿
-extern uint8_t move_mode3 ;//ÓÃÓÚ½ÓÊÕÓïÒôÊ¶±ğ´®¿ÚÊı¾İµÄ±äÁ¿
-extern uint8_t move_mode ;//¾ö¶¨×´Ì¬±äÁ¿
-extern uint8_t previous_mode ;//ÓÃÓÚ±£´æÉÏÒ»´Î½ÓÊÕ´®¿ÚÊı¾İµÄ±äÁ¿
-extern uint16_t bz_flag;//±ÜÕÏ±êÖ¾Î» ON/OFF Ä¬ÈÏoff
-extern uint16_t hw_flag;//ºìÍâ±êÖ¾Î» ON/OFF Ä¬ÈÏoff
-extern int happiness; //¿ªĞÄÖ¸Êı
-extern int stamina;  //ÌåÁ¦Öµ
+extern uint8_t move_mode1 ;//ç”¨äºæ¥æ”¶è“ç‰™ä¸²å£æ•°æ®çš„å˜é‡
+extern uint8_t move_mode3 ;//ç”¨äºæ¥æ”¶è¯­éŸ³è¯†åˆ«ä¸²å£æ•°æ®çš„å˜é‡
+extern uint8_t move_mode ;//å†³å®šçŠ¶æ€å˜é‡
+extern uint8_t previous_mode ;//ç”¨äºä¿å­˜ä¸Šä¸€æ¬¡æ¥æ”¶ä¸²å£æ•°æ®çš„å˜é‡
+extern uint16_t bz_flag;//é¿éšœæ ‡å¿—ä½ ON/OFF é»˜è®¤off
+extern uint16_t hw_flag;//çº¢å¤–æ ‡å¿—ä½ ON/OFF é»˜è®¤off
+extern int happiness; //å¼€å¿ƒæŒ‡æ•°
+extern int stamina;  //ä½“åŠ›å€¼
 #define STATUS_TEXT_BUFFER_SIZE 128U
-char read[STATUS_TEXT_BUFFER_SIZE]={0};  //ÀÊ¶Á¿ªĞÄÖµ»òÌåÁ¦ÖµµÄ×Ö·û´®±äÁ¿
-extern uint16_t ff; //Á¬ĞøÇ°½ø¼ÆÊı
-extern uint16_t bb; //Á¬ĞøºóÍË¼ÆÊı
-extern uint16_t ll; //Á¬Ğø×ó×ª¼ÆÊı
-extern uint16_t rr; //Á¬ĞøÓÒ×ª¼ÆÊı
+char read[STATUS_TEXT_BUFFER_SIZE]={0};  //æœ—è¯»å¼€å¿ƒå€¼æˆ–ä½“åŠ›å€¼çš„å­—ç¬¦ä¸²å˜é‡
+extern uint16_t ff; //è¿ç»­å‰è¿›è®¡æ•°
+extern uint16_t bb; //è¿ç»­åé€€è®¡æ•°
+extern uint16_t ll; //è¿ç»­å·¦è½¬è®¡æ•°
+extern uint16_t rr; //è¿ç»­å³è½¬è®¡æ•°
 
-/**************ÓïÒôºÏ³ÉĞ¾Æ¬ÉèÖÃÃüÁî*********************/
-//Ñ¡Ôñ±³¾°ÒôÀÖ2¡£(0£ºÎŞ±³¾°ÒôÀÖ  1-15£º±³¾°ÒôÀÖ¿ÉÑ¡)
-//m[0~16]:0±³¾°ÒôÀÖÎª¾²Òô£¬16±³¾°ÒôÀÖÒôÁ¿×î´ó
-//v[0~16]:0ÀÊ¶ÁÒôÁ¿Îª¾²Òô£¬16ÀÊ¶ÁÒôÁ¿×î´ó
-//t[0~5]:0ÀÊ¶ÁÓïËÙ×îÂı£¬5ÀÊ¶ÁÓïËÙ×î¿ì
+/**************è¯­éŸ³åˆæˆèŠ¯ç‰‡è®¾ç½®å‘½ä»¤*********************/
+//é€‰æ‹©èƒŒæ™¯éŸ³ä¹2ã€‚(0ï¼šæ— èƒŒæ™¯éŸ³ä¹  1-15ï¼šèƒŒæ™¯éŸ³ä¹å¯é€‰)
+//m[0~16]:0èƒŒæ™¯éŸ³ä¹ä¸ºé™éŸ³ï¼Œ16èƒŒæ™¯éŸ³ä¹éŸ³é‡æœ€å¤§
+//v[0~16]:0æœ—è¯»éŸ³é‡ä¸ºé™éŸ³ï¼Œ16æœ—è¯»éŸ³é‡æœ€å¤§
+//t[0~5]:0æœ—è¯»è¯­é€Ÿæœ€æ…¢ï¼Œ5æœ—è¯»è¯­é€Ÿæœ€å¿«
 
-void mode_forward(void)//Ç°½ø
+void mode_forward(void)//å‰è¿›
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP2); //Ç°½øÁ³	
+			OLED_ShowImage(0, 0, 128, 64, BMP2); //å‰è¿›è„¸	
 			move_forward();
-			LED13_Turn();//·­×ªµçÆ½×´Ì¬£¬ÓÉ1±äÎª0£¬µÆÓÉÃğ±äÁÁ
+			LED13_Turn();//ç¿»è½¬ç”µå¹³çŠ¶æ€ï¼Œç”±1å˜ä¸º0ï¼Œç¯ç”±ç­å˜äº®
 			if(previous_mode == 'f')
 			{
 				ff++;
@@ -58,9 +58,9 @@ void mode_forward(void)//Ç°½ø
 			stamina -=5;
 	
 }
-void mode_behind(void)//ºóÍË
+void mode_behind(void)//åé€€
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP2); //Ç°½øÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP2); //å‰è¿›è„¸
 			move_behind();
 			LED13_Turn();
 			if(previous_mode == 'b')
@@ -79,9 +79,9 @@ void mode_behind(void)//ºóÍË
 			stamina -=5;
 	
 }
-void mode_left(void)//×ó×ª
+void mode_left(void)//å·¦è½¬
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP3); //×ó×ªÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP3); //å·¦è½¬è„¸
 			move_left();
 			LED13_Turn();
 			if(previous_mode == 'l')
@@ -101,9 +101,9 @@ void mode_left(void)//×ó×ª
 	
 	
 }
-void mode_right(void)//ÓÒ×ª
+void mode_right(void)//å³è½¬
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP4); //ÓÒ×ªÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP4); //å³è½¬è„¸
 			move_right();
 			LED13_Turn();
 			if(previous_mode == 'r')
@@ -122,18 +122,18 @@ void mode_right(void)//ÓÒ×ª
 			stamina -=5;
 }
 
-void mode_swing_qianhou(void)//Ç°ºóÒ¡°Ú
+void mode_swing_qianhou(void)//å‰åæ‘‡æ‘†
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP11); //ÃÔºıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP11); //è¿·ç³Šè„¸
 			move_shake_qianhou();
 			LED13_Turn();
 			previous_mode = move_mode;
 			stamina -=5;
 			happiness +=5;
 }
-void mode_swing_zuoyou(void)//×óÓÒÒ¡°Ú
+void mode_swing_zuoyou(void)//å·¦å³æ‘‡æ‘†
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP11); //ÃÔºıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP11); //è¿·ç³Šè„¸
 			move_shake_zuoyou();
 			LED13_Turn();
 			previous_mode = move_mode;
@@ -141,9 +141,9 @@ void mode_swing_zuoyou(void)//×óÓÒÒ¡°Ú
 			happiness +=5;
 }
 
-void mode_dance(void)//ÌøÎè
+void mode_dance(void)//è·³èˆ
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP5); //ÌØÊâÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP5); //ç‰¹æ®Šè„¸
 			move_dance();
 			LED13_Turn();
 			previous_mode = move_mode;
@@ -151,25 +151,25 @@ void mode_dance(void)//ÌøÎè
 			happiness +=5;
 	
 }
-void mode_stand(void)//Á¢Õı
+void mode_stand(void)//ç«‹æ­£
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 			move_stand();
 			LED13_Turn();
 			previous_mode = move_mode;
 			move_mode = '0';
-			SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]ÍúÍú");
+			SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]\xCD\xFA\xCD\xFA" /* [v12][m0][t5]æ—ºæ—º */);
 			Delay_s(1);
 			stamina -=1;
 	
 	
 }
-void mode_slowstand(void)//ÆğÉí
+void mode_slowstand(void)//èµ·èº«
 {
-			if (move_mode3 == 'q'){//Ö»ÓĞÊÇÍ¨¹ıÓïÒô½»»¥£¬²Å»á´¥·¢ÓïÒôºÏ³É
-			SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]½ĞÎÒ¸ÉÂï");Delay_s(2);
+			if (move_mode3 == 'q'){//åªæœ‰æ˜¯é€šè¿‡è¯­éŸ³äº¤äº’ï¼Œæ‰ä¼šè§¦å‘è¯­éŸ³åˆæˆ
+			SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]\xBD\xD0\xCE\xD2\xB8\xC9\xC2\xEF" /* [v12][m0][t5]å«æˆ‘å¹²å˜› */);Delay_s(2);
 			}
-			OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 			move_slow_stand(previous_mode);
 			LED13_Turn();
 			previous_mode = move_mode;
@@ -177,29 +177,29 @@ void mode_slowstand(void)//ÆğÉí
 			stamina -=1;
 }
 
-void mode_strech(void)//×øÏÂ²ÁÁ³
+void mode_strech(void)//åä¸‹æ“¦è„¸
 {
-			if (move_mode3 == 's'){//Ö»ÓĞÊÇÍ¨¹ıÓïÒô½»»¥£¬²Å»á´¥·¢ÓïÒôºÏ³É
-			SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]×ñÃü");Delay_ms(500);
+			if (move_mode3 == 's'){//åªæœ‰æ˜¯é€šè¿‡è¯­éŸ³äº¤äº’ï¼Œæ‰ä¼šè§¦å‘è¯­éŸ³åˆæˆ
+			SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]\xD7\xF1\xC3\xFC" /* [v12][m0][t5]éµå‘½ */);Delay_ms(500);
 			}
-			OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 			move_slow_stand(previous_mode);
-			OLED_ShowImage(0, 0, 128, 64, BMP2);//Ç°½øÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP2);//å‰è¿›è„¸
 			move_stretch();
-			OLED_ShowImage(0, 0, 128, 64, BMP12);//Ã¨Ã¨Á³
+			OLED_ShowImage(0, 0, 128, 64, BMP12);//çŒ«çŒ«è„¸
 			LED13_Turn();
 			previous_mode = move_mode;
 			move_mode = '0';
 			stamina +=5;
 			happiness +=2;
 }
-void mode_hello(void)//´òÕĞºô
+void mode_hello(void)//æ‰“æ‹›å‘¼
 {
 			if (previous_mode != '5' && previous_mode != 'D') {
-				OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+				OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 				move_slow_stand(previous_mode);
 			}
-	OLED_ShowImage(0, 0, 128, 64, BMP12);//Ã¨Ã¨Á³
+	OLED_ShowImage(0, 0, 128, 64, BMP12);//çŒ«çŒ«è„¸
 			//move_hello();
 		int i;
 	for(i=0;i<20;i++)//
@@ -216,14 +216,14 @@ void mode_hello(void)//´òÕĞºô
 	Servo_SetAngle4(70-i);
 		Delay_ms(7);
 	}
-	for(i=0;i<60;i++)//ÓÒÇ°×ã»ºÂıÌ§Æğ
+	for(i=0;i<60;i++)//å³å‰è¶³ç¼“æ…¢æŠ¬èµ·
 	{
 		Servo_SetAngle1(70+i);
 		Delay_ms(4);
 	}
 	Delay_ms(50);
-	//ÏÂÃæÊÇÒ¡Á½´ÎÓÒÇ°×ã
-	SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5] ¹şà¶Ñ½");
+	//ä¸‹é¢æ˜¯æ‘‡ä¸¤æ¬¡å³å‰è¶³
+	SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5] \xB9\xFE\xE0\xB6\xD1\xBD" /* [v12][m0][t5] å“ˆå–½å‘€ */);
 	Servo_SetAngle1(180);
 	Delay_ms(400);
 	Servo_SetAngle1(130);
@@ -240,9 +240,9 @@ void mode_hello(void)//´òÕĞºô
 			stamina -=2;
 			happiness +=2;
 }
-void mode_twohands(void)//½»ÌæÌ§ÊÖ
+void mode_twohands(void)//äº¤æ›¿æŠ¬æ‰‹
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 			move_stand();
 			move_two_hands();
 			LED13_Turn();
@@ -252,13 +252,13 @@ void mode_twohands(void)//½»ÌæÌ§ÊÖ
 			happiness +=2;
 	
 }
-void mode_lanyao(void)//ÀÁÑü
+void mode_lanyao(void)//æ‡’è…°
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 			move_slow_stand(previous_mode);
-			OLED_ShowImage(0, 0, 128, 64, BMP9);//¿ªĞÄÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP9);//å¼€å¿ƒè„¸
 			lan_yao();
-			OLED_ShowImage(0, 0, 128, 64, BMP1);//Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1);//ç«‹æ­£è„¸
 			LED13_Turn();
 			previous_mode = move_mode;
 			move_mode = '0';
@@ -266,11 +266,11 @@ void mode_lanyao(void)//ÀÁÑü
 			happiness +=1;
 	
 }
-void mode_headup(void)//Ì§Í·
+void mode_headup(void)//æŠ¬å¤´
 {
-			OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+			OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 			move_slow_stand(previous_mode);
-			OLED_ShowImage(0, 0, 128, 64, BMP10);//µ÷Æ¤Á³
+			OLED_ShowImage(0, 0, 128, 64, BMP10);//è°ƒçš®è„¸
 			move_head_up();
 			LED13_Turn();
 			previous_mode = move_mode;
@@ -278,67 +278,67 @@ void mode_headup(void)//Ì§Í·
 			stamina -=5;
 	
 }
-void mode_sleeppa(void)//Å¿ÏÂË¯¾õ
+void mode_sleeppa(void)//è¶´ä¸‹ç¡è§‰
 {
 			if (previous_mode != '5' && previous_mode != 'q') {
-				OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+				OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 				move_slow_stand(previous_mode);
 			}
-			if (rand()%2) {//Ëæ»ú²úÉúÁ½ÖÖ±íÇéÖĞµÄÒ»ÖÖ
-				OLED_ShowImage(0, 0, 128, 64, BMP6); //ÆÕÍ¨Ë¯¾õÁ³
+			if (rand()%2) {//éšæœºäº§ç”Ÿä¸¤ç§è¡¨æƒ…ä¸­çš„ä¸€ç§
+				OLED_ShowImage(0, 0, 128, 64, BMP6); //æ™®é€šç¡è§‰è„¸
 			}
 			else{
-				OLED_ShowImage(0, 0, 128, 64, BMP8); //º¨Ë¯Á³
+				OLED_ShowImage(0, 0, 128, 64, BMP8); //é…£ç¡è„¸
 			}
 			move_sleep_p();
-			SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]Íí°²");Delay_s(1);
+			SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xCD\xED\xB0\xB2" /* [v12][m0][t5]æ™šå®‰ */);Delay_s(1);
 			previous_mode = move_mode;
 			move_mode = '0';
 			stamina =100;
 			happiness +=15;
 }
-void mode_sleepwo(void)//ÎÔÏÂË¯¾õ
+void mode_sleepwo(void)//å§ä¸‹ç¡è§‰
 {
 			if (previous_mode != '5' && previous_mode != 'q') {
-				OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
+				OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
 				move_slow_stand(previous_mode);
 				Delay_s(1);
 			}
-			if (rand()%2) {//Ëæ»ú²úÉúÁ½ÖÖ±íÇéÖĞµÄÒ»ÖÖ
-				OLED_ShowImage(0, 0, 128, 64, BMP6); //ÆÕÍ¨Ë¯¾õÁ³
+			if (rand()%2) {//éšæœºäº§ç”Ÿä¸¤ç§è¡¨æƒ…ä¸­çš„ä¸€ç§
+				OLED_ShowImage(0, 0, 128, 64, BMP6); //æ™®é€šç¡è§‰è„¸
 			}
 			else{
-				OLED_ShowImage(0, 0, 128, 64 , BMP8); //º¨Ë¯Á³
+				OLED_ShowImage(0, 0, 128, 64 , BMP8); //é…£ç¡è„¸
 			}
 			move_sleep_w();
-			SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]Íí°²");Delay_s(1);
+			SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xCD\xED\xB0\xB2" /* [v12][m0][t5]æ™šå®‰ */);Delay_s(1);
 			previous_mode = move_mode;
 			move_mode = '0';
 			stamina =100;
 			happiness +=15;
 }
-void mode_nanshou(void)//ÄÑÊÜ£¨·Ç×èÈû£©
+void mode_nanshou(void)//éš¾å—ï¼ˆéé˜»å¡ï¼‰
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP2); //Ç°½øÁ³
+	OLED_ShowImage(0, 0, 128, 64, BMP2); //å‰è¿›è„¸
 	(void)ActionTask_RequestMotion(ACTION_SLEEP_SIDE);
-	(void)AudioTask_RequestText("[v12][m0][t5]ÎØÎØ");
+	(void)AudioTask_RequestText("[v12][m0][t5]\xCE\xD8\xCE\xD8" /* [v12][m0][t5]å‘œå‘œ */);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
-void mode_biaobai(void)//±í°×
+void mode_biaobai(void)//è¡¨ç™½
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP7); //love»¨³ÕÁ³	
-	Servo_SetAngle1(135);//Ì§ÆğÓÒÇ°½Å
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]ÄãÊÇº¼ÖİÎ÷ºşµÄÃÀ¾°£¬ÊÇÎŞĞèÔöÌíĞŞÊÎµÄÀÃÂş");Delay_s(8);
-	OLED_ShowImage(0, 0, 128, 64, BMP11); //¿ªĞÄÃÔºıÁ³	
-	Servo_SetAngle3(45);//Ì§Æğ×óÇ°½Å
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]ÓµÄãÈë»³£¬¾ÍÊÇ´º·çºÍìã");Delay_s(5);
+	OLED_ShowImage(0, 0, 128, 64, BMP7); //loveèŠ±ç—´è„¸	
+	Servo_SetAngle1(135);//æŠ¬èµ·å³å‰è„š
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xC4\xE3\xCA\xC7\xBA\xBC\xD6\xDD\xCE\xF7\xBA\xFE\xB5\xC4\xC3\xC0\xBE\xB0\xA3\xAC\xCA\xC7\xCE\xDE\xD0\xE8\xD4\xF6\xCC\xED\xD0\xDE\xCA\xCE\xB5\xC4\xC0\xC3\xC2\xFE" /* [v12][m0][t5]ä½ æ˜¯æ­å·è¥¿æ¹–çš„ç¾æ™¯ï¼Œæ˜¯æ— éœ€å¢æ·»ä¿®é¥°çš„çƒ‚æ¼« */);Delay_s(8);
+	OLED_ShowImage(0, 0, 128, 64, BMP11); //å¼€å¿ƒè¿·ç³Šè„¸	
+	Servo_SetAngle3(45);//æŠ¬èµ·å·¦å‰è„š
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xD3\xB5\xC4\xE3\xC8\xEB\xBB\xB3\xA3\xAC\xBE\xCD\xCA\xC7\xB4\xBA\xB7\xE7\xBA\xCD\xEC\xE3" /* [v12][m0][t5]æ‹¥ä½ å…¥æ€€ï¼Œå°±æ˜¯æ˜¥é£å’Œç…¦ */);Delay_s(5);
 	Servo_SetAngle1(90);//
-	Servo_SetAngle3(90);//ÊÕ»ØÁ½Ö»Ç°½Å
-	OLED_ShowImage(0, 0, 128, 64, BMP9); //¿ªĞÄÁ³	
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]ÍûÄãÑÛíø£¬±ãÊÇÄñÓï»¨Ïã");Delay_s(5);
-	OLED_ShowImage(0, 0, 128, 64, BMP7); //love»¨³ÕÁ³
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]°®ÄãµÄ£¬Ğ¡´ô");
+	Servo_SetAngle3(90);//æ”¶å›ä¸¤åªå‰è„š
+	OLED_ShowImage(0, 0, 128, 64, BMP9); //å¼€å¿ƒè„¸	
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xCD\xFB\xC4\xE3\xD1\xDB\xED\xF8\xA3\xAC\xB1\xE3\xCA\xC7\xC4\xF1\xD3\xEF\xBB\xA8\xCF\xE3" /* [v12][m0][t5]æœ›ä½ çœ¼çœ¸ï¼Œä¾¿æ˜¯é¸Ÿè¯­èŠ±é¦™ */);Delay_s(5);
+	OLED_ShowImage(0, 0, 128, 64, BMP7); //loveèŠ±ç—´è„¸
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xB0\xAE\xC4\xE3\xB5\xC4\xA3\xAC\xD0\xA1\xB4\xF4" /* [v12][m0][t5]çˆ±ä½ çš„ï¼Œå°å‘† */);
 	move_shake_qianhou();
 	move_shake_qianhou();
 	Delay_s(5);
@@ -347,20 +347,20 @@ void mode_biaobai(void)//±í°×
 	stamina -=2;
 	happiness +=5;
 }
-void mode_yuansu(void)//ÔªËØÖÜÆÚ±í
+void mode_yuansu(void)//å…ƒç´ å‘¨æœŸè¡¨
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP5); //ºÙºÙÁ³	
-	Servo_SetAngle1(135);//Ì§ÆğÓÒÇ°½Å
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]Çâº¤ï®îëÅğ");Delay_s(2);Delay_ms(500);
-	OLED_ShowImage(0, 0, 128, 64, BMP10); //µ÷Æ¤Á³	
-	Servo_SetAngle3(45);//Ì§Æğ×óÇ°½Å
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]Ì¼µªÑõ·úÄÊ");Delay_s(2);Delay_ms(500);
-	Servo_SetAngle2(45);//ÓÒºó½ÅÏòºóÌ§
-	Servo_SetAngle4(135);//×óºó½ÅÏòºóÌ§
-	OLED_ShowImage(0, 0, 128, 64, BMP12); //Ã¨Ã¨Á³	
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]ÄÆÃ¾ÂÁ¹èÁ×");Delay_s(2);Delay_ms(500);
-	OLED_ShowImage(0, 0, 128, 64, BMP11); //¿ªĞÄÃÔºıÁ³
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5] Ğ¡´ô×î¿É°®");
+	OLED_ShowImage(0, 0, 128, 64, BMP5); //å˜¿å˜¿è„¸	
+	Servo_SetAngle1(135);//æŠ¬èµ·å³å‰è„š
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xC7\xE2\xBA\xA4\xEF\xAE\xEE\xEB\xC5\xF0" /* [v12][m0][t5]æ°¢æ°¦é”‚é“ç¡¼ */);Delay_s(2);Delay_ms(500);
+	OLED_ShowImage(0, 0, 128, 64, BMP10); //è°ƒçš®è„¸	
+	Servo_SetAngle3(45);//æŠ¬èµ·å·¦å‰è„š
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xCC\xBC\xB5\xAA\xD1\xF5\xB7\xFA\xC4\xCA" /* [v12][m0][t5]ç¢³æ°®æ°§æ°Ÿæ°– */);Delay_s(2);Delay_ms(500);
+	Servo_SetAngle2(45);//å³åè„šå‘åæŠ¬
+	Servo_SetAngle4(135);//å·¦åè„šå‘åæŠ¬
+	OLED_ShowImage(0, 0, 128, 64, BMP12); //çŒ«çŒ«è„¸	
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xC4\xC6\xC3\xBE\xC2\xC1\xB9\xE8\xC1\xD7" /* [v12][m0][t5]é’ é•é“ç¡…ç£· */);Delay_s(2);Delay_ms(500);
+	OLED_ShowImage(0, 0, 128, 64, BMP11); //å¼€å¿ƒè¿·ç³Šè„¸
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5] \xD0\xA1\xB4\xF4\xD7\xEE\xBF\xC9\xB0\xAE" /* [v12][m0][t5] å°å‘†æœ€å¯çˆ± */);
 	move_shake_qianhou();
 	move_shake_qianhou();
 	move_shake_qianhou();
@@ -370,20 +370,20 @@ void mode_yuansu(void)//ÔªËØÖÜÆÚ±í
 	stamina -=2;
 	happiness +=2;
 }
-void mode_xiaoxun(void)//Ğ£Ñµ
+void mode_xiaoxun(void)//æ ¡è®­
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP5); //ºÙºÙÁ³	
-	Servo_SetAngle1(135);//Ì§ÆğÓÒÇ°½Å
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]¾«ÇÚÇóÑ§");Delay_s(2);//Á½¸ö×Ö¸ÕºÃ1s
-	OLED_ShowImage(0, 0, 128, 64, BMP10); //µ÷Æ¤Á³	
-	Servo_SetAngle3(45);//Ì§Æğ×óÇ°½Å
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]¶ØóÆÀøÖ¾");Delay_s(2);
-	Servo_SetAngle2(45);//ÓÒºó½ÅÏòºóÌ§
-	Servo_SetAngle4(135);//×óºó½ÅÏòºóÌ§
-	OLED_ShowImage(0, 0, 128, 64, BMP12); //Ã¨Ã¨Á³	
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]¹ûÒãÁ¦ĞĞ");Delay_s(2);
-	OLED_ShowImage(0, 0, 128, 64, BMP11); //¿ªĞÄÃÔºıÁ³
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]ÖÒË¡ÈÎÊÂ");
+	OLED_ShowImage(0, 0, 128, 64, BMP5); //å˜¿å˜¿è„¸	
+	Servo_SetAngle1(135);//æŠ¬èµ·å³å‰è„š
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xBE\xAB\xC7\xDA\xC7\xF3\xD1\xA7" /* [v12][m0][t5]ç²¾å‹¤æ±‚å­¦ */);Delay_s(2);//ä¸¤ä¸ªå­—åˆšå¥½1s
+	OLED_ShowImage(0, 0, 128, 64, BMP10); //è°ƒçš®è„¸	
+	Servo_SetAngle3(45);//æŠ¬èµ·å·¦å‰è„š
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xB6\xD8\xF3\xC6\xC0\xF8\xD6\xBE" /* [v12][m0][t5]æ•¦ç¬ƒåŠ±å¿— */);Delay_s(2);
+	Servo_SetAngle2(45);//å³åè„šå‘åæŠ¬
+	Servo_SetAngle4(135);//å·¦åè„šå‘åæŠ¬
+	OLED_ShowImage(0, 0, 128, 64, BMP12); //çŒ«çŒ«è„¸	
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xB9\xFB\xD2\xE3\xC1\xA6\xD0\xD0" /* [v12][m0][t5]æœæ¯…åŠ›è¡Œ */);Delay_s(2);
+	OLED_ShowImage(0, 0, 128, 64, BMP11); //å¼€å¿ƒè¿·ç³Šè„¸
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xD6\xD2\xCB\xA1\xC8\xCE\xCA\xC2" /* [v12][m0][t5]å¿ æ•ä»»äº‹ */);
 	move_shake_qianhou();
 	move_shake_qianhou();
 	Delay_s(2);
@@ -391,83 +391,83 @@ void mode_xiaoxun(void)//Ğ£Ñµ
 	move_mode = '0';
 	stamina -=2;
 }
-void mode_world(void)//ÊÀ½çÖ®¹â
+void mode_world(void)//ä¸–ç•Œä¹‹å…‰
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP5); //ºÙºÙÁ³	
-	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]ÎªÊÀ½çÖ®¹â");
-	Servo_SetAngle2(135);//ÓÒºó½ÅÏòÇ°Ì§
-	Servo_SetAngle4(45);//×óºó½ÅÏòÇ°Ì§
+	OLED_ShowImage(0, 0, 128, 64, BMP5); //å˜¿å˜¿è„¸	
+	SYN_FrameInfo(2, (uint8_t *)"[v12][m0][t5]\xCE\xAA\xCA\xC0\xBD\xE7\xD6\xAE\xB9\xE2" /* [v12][m0][t5]ä¸ºä¸–ç•Œä¹‹å…‰ */);
+	Servo_SetAngle2(135);//å³åè„šå‘å‰æŠ¬
+	Servo_SetAngle4(45);//å·¦åè„šå‘å‰æŠ¬
 	Delay_s(2);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
-void mode_xiaodai(void)//ÓïÒô»½ĞÑĞ¡´ô£¨·Ç×èÈû£©
+void mode_xiaodai(void)//è¯­éŸ³å”¤é†’å°å‘†ï¼ˆéé˜»å¡ï¼‰
 {
-	OLED_ShowImage(0, 0, 128, 64, BMP1); //Á¢ÕıÁ³
-	(void)AudioTask_RequestText("[v12][m0][t5]ÎÒÔÚ");
+	OLED_ShowImage(0, 0, 128, 64, BMP1); //ç«‹æ­£è„¸
+	(void)AudioTask_RequestText("[v12][m0][t5]\xCE\xD2\xD4\xDA" /* [v12][m0][t5]æˆ‘åœ¨ */);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
-void OLED_happiness(void)//OLEDÕ¹Ê¾¿ªĞÄÖµ
+void OLED_happiness(void)//OLEDå±•ç¤ºå¼€å¿ƒå€¼
 {
-	OLED_ShowChinese(0,0,"¿ªĞÄÖµ£¬");
+	OLED_ShowChinese(0,0,"\xBF\xAA\xD0\xC4\xD6\xB5\xA3\xAC" /* å¼€å¿ƒå€¼ï¼Œ */);
 	OLED_ShowNum(64,0,(uint32_t)happiness,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,16);
 }
-void mode_happiness(void)//Õ¹Ê¾¿ªĞÄÖµ£¨·Ç×èÈû£ºÒ»´ÎÓïÒô + Ò»¸ö¶¯×÷£¬²»ÔÙ Delay_s£©
+void mode_happiness(void)//å±•ç¤ºå¼€å¿ƒå€¼ï¼ˆéé˜»å¡ï¼šä¸€æ¬¡è¯­éŸ³ + ä¸€ä¸ªåŠ¨ä½œï¼Œä¸å† Delay_sï¼‰
 {
 	const char *tail = "";
-	OLED_ShowImage(0, 8, 128, 48, BMP1); //Á¢ÕıÁ³
+	OLED_ShowImage(0, 8, 128, 48, BMP1); //ç«‹æ­£è„¸
 	if (happiness >= 60) {
-		OLED_ShowImage(0, 8, 128, 48, BMP9); //¿ªĞÄÁ³
-		tail = "£¬ºÍÖ÷ÈËÔÚÒ»ÆğÕæ¿ªĞÄ";
+		OLED_ShowImage(0, 8, 128, 48, BMP9); //å¼€å¿ƒè„¸
+		tail = "\xA3\xAC\xBA\xCD\xD6\xF7\xC8\xCB\xD4\xDA\xD2\xBB\xC6\xF0\xD5\xE6\xBF\xAA\xD0\xC4" /* ï¼Œå’Œä¸»äººåœ¨ä¸€èµ·çœŸå¼€å¿ƒ */;
 		(void)ActionTask_RequestMotion(ACTION_SWING_FORWARD_BACK);
 	} else if (happiness <= 10) {
 		OLED_ShowImage(0, 8, 128, 48, BMP2);
-		tail = "£¬ÅãĞ¡´ôÍæÒ»»á°È";
+		tail = "\xA3\xAC\xC5\xE3\xD0\xA1\xB4\xF4\xCD\xE6\xD2\xBB\xBB\xE1\xB0\xC8" /* ï¼Œé™ªå°å‘†ç©ä¸€ä¼šå­ */;
 		(void)ActionTask_RequestMotion((rand() % 2) ? ACTION_SLEEP_PRONE : ACTION_SLEEP_SIDE);
 	}
 	OLED_happiness();
-	snprintf(read, sizeof(read), "[v12][m0][t5]µ±Ç°µÄ¿ªĞÄÖµÎª%d%s", happiness, tail);
+	snprintf(read, sizeof(read), "[v12][m0][t5]\xB5\xB1\xC7\xB0\xB5\xC4\xBF\xAA\xD0\xC4\xD6\xB5\xCE\xAA%d%s" /* [v12][m0][t5]å½“å‰çš„å¼€å¿ƒå€¼ä¸º%d%s */, happiness, tail);
 	(void)AudioTask_RequestText(read);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
-void OLED_stamina(void)//OLEDÕ¹Ê¾ÌåÁ¦Öµ
+void OLED_stamina(void)//OLEDå±•ç¤ºä½“åŠ›å€¼
 {
-	OLED_ShowChinese(0,0,"ÌåÁ¦Öµ£¬");
+	OLED_ShowChinese(0,0,"\xCC\xE5\xC1\xA6\xD6\xB5\xA3\xAC" /* ä½“åŠ›å€¼ï¼Œ */);
 	OLED_ShowNum(64,0,(uint32_t)stamina,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,16);
 }
-void mode_stamina(void)//Õ¹Ê¾ÌåÁ¦Öµ£¨·Ç×èÈû£©
+void mode_stamina(void)//å±•ç¤ºä½“åŠ›å€¼ï¼ˆéé˜»å¡ï¼‰
 {
 	const char *tail = "";
-	OLED_ShowImage(0, 8, 128, 48, BMP1); //Á¢ÕıÁ³
+	OLED_ShowImage(0, 8, 128, 48, BMP1); //ç«‹æ­£è„¸
 	if (stamina >= 60) {
-		OLED_ShowImage(0, 8, 128, 48, BMP9); //¿ªĞÄÁ³
-		tail = "£¬Ğ¡´ô¾«Á¦ÂúÂú£¬ºÍÎÒÒ»ÆğÍæ°È";
+		OLED_ShowImage(0, 8, 128, 48, BMP9); //å¼€å¿ƒè„¸
+		tail = "\xA3\xAC\xD0\xA1\xB4\xF4\xBE\xAB\xC1\xA6\xC2\xFA\xC2\xFA\xA3\xAC\xBA\xCD\xCE\xD2\xD2\xBB\xC6\xF0\xCD\xE6\xB0\xC8" /* ï¼Œå°å‘†ç²¾åŠ›æ»¡æ»¡ï¼Œå’Œæˆ‘ä¸€èµ·ç©å­ */;
 		(void)ActionTask_RequestMotion(ACTION_SWING_FORWARD_BACK);
 	} else if (stamina <= 10) {
 		OLED_ShowImage(0, 8, 128, 48, BMP2);
-		tail = "£¬ÈÃĞ¡´ôĞİÏ¢Ò»ÏÂ°È";
+		tail = "\xA3\xAC\xC8\xC3\xD0\xA1\xB4\xF4\xD0\xDD\xCF\xA2\xD2\xBB\xCF\xC2\xB0\xC8" /* ï¼Œè®©å°å‘†ä¼‘æ¯ä¸€ä¸‹å­ */;
 		(void)ActionTask_RequestMotion((rand() % 2) ? ACTION_SLEEP_PRONE : ACTION_SLEEP_SIDE);
 	}
 	OLED_stamina();
-	snprintf(read, sizeof(read), "[v12][m0][t5]µ±Ç°µÄÌåÁ¦ÖµÎª%d%s", stamina, tail);
+	snprintf(read, sizeof(read), "[v12][m0][t5]\xB5\xB1\xC7\xB0\xB5\xC4\xCC\xE5\xC1\xA6\xD6\xB5\xCE\xAA%d%s" /* [v12][m0][t5]å½“å‰çš„ä½“åŠ›å€¼ä¸º%d%s */, stamina, tail);
 	(void)AudioTask_RequestText(read);
 	previous_mode = move_mode;
 	move_mode = '0';
 }
-void mode_index(void)//Õ¹Ê¾¿ªĞÄÖµºÍÌåÁ¦Öµ
+void mode_index(void)//å±•ç¤ºå¼€å¿ƒå€¼å’Œä½“åŠ›å€¼
 {
 	OLED_Clear();
-	OLED_ShowChinese(0,0,"¿ªĞÄÖµ£¬");
+	OLED_ShowChinese(0,0,"\xBF\xAA\xD0\xC4\xD6\xB5\xA3\xAC" /* å¼€å¿ƒå€¼ï¼Œ */);
 	OLED_ShowNum(64,0,(uint32_t)happiness,3,OLED_8X16); /* max 200/500: always 3 digits */
-	OLED_ShowChinese(0,16,"ÌåÁ¦Öµ£¬");
+	OLED_ShowChinese(0,16,"\xCC\xE5\xC1\xA6\xD6\xB5\xA3\xAC" /* ä½“åŠ›å€¼ï¼Œ */);
 	OLED_ShowNum(64,16,(uint32_t)stamina,3,OLED_8X16); /* max 200/500: always 3 digits */
 	OLED_UpdateArea(0,0,128,32);
-	snprintf(read, sizeof(read), "[v12][m0][t5]µ±Ç°µÄ¿ªĞÄÖµÎª%d£¬ÌåÁ¦ÖµÎª%d", happiness, stamina);
-	(void)AudioTask_RequestText(read); /* ·Ç×èÈû£¬Ô­À´ Delay_s(10) */
+	snprintf(read, sizeof(read), "[v12][m0][t5]\xB5\xB1\xC7\xB0\xB5\xC4\xBF\xAA\xD0\xC4\xD6\xB5\xCE\xAA%d\xA3\xAC\xCC\xE5\xC1\xA6\xD6\xB5\xCE\xAA%d" /* [v12][m0][t5]å½“å‰çš„å¼€å¿ƒå€¼ä¸º%dï¼Œä½“åŠ›å€¼ä¸º%d */, happiness, stamina);
+	(void)AudioTask_RequestText(read); /* éé˜»å¡ï¼ŒåŸæ¥ Delay_s(10) */
 	previous_mode = move_mode;
 	move_mode = '0';
 }
