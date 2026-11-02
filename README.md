@@ -84,6 +84,7 @@ docs/        协议、设计方案、审查报告
 bash tests/host/run_tests.sh          # 状态机、协议覆盖、GBK 截断、体力规则、电池、超声波、舵机换算
 bash tools/check_firmware_syntax.sh   # 用 clang 对 Keil 工程全部 C 文件做 Cortex-M3 检查
 python3 hardware/gen/build.py --check # 重新生成底板并跑 ERC/DRC，确认提交的文件是最新的
+# CI 另外用 KiCad 8 的 kicad-cli 做官方 ERC/DRC
 ```
 
 ## 文档
@@ -101,7 +102,7 @@ python3 hardware/gen/build.py --check # 重新生成底板并跑 ERC/DRC，确�
 ## 已知限制
 
 - 固件改动已通过主机测试和 Cortex-M3 编译检查，**尚未在实物上回归测试**；如发现动作异常，可用 `git log` 定位并反馈。
-- V2 底板是脚本生成并自动布线的，已过脚本 ERC/DRC，**尚未打样**。
+- V2 底板是脚本生成并自动布线的，已过 KiCad 8 官方 ERC/DRC，**尚未打样**。
 - 4 舵机每条腿只有 1 个自由度，步态以趣味动作为主，不追求真实四足运动学。
 
 ## 许可证与致谢
