@@ -19,14 +19,14 @@ Generated from `hardware/gen/design_lite.py`. Firmware: `make LITE=1` (or add `M
 | 13 | PB5 | - |  |
 | 14 | PB6 | - |  |
 | 15 | PB7 | - |  |
-| 16 | PB8 | - |  |
-| 17 | PB9 | - |  |
+| 16 | PB8 | OLED_SCL | J7.3 |
+| 17 | PB9 | OLED_SDA | J7.4 |
 | 18 | 5V | VLOGIC | (power) |
 | 19 | GND | GND | (power) |
-| 20 | 3V3 | - |  |
+| 20 | 3V3 | +3V3 | (power) |
 | 21 | GND | GND | (power) |
 | 22 | GND | GND | (power) |
-| 23 | 3V3 | - |  |
+| 23 | 3V3 | +3V3 | (power) |
 | 24 | NRST | - |  |
 | 25 | PB11 | SU_TXD | J6.3 |
 | 26 | PB10 | SU_RXD | J6.4 |

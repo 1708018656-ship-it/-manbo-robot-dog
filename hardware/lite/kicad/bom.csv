@@ -11,4 +11,5 @@ Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
 1,J4,SERVO3,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 3 (brown=GND, red=V+, orange=SIG)"
 1,J5,SERVO4,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 4 (brown=GND, red=V+, orange=SIG)"
 1,J6,SU-03T,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,"SU-03T voice module: VCC, GND, TX(B7), RX(B6); mic + speaker plug into the module"
+1,J7,OLED I2C,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,"0.96in SSD1306 I2C OLED, powered from the Blue Pill 3V3 (plugs in directly)"
 1,U1,BluePill STM32F103C8T6,BluePill_Socket_2x20_W15.24mm,Blue Pill STM32F103C8T6,Blue Pill on 2x 1x20 female headers

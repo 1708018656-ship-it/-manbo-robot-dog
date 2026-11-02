@@ -18,5 +18,6 @@ PLACEMENT = {
     "J4": (31.0, 46.0, 90),
     "J5": (39.5, 46.0, 90),
     "J6": (52.0, 46.0, 90),       # SU-03T  VCC GND TX RX
+    "J7": (24.0, 4.0, 90),        # OLED    GND VCC SCL SDA (top edge)
 }
 PLACEMENT.update({k: (x, y, 0) for k, (x, y) in HOLES.items()})

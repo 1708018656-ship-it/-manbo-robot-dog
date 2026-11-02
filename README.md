@@ -1,6 +1,6 @@
 # 曼波机器狗（Manbo Robot Dog）
 
-> 基于 STM32F103C8T6 的低成本桌面四足机器狗：**说口令就能走**。精简版整机约 40–65 元（4 个 SG90 舵机 + SU-03T 离线语音 + 4 节 5 号电池）；完整版另有 OLED 表情、语音播报、超声波避障、红外防跌落。
+> 基于 STM32F103C8T6 的低成本桌面四足机器狗：**说口令就走，还会回话、做表情**。精简版整机约 50–75 元（4 个 SG90 舵机 + SU-03T 离线语音 + OLED + 4 节 5 号电池）；完整版另有蓝牙、超声波避障、红外防跌落、电池检测。
 
 **维护者：[@1708018656-ship-it](https://github.com/1708018656-ship-it)** · 基于 [RussellCooper-DJZ/manbo-robot-dog](https://github.com/RussellCooper-DJZ/manbo-robot-dog)（MIT）
 
@@ -14,12 +14,12 @@
 
 | | 精简版（推荐入门，省钱） | 完整版 |
 |---|---|---|
-| 功能 | 语音口令控制 + 运动 | 运动 + 蓝牙/语音控制 + OLED 表情 + 语音播报 + 超声波避障 + 红外防跌落 + 电池检测 |
-| 硬件 | [hardware/lite/](hardware/lite/README.md)：70×54 mm 小板，4 节 5 号电池，SU-03T 语音模块 | [hardware/](hardware/README.md)：100×90 mm 扩展底板 V2，2S 锂电 |
+| 功能 | 语音口令控制 + 运动 + 语音回复 + OLED 表情 | 以上全部 + 蓝牙 + 超声波避障 + 红外防跌落 + 电池检测 |
+| 硬件 | [hardware/lite/](hardware/lite/README.md)：70×54 mm 小板，4 节 5 号电池，SU-03T 语音模块（自带喇叭回话），OLED | [hardware/](hardware/README.md)：100×90 mm 扩展底板 V2，2S 锂电 |
 | 固件 | `make LITE=1` | `make V2=1`（或原版飞线 `make`） |
-| 大概成本（不含电池、下载器） | 约 40–65 元 | 明显更高（多了语音合成、蓝牙、屏幕、传感器和锂电供电） |
+| 大概成本（不含电池、下载器） | 约 50–75 元 | 明显更高（多了语音合成、蓝牙、屏幕、传感器和锂电供电） |
 
-<p align="center"><img src="hardware/lite/kicad/pcb-preview.svg" width="520" alt="精简版底板"><br><sub>精简版底板（70 × 54 mm，12 个元件）。完整版底板见 <a href="hardware/README.md">hardware/</a></sub></p>
+<p align="center"><img src="hardware/lite/kicad/pcb-preview.svg" width="520" alt="精简版底板"><br><sub>精简版底板（70 × 54 mm，13 个元件）。完整版底板见 <a href="hardware/README.md">hardware/</a></sub></p>
 
 ## 这一版改了什么
 
