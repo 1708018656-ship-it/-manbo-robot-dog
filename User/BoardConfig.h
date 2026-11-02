@@ -43,4 +43,33 @@
   #define BOARD_HAS_VBAT_SENSE 0
 #endif
 
+/*
+ * Feature set.
+ *   MANBO_LITE: low-cost build - voice commands (SU-03T on USART3) + motion
+ *   only. No OLED, no speech synthesis, no ultrasonic / IR, no stamina game.
+ *   Walking stops by itself after MANBO_WALK_TIMEOUT_MS in case the "stop"
+ *   phrase is not recognised. Use with the lite board in hardware/lite/.
+ */
+#ifdef MANBO_LITE
+  #define MANBO_HAS_OLED       0
+  #define MANBO_HAS_SPEECH     0
+  #define MANBO_HAS_SENSORS    0
+  #define MANBO_HAS_PET_STATS  0
+  #ifndef MANBO_WALK_TIMEOUT_MS
+    #define MANBO_WALK_TIMEOUT_MS 10000U
+  #endif
+#else
+  #define MANBO_HAS_OLED       1
+  #define MANBO_HAS_SPEECH     1
+  #define MANBO_HAS_SENSORS    1
+  #define MANBO_HAS_PET_STATS  1
+  #ifndef MANBO_WALK_TIMEOUT_MS
+    #define MANBO_WALK_TIMEOUT_MS 0U      /* 0 = walk until the next command */
+  #endif
+#endif
+
+#if defined(MANBO_LITE) && defined(MANBO_BOARD_V2)
+  #error "MANBO_LITE uses the lite board; do not combine with MANBO_BOARD_V2"
+#endif
+
 #endif /* BOARD_CONFIG_H */

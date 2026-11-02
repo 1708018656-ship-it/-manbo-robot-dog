@@ -20,16 +20,19 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        board: ["0", "1"]   # 0 = original wiring, 1 = MANBO_BOARD_V2 PCB
+        include:
+          - { name: original, flags: "" }
+          - { name: v2-board, flags: "V2=1" }
+          - { name: lite,     flags: "LITE=1" }
     steps:
       - uses: actions/checkout@v5
       - name: Install ARM GCC
         run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
       - name: Build firmware
-        run: make -j"$(nproc)" V2=${{ matrix.board }}
+        run: make -j"$(nproc)" ${{ matrix.flags }}
       - uses: actions/upload-artifact@v4
         with:
-          name: manbo-firmware-v2-${{ matrix.board }}
+          name: manbo-firmware-${{ matrix.name }}
           path: |
             build/manbo.hex
             build/manbo.bin

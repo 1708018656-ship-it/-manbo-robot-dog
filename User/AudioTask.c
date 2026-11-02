@@ -2,6 +2,7 @@
 #include "stm32f10x.h"
 #include "usart2.h"
 #include "GbkText.h"
+#include "BoardConfig.h"
 
 #define AUDIO_FRAME_CAPACITY SYN6288_FRAME_CAPACITY
 #define AUDIO_MAX_TEXT_LENGTH SYN6288_MAX_TEXT_BYTES
@@ -25,6 +26,10 @@ void AudioTask_Init(void)
 
 uint8_t AudioTask_RequestText(const char *text)
 {
+#if !MANBO_HAS_SPEECH
+    (void)text;
+    return 0U;          /* lite build: no speech module fitted */
+#else
     uint8_t text_length;
     uint16_t i;
     uint8_t checksum;
@@ -58,6 +63,7 @@ uint8_t AudioTask_RequestText(const char *text)
     g_audio.index = 0U;
     g_audio.active = 1U;
     return 1U;
+#endif
 }
 
 void AudioTask_Run(uint32_t now_ms)

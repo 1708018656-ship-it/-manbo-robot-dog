@@ -20,12 +20,14 @@ printf '#pragma once\ndouble sqrt(double); double pow(double,double); double sin
 
 FILES=$(grep -oP '(?<=<FilePath>)[^<]+\.c(?=</FilePath>)' Project.uvprojx | tr '\\' '/' | grep -v -E 'Library/|core_cm3')
 status=0
+for VARIANT in "" "-DMANBO_BOARD_V2" "-DMANBO_LITE"; do
 for f in $FILES; do
   clang --target=thumbv7m-none-eabi -mcpu=cortex-m3 -ffreestanding -fsyntax-only -std=c99 \
     -Wall -Wextra -Wno-unused-parameter -Wno-missing-braces -Wno-invalid-source-encoding \
     -Werror=implicit-function-declaration \
-    -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -isystem "$STUB" \
+    -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD $VARIANT -isystem "$STUB" \
     -IStart -ILibrary -IUser -ISystem -IHardware "$f" || status=1
 done
-[ $status -eq 0 ] && echo "firmware syntax check: OK ($(echo "$FILES" | wc -l) files)"
+done
+[ $status -eq 0 ] && echo "firmware syntax check: OK ($(echo "$FILES" | wc -l) files x 3 variants)"
 exit $status

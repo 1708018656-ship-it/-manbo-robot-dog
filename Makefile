@@ -1,6 +1,7 @@
 # GCC build for the STM32 firmware (Keil Project.uvprojx is still supported).
 #   make            -> build/manbo.elf / .hex / .bin
 #   make V2=1       -> new carrier PCB pin map (MANBO_BOARD_V2)
+#   make LITE=1     -> low-cost voice + motion build (MANBO_LITE, hardware/lite)
 #   make flash      -> st-flash write build/manbo.bin 0x08000000
 #   make test       -> host unit tests
 # Requires arm-none-eabi-gcc (Ubuntu: apt install gcc-arm-none-eabi).
@@ -20,6 +21,9 @@ SRCS += gcc/startup_stm32f103xb.c gcc/syscalls.c
 DEFS := -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD
 ifeq ($(V2),1)
 DEFS += -DMANBO_BOARD_V2
+endif
+ifeq ($(LITE),1)
+DEFS += -DMANBO_LITE
 endif
 
 INCS := -IStart -ILibrary -IUser -ISystem -IHardware

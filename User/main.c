@@ -23,6 +23,7 @@
 #include "PetStats.h"
 #include "Watchdog.h"
 #include "BatteryTask.h"
+#include "BoardConfig.h"
 
 /****************************************************
 *
@@ -46,10 +47,12 @@ uint8_t t3=0 ; //存储红外的信号 左
 uint8_t t4=0 ; //存储红外的信号 右
 static uint8_t continuous_cmd = 0U; /* gait that repeats until a new command */
 static uint16_t gait_repeat = 0U;   /* same gait back-to-back counter */
+static uint32_t continuous_start_ms = 0U; /* for MANBO_WALK_TIMEOUT_MS */
 
 /* OLED face per command, same faces the legacy mode_xxx() functions used. */
 static void Face_ShowForCommand(uint8_t cmd)
 {
+#if MANBO_HAS_OLED
 	switch (cmd)
 	{
 		case 'f': case 'b': case 'l': case 'r':
@@ -63,13 +66,20 @@ static void Face_ShowForCommand(uint8_t cmd)
 		default:
 			break;
 	}
-	LED13_Turn();
+#else
+	(void)cmd;
+#endif
+	LED13_Turn();   /* lite build: the on-board LED blinks on every command */
 }
 
 /* Motion is refused when stamina is used up or the battery is critical. */
 static uint8_t MotionAllowed(void)
 {
+#if MANBO_HAS_PET_STATS
 	return ((stamina > 0) && (BatteryTask_Level() != BATTERY_CRITICAL)) ? 1U : 0U;
+#else
+	return (BatteryTask_Level() != BATTERY_CRITICAL) ? 1U : 0U;
+#endif
 }
 
 /* Board V2 only (original wiring always reports BATTERY_UNKNOWN). */
@@ -100,17 +110,23 @@ int main(void)
 
 	/*模块初始化*/
 	LED_Init();			//LED初始化
+#if MANBO_HAS_OLED
 	OLED_Init();		//OLED初始化
+#endif
 	USART1_Init();		//蓝牙串口初始化
+#if MANBO_HAS_SPEECH
 	USART2_Init();		//语音合成串口初始化
+#endif
 	USART3_Init();		//语音识别串口初始化
 	CommTask_Init();        //第二阶段：初始化通信任务
 	SafetyTask_Init();     //第二阶段：初始化安全任务
 	ActionTask_Init();      //第三阶段：初始化 PoseStep 动作状态机
 	AudioTask_Init();       //第五阶段：初始化非阻塞语音任务
 	Servo_Init();		//舵机初始化
+#if MANBO_HAS_SENSORS
 	hongwai_init();     //红外初始化
 	UltrasonicWave_Init(); //超声波初始化
+#endif
 	Timebase_Init();       //1ms协作式调度时基
 	AppTask_Init();        //初始化任务调度骨架
 	happiness=200;//初始化开心指数
@@ -118,9 +134,11 @@ int main(void)
 	bz_flag=0;//避障标志位 ON/OFF 默认off
 	hw_flag=0;//红外标志位 ON/OFF 默认off
 	/*进入默认状态*/
+#if MANBO_HAS_OLED
 	OLED_Clear();
 	OLED_ShowImage(0, 0, 128, 64, BMP1); //立正
 	OLED_Update();          /* boot: show the face now (normally AppTask_Ui refreshes) */
+#endif
  
 /**************语音合成芯片设置命令*********************/
 //选择背景音乐2。(0：无背景音乐  1-15：背景音乐可选)
@@ -130,11 +148,16 @@ int main(void)
 
 	/* After a watchdog reset skip the 1 s greeting: recover quickly, and do
 	 * not bark on every reset if something keeps tripping the watchdog. */
+#if MANBO_HAS_SPEECH
 	if (Watchdog_CausedLastReset() == 0U)
 	{
 		SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]\xCD\xFA\xCD\xFA" /* 旺旺 */);
 		Delay_s(1);   //唤醒后狗叫一声,音量12适合演示，10适合调试
 	}
+#else
+	(void)Watchdog_CausedLastReset();   /* just clear the reset flags */
+	(void)ActionTask_RequestMotion(ACTION_STAND);
+#endif
 	
 	Watchdog_Init();       /* after all blocking start-up code */
 
@@ -172,6 +195,7 @@ int main(void)
 				PetStats_Apply(move_mode, previous_mode, &gait_repeat, &stamina, &happiness);
 				Face_ShowForCommand(move_mode);
 				continuous_cmd = PetStats_IsContinuous(move_mode) ? move_mode : 0U;
+				continuous_start_ms = now_ms;
 				previous_mode = move_mode;
 				move_mode = '0';
 			}
@@ -179,6 +203,13 @@ int main(void)
 			{
 				continuous_cmd = 0U;   /* any other new command stops walking */
 			}
+		}
+		else if ((MANBO_WALK_TIMEOUT_MS != 0U) && (continuous_cmd != 0U) &&
+		         ((uint32_t)(now_ms - continuous_start_ms) >= MANBO_WALK_TIMEOUT_MS))
+		{
+			/* safety net for voice control: stop if "停" was not recognised */
+			continuous_cmd = 0U;
+			(void)ActionTask_RequestMotion(ACTION_STAND);
 		}
 		else if ((continuous_cmd != 0U) && (MotionAllowed() != 0U) &&
 		         (ActionTask_IsActive() == 0U))
@@ -193,6 +224,7 @@ int main(void)
 
 		Battery_React();
 
+#if MANBO_HAS_PET_STATS
 		//***体力值与开心值反应设置***//
 		if(stamina<0)//体力值小于0，执行“难受”状态
 	{
@@ -209,6 +241,8 @@ int main(void)
 		if(happiness>200)//开心值不大于1000
 		{happiness=200;}
 		
+#endif
+#if MANBO_HAS_SENSORS
 		//***红外悬崖检测模块设置***//
 		if(move_mode == 'H') //红外开
 		{hw_flag=1;}
@@ -233,6 +267,7 @@ int main(void)
 			SensorTask_SetEnabled(0U);
 			T=100;
 		}
+#endif
 		/* SensorTask runs from AppTask; no blocking Bizhang call here. */
 		
 		
@@ -243,10 +278,12 @@ int main(void)
 		 * mode_forward()/mode_dance()/... branches were unreachable and are gone. */
 		switch (move_mode)
 		{
+#if MANBO_HAS_OLED
 			case 'n': mode_nanshou();   break;   /* 难受 */
 			case 'K': mode_happiness(); break;   /* 播报开心值 */
 			case 'T': mode_stamina();   break;   /* 播报体力值 */
 			case 'Z': mode_index();     break;   /* 播报开心值+体力值 */
+#endif
 			case 'H': case 'h': case 'x': case 'c':
 				move_mode = '0';                 /* mode switches handled above */
 				break;
