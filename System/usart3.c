@@ -109,6 +109,39 @@ uint8_t USART3_GetRxData(void)
   *           请确保函数名正确，不能有任何差异，否则中断函数将不能进入
   */
 
+/* Queue up to len bytes; returns how many were accepted (never waits). */
+uint8_t USART3_SendBytes(const uint8_t *data, uint8_t len)
+{
+	uint8_t accepted = 0U;
+	uint8_t next_head;
+
+	if (data == 0)
+	{
+		return 0U;
+	}
+	while (accepted < len)
+	{
+		next_head = (uint8_t)((USART3_TxHead + 1U) % USART3_TX_CAPACITY);
+		if (next_head == USART3_TxTail)
+		{
+			break;
+		}
+		USART3_TxBuffer[USART3_TxHead] = data[accepted];
+		USART3_TxHead = next_head;
+		accepted++;
+	}
+	if (accepted != 0U)
+	{
+		USART_ITConfig(USART3, USART_IT_TXE, ENABLE);
+	}
+	return accepted;
+}
+
+uint8_t USART3_TxFree(void)
+{
+	return (uint8_t)((USART3_TxTail + USART3_TX_CAPACITY - USART3_TxHead - 1U) % USART3_TX_CAPACITY);
+}
+
 void USART3_IRQHandler(void)
 {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) == SET)		//判断是否是USART1的接收事件触发的中断
