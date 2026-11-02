@@ -831,6 +831,16 @@
               <FilePath>.\User\AppTask.h</FilePath>
             </File>
             <File>
+              <FileName>BatteryTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\BatteryTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>BatteryTask.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\BatteryTask.h</FilePath>
+            </File>
+            <File>
               <FileName>CommTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\CommTask.c</FilePath>

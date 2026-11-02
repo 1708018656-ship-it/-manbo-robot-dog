@@ -57,3 +57,12 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/pet_stats_tests"
 
 "$BUILD_DIR/pet_stats_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/User" \
+  "$ROOT_DIR/tests/host/test_battery.c" \
+  -o "$BUILD_DIR/battery_tests"
+
+"$BUILD_DIR/battery_tests"

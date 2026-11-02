@@ -5,6 +5,7 @@
 #include "ActionTask.h"
 #include "AudioTask.h"
 #include "SensorTask.h"
+#include "BatteryTask.h"
 #include "PerfProbe.h"
 
 #define APP_TASK_COUNT 7U
@@ -46,6 +47,7 @@ void AppTask_Init(void)
     uint32_t now_ms = Timebase_NowMs();
 
     SensorTask_Init();
+    BatteryTask_Init();
 #if PERF_PROBE_ENABLE
     PerfProbe_Init();
 #endif
@@ -90,6 +92,7 @@ static void AppTask_Safety(uint32_t now_ms)
 static void AppTask_Sensor(uint32_t now_ms)
 {
     SensorTask_Run(now_ms);
+    BatteryTask_Run(now_ms);   /* self-throttled to 10 Hz */
 }
 
 static void AppTask_Decision(uint32_t now_ms)

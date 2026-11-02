@@ -23,6 +23,7 @@
 #include "AudioTask.h"
 #include "PetStats.h"
 #include "Watchdog.h"
+#include "BatteryTask.h"
 
 /****************************************************
 *
@@ -70,6 +71,34 @@ static void Face_ShowForCommand(uint8_t cmd)
 			break;
 	}
 	LED13_Turn();
+}
+
+/* Motion is refused when stamina is used up or the battery is critical. */
+static uint8_t MotionAllowed(void)
+{
+	return ((stamina > 0) && (BatteryTask_Level() != BATTERY_CRITICAL)) ? 1U : 0U;
+}
+
+/* Board V2 only (original wiring always reports BATTERY_UNKNOWN). */
+static void Battery_React(void)
+{
+	BatteryLevel level;
+
+	if (BatteryTask_ConsumeChange(&level) == 0U)
+	{
+		return;
+	}
+	if (level == BATTERY_LOW)
+	{
+		(void)AudioTask_RequestText("[v12][m0][t5]" "\xB5\xE7\xC1\xBF\xB2\xBB\xD7\xE3\xA3\xAC\xC7\xEB\xB3\xE4\xB5\xE7" /* 电量不足，请充电 */);
+	}
+	else if (level == BATTERY_CRITICAL)
+	{
+		continuous_cmd = 0U;
+		(void)ActionTask_RequestMotion(ACTION_SLEEP_PRONE);   /* lowest servo load */
+		OLED_ShowImage(0, 0, 128, 64, BMP6);                  /* sleeping face */
+		(void)AudioTask_RequestText("[v12][m0][t5]" "\xB5\xE7\xC1\xBF\xB9\xFD\xB5\xCD\xA3\xAC\xD0\xA1\xB4\xF4\xD2\xAA\xD0\xDD\xCF\xA2\xC1\xCB" /* 电量过低，小呆要休息了 */);
+	}
 }
 
 int main(void)
@@ -135,7 +164,8 @@ int main(void)
 			else if (USART3_GetRxFlag()) {
 				rx = move_mode3;
 			}
-			if ((rx != 0U) && ((stamina > 0) || (rx == '2') || (rx == 'p'))) {
+			/* 体力耗尽或电池电量过低时只接受睡觉和急停 */
+			if ((rx != 0U) && ((MotionAllowed() != 0U) || (rx == '2') || (rx == 'p') || (rx == '5'))) {
 				move_mode = rx;
 			}
 		}
@@ -155,7 +185,7 @@ int main(void)
 				continuous_cmd = 0U;   /* any other new command stops walking */
 			}
 		}
-		else if ((continuous_cmd != 0U) && (stamina > 0) &&
+		else if ((continuous_cmd != 0U) && (MotionAllowed() != 0U) &&
 		         (ActionTask_IsActive() == 0U))
 		{
 			/* Legacy behaviour: keep walking / dancing until a new command. */
@@ -165,6 +195,8 @@ int main(void)
 				previous_mode = continuous_cmd;
 			}
 		}
+
+		Battery_React();
 
 		//***体力值与开心值反应设置***//
 		if(stamina<0)//体力值小于0，执行“难受”状态
