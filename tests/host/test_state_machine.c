@@ -202,6 +202,30 @@ static void test_advanced_action_requests_speech(void)
                    "new speech request is accepted after previous frame");
 }
 
+static void test_every_protocol_motion_byte_is_accepted(void)
+{
+    /* main.c relies on this: these bytes must never fall through to the
+     * (removed) blocking legacy dispatch. Keep in sync with docs/protocol.md. */
+    const char *motion = "fblrwzd5qsojy1p2BYXWU";
+    const char *not_motion = "nKTZHhxc0";
+    const char *c;
+
+    for (c = motion; *c != '\0'; ++c)
+    {
+        reset_observations();
+        ActionTask_Init();
+        AudioTask_Init();
+        EXPECT_EQ_UINT(ActionTask_HandleCommand((uint8_t)*c), 1U,
+                       "protocol motion byte is accepted by ActionTask");
+    }
+    for (c = not_motion; *c != '\0'; ++c)
+    {
+        ActionTask_Init();
+        EXPECT_EQ_UINT(ActionTask_HandleCommand((uint8_t)*c), 0U,
+                       "non-motion byte is left to main.c");
+    }
+}
+
 int main(void)
 {
     test_pose_progression_and_preemption();
@@ -209,6 +233,7 @@ int main(void)
     test_emergency_stop_restores_safe_pose();
     test_communication_fault_latches_and_stops();
     test_advanced_action_requests_speech();
+    test_every_protocol_motion_byte_is_accepted();
 
     printf("state_machine_tests: %u assertions, %u failures\n",
            g_tests, g_failures);

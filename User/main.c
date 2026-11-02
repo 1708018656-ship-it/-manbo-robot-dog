@@ -22,6 +22,7 @@
 #include "ActionTask.h"
 #include "AudioTask.h"
 #include "PetStats.h"
+#include "Watchdog.h"
 
 /****************************************************
 *
@@ -106,6 +107,8 @@ int main(void)
 
 	SYN_FrameInfo(0, (uint8_t *)"[v12][m0][t5]ÍúÍú");Delay_s(1);//»½ĞÑºó¹·½ĞÒ»Éù,ÒôÁ¿12ÊÊºÏÑİÊ¾£¬10ÊÊºÏµ÷ÊÔ
 	
+	Watchdog_Init();       /* after all blocking start-up code */
+
 	while (1)
 	{  
 		now_ms = Timebase_NowMs();
@@ -207,58 +210,23 @@ int main(void)
 		
 		
 		//***»¥¶¯ÉèÖÃ***//
-		if (move_mode == 'f') { //Ç°½ø
-			mode_forward();
-		} else if (move_mode == 'b') { //ºóÍË
-			mode_behind();
-		} else if (move_mode == 'l') { //×ó×ª
-			mode_left();
-		} else if (move_mode == 'r') { //ÓÒ×ª
-			mode_right();
-		} else if (move_mode == 'w') { //Ç°ºóÒ¡°Ú
-			mode_swing_qianhou();
-		} else if (move_mode == 'z') { //×óÓÒÒ¡°Ú
-			mode_swing_zuoyou();
-		} else if (move_mode == 'd') { //ÌøÎè
-			mode_dance();
-		} else if (move_mode == '5') { //Á¢Õı
-			mode_stand();
-		} else if (move_mode == 'q' && previous_mode != '0') { //ÆğÉí
-			mode_slowstand();
-		} else if (move_mode == 's' && previous_mode != 's') { //×øÏÂ
-			mode_strech();
-		} else if (move_mode == 'j') { //½»ÌæÌ§ÊÖ
-			mode_twohands();
-		} else if (move_mode == 'y') { //ÉìÀÁÑü
-			mode_lanyao();
-		} else if (move_mode == '1') { //Ì§Í·
-			mode_headup();
-		} else if (move_mode == 'p' && previous_mode != 'p') { //Å¿ÏÂË¯¾õ
-			mode_sleeppa();
-		} else if (move_mode == '2' && previous_mode != '2') { //ÎÔÏÂË¯¾õ
-			mode_sleepwo();
-		} else if (move_mode == 'n') { //ÄÑÊÜ
-			mode_nanshou();
-		} else if (move_mode == 'B') { //±í°×
-			mode_biaobai();
-		} else if (move_mode == 'Y') { //±³ÔªËØÖÜÆÚ±í
-			mode_yuansu();
-		} else if (move_mode == 'X') { //±³Ğ£Ñµ
-			mode_xiaoxun();
-		} else if (move_mode == 'W') { //ÎªÊÀ½çÖ®¹â
-			mode_world();
-		} else if (move_mode == 'o') { //´òÕĞºô
-			mode_hello();
-		} else if (move_mode == 'U') { //±»½Ğ¡°Ğ¡´ô¡±
-			mode_xiaodai();
-		} else if (move_mode == 'K') { //Õ¹Ê¾¿ªĞÄÖµ
-			mode_happiness();
-		} else if (move_mode == 'T') { //Õ¹Ê¾ÌåÁ¦Öµ
-			mode_stamina();
-		} else if (move_mode == 'Z') { //Õ¹Ê¾¿ªĞÄÖµºÍÌåÁ¦Öµ
-			mode_index();
-		} 
+		/* Only commands that ActionTask does not own reach here. All motion
+		 * commands are accepted by ActionTask above (see test_state_machine.c,
+		 * "every protocol motion byte is accepted"), so the old blocking
+		 * mode_forward()/mode_dance()/... branches were unreachable and are gone. */
+		switch (move_mode)
+		{
+			case 'n': mode_nanshou();   break;   /* éš¾å— */
+			case 'K': mode_happiness(); break;   /* æ’­æŠ¥å¼€å¿ƒå€¼ */
+			case 'T': mode_stamina();   break;   /* æ’­æŠ¥ä½“åŠ›å€¼ */
+			case 'Z': mode_index();     break;   /* æ’­æŠ¥å¼€å¿ƒå€¼+ä½“åŠ›å€¼ */
+			case 'H': case 'h': case 'x': case 'c':
+				move_mode = '0';                 /* mode switches handled above */
+				break;
+			default:
+				break;
+		}
 
-
+		Watchdog_Feed();
 	}
 }
