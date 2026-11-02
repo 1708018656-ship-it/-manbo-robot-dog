@@ -46,3 +46,7 @@ Thumbs.db
 *.code-workspace
 
 build/
+
+# Python
+__pycache__/
+*.pyc
