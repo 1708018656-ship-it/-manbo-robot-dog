@@ -175,7 +175,7 @@ def footprint_sexpr(pl, nets, project_root):
     return "\n".join(o)
 
 
-def write(parts, placed, board_w, board_h, tracks, vias, title, rev, date, project):
+def write(parts, placed, board_w, board_h, tracks, vias, title, rev, date, project, brand=None):
     nets = net_table(parts)
     root = uid("root", project)
     o = ['(kicad_pcb (version 20240108) (generator "manbo_gen") (generator_version "8.0")',
@@ -205,7 +205,8 @@ def write(parts, placed, board_w, board_h, tracks, vias, title, rev, date, proje
         o.append('  (gr_arc (start %s %s) (mid %s %s) (end %s %s) (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (uuid %s))'
                  % (fmt(s_[0]), fmt(s_[1]), fmt(m_[0]), fmt(m_[1]), fmt(e_[0]), fmt(e_[1]), q(uid("arc", i))))
     o.append('  (gr_text %s (at %s %s 0) (layer "F.SilkS") (uuid %s) (effects (font (size 1.5 1.5) (thickness 0.25)) (justify left)))'
-             % (q("MANBO CARRIER V%s  github: manbo-robot-dog" % rev), fmt(30), fmt(88.0), q(uid("brand"))))
+             % (q((brand or ("MANBO CARRIER V%s" % rev, 30.0, 88.0))[0]), fmt((brand or (0, 30.0, 88.0))[1]),
+                fmt((brand or (0, 30.0, 88.0))[2]), q(uid("brand"))))
     for i, (x1, y1, x2, y2, w, layer, net) in enumerate(tracks):
         o.append('  (segment (start %s %s) (end %s %s) (width %s) (layer %s) (net %d) (uuid %s))'
                  % (fmt(x1), fmt(y1), fmt(x2), fmt(y2), fmt(w), q(layer), nets[net], q(uid("seg", i))))

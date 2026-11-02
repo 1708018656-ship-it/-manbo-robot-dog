@@ -40,7 +40,7 @@ class SymbolShape:
         self.part = part
         self.pins = []        # (num, name, x, y, angle)
         names = part.pins
-        if part.ref.startswith("U3"):           # Blue Pill: two rows
+        if len(part.pins) == 40:                # Blue Pill: two rows
             half = len(names) // 2
             self.half_w = 10.16
             top = (half - 1) / 2 * PITCH
@@ -58,7 +58,7 @@ class SymbolShape:
             self.half_h = max(top + PITCH, 2 * PITCH)
 
     def key(self):
-        return (self.part.ref[0], tuple((p[0], p[1]) for p in self.part.pins), self.part.ref == "U3")
+        return (self.part.ref[0], tuple((p[0], p[1]) for p in self.part.pins), len(self.part.pins) == 40)
 
     def width(self):
         return 2 * (self.half_w + PIN_LEN)
@@ -89,7 +89,7 @@ def lib_symbol(name, shape, prefix):
     return "\n".join(out)
 
 
-def build(parts, title, project, rev, date):
+def build(parts, title, project, rev, date, sheet_titles=None, mcu_ref="U3"):
     root = uid("root", project)
     shapes = [SymbolShape(p) for p in parts if p.pins]
     libnames = {}
@@ -111,6 +111,10 @@ def build(parts, title, project, rev, date):
               "servo": "SERVOS: TIM3 CH1-4",
               "modules": "MODULES",
               "sense": "BATTERY SENSE: VBAT/4.03 -> PA4"}
+    if sheet_titles:
+        titles.update(sheet_titles)
+    present = {p.group if p.group in col_x else "modules" for p in parts if p.pins}
+    order = [g for g in order if g in present]
 
     body = []
     placed = []

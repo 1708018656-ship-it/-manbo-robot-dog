@@ -1,0 +1,12 @@
+Manbo robot dog LITE board rev L1.0 - generated board report (hardware/gen/drc.py, exact geometry)
+board: 70 x 54 mm, 2 layers, 16 footprints
+nets: 10, routed segments: 82 (393 mm), vias: 3
+clearance: signal 0.20 mm, power 0.30 mm, edge 0.50 mm
+track widths: GND 1 mm, VBAT_IN 1.5 mm, VLOGIC 0.6 mm, VSERVO 1.5 mm, signal 0.25 mm
+unrouted connections: 0
+clearance violations: 0
+nets not fully connected: 0
+
+Note: the GND pours on both layers are unfilled in the file; press B in
+KiCad (Edit > Fill All Zones) before plotting. All GND pads are also
+connected by tracks, so the board works without the pour.

@@ -72,6 +72,13 @@ def get(name):
                 Pad("2", "smd", "roundrect", 2.1375, 0, 1.325, 3.4)]
         return Footprint(name, pads, (-3.1, -2.0, 3.1, 2.0), smd=True)
 
+    if fp == "D_SMA":
+        # KiCad Diode_SMD:D_SMA - pad 1 = cathode (marked on silk)
+        pads = [Pad("1", "smd", "rect", -2.0, 0, 2.5, 1.7),
+                Pad("2", "smd", "rect", 2.0, 0, 2.5, 1.7)]
+        return Footprint(name, pads, (-3.4, -1.6, 3.4, 1.6),
+                         silk_lines=[(-3.4, -1.6, -3.4, 1.6)], smd=True)
+
     if fp == "Fuse_2920_7451Metric":
         pads = [Pad("1", "smd", "roundrect", -3.4, 0, 1.85, 5.35),
                 Pad("2", "smd", "roundrect", 3.4, 0, 1.85, 5.35)]

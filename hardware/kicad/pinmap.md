@@ -1,4 +1,4 @@
-# Manbo carrier V2 - Blue Pill pin map
+# Manbo robot dog carrier board V2 - Blue Pill pin map
 
 Generated from `hardware/gen/design.py`. Firmware: build with `MANBO_BOARD_V2` (`make V2=1`, or add the define in Keil).
 

@@ -190,3 +190,10 @@ def nets():
         for num, net in p.nets.items():
             out.setdefault(net, []).append((p.ref, num))
     return out
+
+
+# firmware fixed pins that the board must match (checked by build.py)
+FIRMWARE_PINS = {"PA6": "SERVO1_PWM", "PA7": "SERVO2_PWM", "PB0": "SERVO3_PWM", "PB1": "SERVO4_PWM",
+                 "PA9": "BT_RXD", "PA10": "BT_TXD", "PA2": "SYN_RXD", "PA3": "SYN_TXD",
+                 "PB10": "ASR_RXD", "PB11": "ASR_TXD", "PB8": "OLED_SCL", "PB9": "OLED_SDA",
+                 "PA0": "US_TRIG", "PA1": "US_ECHO_3V3"}

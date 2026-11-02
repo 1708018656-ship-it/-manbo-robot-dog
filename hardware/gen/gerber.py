@@ -160,7 +160,7 @@ def outline_segments(W, H, r=2.0, n=8):
     return segs
 
 
-def build(placed, tracks, vias, W, H, via_size, via_drill, project, rev):
+def build(placed, tracks, vias, W, H, via_size, via_drill, project, rev, brand=None):
     files = {}
     cu = {0: GerberWriter("F_Cu", "Copper,L1,Top", H), 1: GerberWriter("B_Cu", "Copper,L2,Bot", H)}
     mask = {0: GerberWriter("F_Mask", "Soldermask,Top", H), 1: GerberWriter("B_Mask", "Soldermask,Bot", H)}
@@ -205,7 +205,8 @@ def build(placed, tracks, vias, W, H, via_size, via_drill, project, rev):
                 lx, ly = (cx, cy + 2.0) if horiz else (cx + 2.6, cy)
                 for s in text_strokes(SHORT.get(names.get(pad.num, ""), names.get(pad.num, ""))[:3], lx, ly, 0.6):
                     silk.line(*s)
-    for s in text_strokes("MANBO CARRIER V%s" % rev, 30.0, 88.0, 1.4, anchor="left"):
+    btext, bx, by = brand or ("MANBO CARRIER V%s" % rev, 30.0, 88.0)
+    for s in text_strokes(btext, bx, by, 1.4, anchor="left"):
         silk.aperture("C", 0.2)
         silk.line(*s)
     # ---- copper: GND pour (solid, knock-out by clear polarity) + objects ----

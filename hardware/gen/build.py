@@ -17,18 +17,27 @@ from collections import Counter, defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import design  # noqa: E402
+import importlib  # noqa: E402
+
+VARIANT = "lite" if "--variant=lite" in sys.argv or ("--variant" in sys.argv and "lite" in sys.argv) else "full"
+design = importlib.import_module("design_lite" if VARIANT == "lite" else "design")
+layout = importlib.import_module("layout_lite" if VARIANT == "lite" else "layout")
 import kicad_sch  # noqa: E402
 import preview  # noqa: E402
-import layout  # noqa: E402
 import kicad_pcb  # noqa: E402
 import router  # noqa: E402
 import drc  # noqa: E402
 import gerber  # noqa: E402
 
-OUT = os.path.normpath(os.path.join(HERE, "..", "kicad"))
-PROJECT = "manbo-carrier"
-REV = "2.0"
+if VARIANT == "lite":
+    OUT = os.path.normpath(os.path.join(HERE, "..", "lite", "kicad"))
+    PROJECT = "manbo-lite"
+else:
+    OUT = os.path.normpath(os.path.join(HERE, "..", "kicad"))
+    PROJECT = "manbo-carrier"
+TITLE = getattr(design, "TITLE", "Manbo robot dog carrier board V2")
+MCU = getattr(design, "MCU_REF", "U3")
+REV = getattr(design, "REV", "2.0")
 DATE = "2026-11-02"
 
 # STM32F103 pins that are NOT 5 V tolerant (datasheet table 5, "FT" column).
@@ -58,12 +67,18 @@ def erc():
         if pw not in nets:
             warnings.append("power net %s unused" % pw)
     # 5 V signals must never reach a non-FT MCU pin
-    bp = next(p for p in design.PARTS if p.ref == "U3")
+    bp = next(p for p in design.PARTS if p.ref == MCU)
     for num, name in bp.pins:
         net = bp.net_of(num)
         if name in NON_FT and net in FIVE_VOLT_SIGNALS:
             errors.append("5 V signal %s on non-5V-tolerant %s" % (net, name))
     # firmware pin map must match BoardConfig.h (MANBO_BOARD_V2)
+    pin_by_name = {name: bp.net_of(num) for num, name in bp.pins}
+    for pin, net in getattr(design, "FIRMWARE_PINS", {}).items():
+        if pin_by_name.get(pin) != net:
+            errors.append("%s should be %s (firmware), board has %s" % (pin, net, pin_by_name.get(pin)))
+    if VARIANT == "lite":
+        return errors, warnings
     cfg = open(os.path.join(HERE, "..", "..", "User", "BoardConfig.h"), encoding="utf-8").read()
     v2 = cfg.split("#ifdef MANBO_BOARD_V2", 1)[1].split("#else", 1)[0]
     pin_by_name = {name: bp.net_of(num) for num, name in bp.pins}
@@ -77,13 +92,6 @@ def erc():
     vpin = re.search(r"VBAT_ADC_PIN\s+GPIO_Pin_(\d+)", v2).group(1)
     if pin_by_name.get("P%s%s" % (vport, vpin)) != "VBAT_SENSE":
         errors.append("VBAT_SENSE pin does not match BoardConfig.h")
-    fixed = {"PA6": "SERVO1_PWM", "PA7": "SERVO2_PWM", "PB0": "SERVO3_PWM", "PB1": "SERVO4_PWM",
-             "PA9": "BT_RXD", "PA10": "BT_TXD", "PA2": "SYN_RXD", "PA3": "SYN_TXD",
-             "PB10": "ASR_RXD", "PB11": "ASR_TXD", "PB8": "OLED_SCL", "PB9": "OLED_SDA",
-             "PA0": "US_TRIG", "PA1": "US_ECHO_3V3"}
-    for pin, net in fixed.items():
-        if pin_by_name.get(pin) != net:
-            errors.append("%s should be %s (firmware), board has %s" % (pin, net, pin_by_name.get(pin)))
     # divider sanity: echo level after divider
     return errors, warnings
 
@@ -147,16 +155,17 @@ def bom_csv():
 
 
 def pinmap_md():
-    bp = next(p for p in design.PARTS if p.ref == "U3")
-    lines = ["# Manbo carrier V2 - Blue Pill pin map", "",
-             "Generated from `hardware/gen/design.py`. Firmware: build with `MANBO_BOARD_V2` "
-             "(`make V2=1`, or add the define in Keil).", "",
+    bp = next(p for p in design.PARTS if p.ref == MCU)
+    lines = ["# %s - Blue Pill pin map" % TITLE, "",
+             "Generated from `hardware/gen/%s.py`. %s" % (design.__name__, getattr(
+                 design, "FIRMWARE_NOTE",
+                 "Firmware: build with `MANBO_BOARD_V2` (`make V2=1`, or add the define in Keil).")), "",
              "| Blue Pill pin | STM32 | Net | Goes to |", "|---|---|---|---|"]
     nets = design.nets()
     for num, name in bp.pins:
         net = bp.net_of(num) or "-"
-        dest = ", ".join("%s.%s" % (r, n) for r, n in nets.get(net, []) if r != "U3") if net != "-" else ""
-        if net in ("GND", "+5V", "+3V3"):
+        dest = ", ".join("%s.%s" % (r, n) for r, n in nets.get(net, []) if r != MCU) if net != "-" else ""
+        if net in ("GND", "+5V", "+3V3", "VLOGIC"):
             dest = "(power)"
         lines.append("| %s | %s | %s | %s |" % (num, name, net, dest))
     return "\n".join(lines) + "\n"
@@ -182,17 +191,18 @@ def kicad_pro():
                         cls("Battery", 1.5, 0.3), cls("Servo", 1.5, 0.3),
                         cls("Logic5V", 0.6), cls("GND", 1.0)],
             "meta": {"version": 3},
-            "netclass_patterns": [{"netclass": "Battery", "pattern": "VBAT*"},
-                                  {"netclass": "Servo", "pattern": "+5V_SERVO"},
-                                  {"netclass": "Logic5V", "pattern": "+5V"},
-                                  {"netclass": "GND", "pattern": "GND"}]},
+            "netclass_patterns": getattr(design, "NETCLASS_PATTERNS", [
+                {"netclass": "Battery", "pattern": "VBAT*"},
+                {"netclass": "Servo", "pattern": "+5V_SERVO"},
+                {"netclass": "Logic5V", "pattern": "+5V"},
+                {"netclass": "GND", "pattern": "GND"}])},
         "sheets": [["%s" % kicad_sch.uid("root", PROJECT), "Root"]],
     }
     return json.dumps(pro, indent=2) + "\n"
 
 
 def outputs():
-    sch, symlib, placed, titles = kicad_sch.build(design.PARTS, "Manbo robot dog carrier board V2", PROJECT, REV, DATE)
+    sch, symlib, placed, titles = kicad_sch.build(design.PARTS, TITLE, PROJECT, REV, DATE, getattr(design, "SHEET_TITLES", None), MCU)
     files = {
         PROJECT + ".kicad_sch": sch,
         "manbo.kicad_sym": symlib,
@@ -220,21 +230,21 @@ def outputs():
     clr = lambda n: 0.3 if n in design.POWER_NETS else kicad_pcb.CLEARANCE  # noqa: E731
     DRC_RESULT[:] = [drc.run(pcb_placed, tracks, vias, layout.BOARD_W, layout.BOARD_H, clr)]
     files[PROJECT + ".kicad_pcb"] = kicad_pcb.write(design.PARTS, pcb_placed, layout.BOARD_W, layout.BOARD_H,
-                                                    tracks, vias, "Manbo robot dog carrier board V2", REV, DATE, PROJECT)
+                                                    tracks, vias, TITLE, REV, DATE, PROJECT, getattr(layout, "BRAND", None))
     files["pcb-preview.svg"] = kicad_pcb.preview_svg(pcb_placed, layout.BOARD_W, layout.BOARD_H, tracks, vias, [])
     fab = gerber.build(pcb_placed, tracks, vias, layout.BOARD_W, layout.BOARD_H,
-                       kicad_pcb.VIA_SIZE, kicad_pcb.VIA_DRILL, PROJECT, REV)
+                       kicad_pcb.VIA_SIZE, kicad_pcb.VIA_DRILL, PROJECT, REV, getattr(layout, "BRAND", None))
     for name, content in fab.items():
         files["../fab/" + name] = content
     FAB[:] = list(fab.items())
     drc_errs, unconnected = DRC_RESULT[0]
     total_len = sum(math.hypot(t[0] - t[2], t[1] - t[3]) for t in tracks)
     files["drc-report.txt"] = "\n".join([
-        "Manbo carrier V%s - generated board report (hardware/gen/drc.py, exact geometry)" % REV,
+        "%s rev %s - generated board report (hardware/gen/drc.py, exact geometry)" % (TITLE, REV),
         "board: %.0f x %.0f mm, 2 layers, %d footprints" % (layout.BOARD_W, layout.BOARD_H, len(pcb_placed)),
         "nets: %d, routed segments: %d (%.0f mm), vias: %d" % (len(length), len(tracks), total_len, len(vias)),
         "clearance: signal 0.20 mm, power 0.30 mm, edge 0.50 mm",
-        "track widths: battery/servo 1.5 mm, GND 1.0 mm, +5V 0.6 mm, +3V3 0.4 mm, signal 0.25 mm",
+        "track widths: " + ", ".join("%s %.2g mm" % (n, w) for n, w in sorted(design.NET_WIDTH.items())) + ", signal %.2g mm" % design.DEFAULT_WIDTH,
         "unrouted connections: %d" % len(ROUTE_FAILED),
         "clearance violations: %d" % len(drc_errs),
         "nets not fully connected: %d" % len(unconnected),

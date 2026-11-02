@@ -1,0 +1,14 @@
+Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
+1,C1,1000uF 10V,CP_Radial_D10.0mm_P5.00mm,1000uF 10V 10x13,
+1,C2,470uF 10V,CP_Radial_D8.0mm_P3.50mm,470uF 10V 8x12,
+1,C3,100nF,C_0805_2012Metric,0805 100nF,
+1,D1,SS34,D_SMA,SS34 SMA,Schottky 3 A: reverse-polarity protection for the whole board
+1,D2,M7,D_SMA,M7 1N4007 SMA,"1N4007 (M7): logic rail isolation, drops ~0.8 V so fresh alkaline stays below 5.5 V"
+4,H1 H2 H3 H4,M3,MountingHole_3.2mm_M3,,M3 mounting hole
+1,J1,4xAA BOX,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,XH2.54 2P,4xAA battery box with switch (NiMH 4.8 V or alkaline 6 V)
+1,J2,SERVO1,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 1 (brown=GND, red=V+, orange=SIG)"
+1,J3,SERVO2,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 2 (brown=GND, red=V+, orange=SIG)"
+1,J4,SERVO3,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 3 (brown=GND, red=V+, orange=SIG)"
+1,J5,SERVO4,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 4 (brown=GND, red=V+, orange=SIG)"
+1,J6,SU-03T,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,"SU-03T voice module: VCC, GND, TX(B7), RX(B6); mic + speaker plug into the module"
+1,U1,BluePill STM32F103C8T6,BluePill_Socket_2x20_W15.24mm,Blue Pill STM32F103C8T6,Blue Pill on 2x 1x20 female headers

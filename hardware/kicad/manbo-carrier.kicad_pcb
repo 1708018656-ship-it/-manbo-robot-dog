@@ -676,7 +676,7 @@
   (gr_arc (start 98 0) (mid 99.4142 0.5858) (end 100 2) (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (uuid "c7efb379-db4a-5056-bdfc-7a2aad8e2083"))
   (gr_arc (start 100 88) (mid 99.4142 89.4142) (end 98 90) (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (uuid "122c8c3a-525e-5ce6-8c4f-066ea19b00ff"))
   (gr_arc (start 2 90) (mid 0.5858 89.4142) (end 0 88) (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (uuid "8f8c655b-4f0d-5d7b-81b3-e54ce81caa3a"))
-  (gr_text "MANBO CARRIER V2.0  github: manbo-robot-dog" (at 30 88 0) (layer "F.SilkS") (uuid "37ef1bd0-c47d-52c5-a8f0-9af05f2fbdac") (effects (font (size 1.5 1.5) (thickness 0.25)) (justify left)))
+  (gr_text "MANBO CARRIER V2.0" (at 30 88 0) (layer "F.SilkS") (uuid "37ef1bd0-c47d-52c5-a8f0-9af05f2fbdac") (effects (font (size 1.5 1.5) (thickness 0.25)) (justify left)))
   (segment (start 16.525 66.595) (end 16.525 67.865) (width 0.6) (layer "F.Cu") (net 30) (uuid "024169e7-529f-5beb-ba61-2eb292511992"))
   (segment (start 16.525 67.865) (end 16.525 69.135) (width 0.6) (layer "F.Cu") (net 30) (uuid "d5a01ccd-d4b0-59a1-8b17-076c653901f6"))
   (segment (start 21.475 66.595) (end 21.475 67.865) (width 0.6) (layer "F.Cu") (net 28) (uuid "5bff29a5-2b88-5044-8a1d-6eb59bd9e9de"))

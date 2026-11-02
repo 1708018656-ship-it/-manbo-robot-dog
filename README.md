@@ -8,6 +8,15 @@
 
 本仓库是在 [RussellCooper-DJZ/manbo-robot-dog](https://github.com/RussellCooper-DJZ/manbo-robot-dog) 基础上的**整体优化版**：修了一批真实 bug，固件全面非阻塞化，新增看门狗、电池检测和舵机校准，并从零设计了一块可直接下单的**扩展底板 V2**。逐条改动见 [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)。
 
+## 两种版本
+
+| | 精简版（推荐入门，省钱） | 完整版 |
+|---|---|---|
+| 功能 | 语音口令控制 + 运动 | 运动 + 蓝牙/语音控制 + OLED 表情 + 语音播报 + 超声波避障 + 红外防跌落 + 电池检测 |
+| 硬件 | [hardware/lite/](hardware/lite/README.md)：70×54 mm 小板，4 节 5 号电池，SU-03T 语音模块 | [hardware/](hardware/README.md)：100×90 mm 扩展底板 V2，2S 锂电 |
+| 固件 | `make LITE=1` | `make V2=1`（或原版飞线 `make`） |
+| 大概成本（不含电池、下载器） | 约 40–65 元 | 明显更高（多了语音合成、蓝牙、屏幕、传感器和锂电供电） |
+
 ![扩展底板 V2](hardware/kicad/pcb-preview.svg)
 
 ## 这一版改了什么
@@ -36,10 +45,10 @@
 | 方式 | 命令 / 操作 |
 |---|---|
 | Keil MDK 5 | 打开 `Project.uvprojx` 编译。用 V2 底板时在 Options → C/C++ → Define 加 `MANBO_BOARD_V2` |
-| GCC | `sudo apt install gcc-arm-none-eabi` 后 `make`（原版接线）或 `make V2=1`（V2 底板），产物在 `build/` |
+| GCC | `sudo apt install gcc-arm-none-eabi` 后 `make`（原版接线）、`make V2=1`（V2 底板）或 `make LITE=1`（精简版），产物在 `build/` |
 | 烧录 | ST-Link：`make flash`，或 Keil / STM32CubeProgrammer 烧 `build/manbo.hex` |
 
-GitHub Actions 每次推送都会编出两种板型的 `.hex`，可在 Actions 页面直接下载。
+GitHub Actions 每次推送都会编出三种版本的 `.hex`，可在 Actions 页面直接下载。
 
 ### 2. 接线
 
@@ -92,7 +101,9 @@ python3 hardware/gen/build.py --check # 重新生成底板并跑 ERC/DRC，确�
 | 文档 | 说明 |
 |---|---|
 | [docs/protocol.md](docs/protocol.md) | 串口命令协议（STM32 与语音模块共用的唯一权威表） |
-| [hardware/README.md](hardware/README.md) | 扩展底板：下单、焊接、上电检查 |
+| [hardware/lite/README.md](hardware/lite/README.md) | **精简版**：底板、供电、组装 |
+| [docs/su03t.md](docs/su03t.md) | 精简版 SU-03T 口令配置表 |
+| [hardware/README.md](hardware/README.md) | 完整版扩展底板：下单、焊接、上电检查 |
 | [hardware/采购清单.md](hardware/采购清单.md) | 整机采购清单（板子、模块、舵机、电池） |
 | [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md) | 本次优化的全部改动与原因 |
 | [docs/non_blocking_state_machine.md](docs/non_blocking_state_machine.md) | 非阻塞状态机设计 |
