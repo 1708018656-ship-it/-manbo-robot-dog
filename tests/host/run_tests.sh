@@ -66,3 +66,14 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/battery_tests"
 
 "$BUILD_DIR/battery_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/tests/host/stubs_sensor" \
+  -I"$ROOT_DIR/User" \
+  "$ROOT_DIR/User/SensorTask.c" \
+  "$ROOT_DIR/tests/host/test_sensor_task.c" \
+  -o "$BUILD_DIR/sensor_task_tests"
+
+"$BUILD_DIR/sensor_task_tests"

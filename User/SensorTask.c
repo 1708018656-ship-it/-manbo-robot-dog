@@ -10,18 +10,25 @@
 #define ULTRASONIC_OBSTACLE_CM     15U
 #define ULTRASONIC_TURN_COOLDOWN_MS 200U
 
+/*
+ * Ranging works on the TIM2 ISR's accumulated count, not on polled edges.
+ * TIM2 fires every 100 us and increments Time only while Echo is high;
+ * Timer_Init() zeroes it at trigger. This task runs only every 10 ms, so it
+ * cannot see edges of echoes shorter than 10 ms (< ~170 cm): the previous
+ * WAIT_RISE/WAIT_FALL polling missed most near obstacles entirely and
+ * under-measured the rest. Now we simply wait one measurement window and
+ * read Time, which *is* the echo width.
+ */
 typedef enum
 {
     SENSOR_IDLE = 0,
-    SENSOR_WAIT_RISE,
-    SENSOR_WAIT_FALL
+    SENSOR_MEASURING
 } SensorState;
 
 static SensorState g_sensor_state;
 static uint32_t g_deadline_ms;
 static uint32_t g_next_trigger_ms;
 static uint32_t g_turn_cooldown_ms;
-static uint16_t g_echo_start_ticks;
 static uint16_t g_last_distance_cm;
 static uint8_t g_distance_valid;
 static uint8_t g_sensor_enabled;
@@ -71,7 +78,6 @@ void SensorTask_Init(void)
     g_deadline_ms = 0U;
     g_next_trigger_ms = 0U;
     g_turn_cooldown_ms = 0U;
-    g_echo_start_ticks = 0U;
     g_last_distance_cm = 0U;
     g_distance_valid = 0U;
     g_sensor_enabled = 0U;
@@ -103,32 +109,26 @@ void SensorTask_Run(uint32_t now_ms)
             {
                 Sensor_Trigger();
                 g_deadline_ms = now_ms + ULTRASONIC_WAIT_TIMEOUT_MS;
-                g_sensor_state = SENSOR_WAIT_RISE;
+                g_sensor_state = SENSOR_MEASURING;
             }
             break;
 
-        case SENSOR_WAIT_RISE:
-            if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1) != RESET)
+        case SENSOR_MEASURING:
+            if (Sensor_DeadlineReached(now_ms, g_deadline_ms) == 0U)
             {
-                g_echo_start_ticks = Time;
-                g_deadline_ms = now_ms + ULTRASONIC_WAIT_TIMEOUT_MS;
-                g_sensor_state = SENSOR_WAIT_FALL;
+                break;
             }
-            else if (Sensor_DeadlineReached(now_ms, g_deadline_ms) != 0U)
+            elapsed_ticks = Time;
+            if ((GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1) != RESET) || (elapsed_ticks == 0U))
             {
+                /* still high: no echo (HC-SR04 holds ~38 ms) / out of range;
+                 * zero: sensor missing or Echo not wired */
                 Sensor_Finish(now_ms, 0U, 0U);
             }
-            break;
-
-        case SENSOR_WAIT_FALL:
-            if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1) == RESET)
+            else
             {
-                elapsed_ticks = (uint16_t)(Time - g_echo_start_ticks);
-                Sensor_Finish(now_ms, 1U, (uint16_t)(((uint32_t)elapsed_ticks * 17U) / 10U));
-            }
-            else if (Sensor_DeadlineReached(now_ms, g_deadline_ms) != 0U)
-            {
-                Sensor_Finish(now_ms, 0U, 0U);
+                /* 100 us tick * 343 m/s / 2 = 1.715 cm per tick */
+                Sensor_Finish(now_ms, 1U, (uint16_t)(((uint32_t)elapsed_ticks * 1715U + 500U) / 1000U));
             }
             break;
 
