@@ -130,8 +130,9 @@ def footprint_sexpr(pl, nets, project_root):
     o.append('  (footprint %s (layer "F.Cu") (uuid %s) (at %s %s %s)'
              % (q(p.footprint), q(uid("fp", p.ref)), fmt(pl.x), fmt(pl.y), fmt(pl.rot)))
     x1, y1, x2, y2 = fp.body
-    o.append('    (property "Reference" %s (at %s %s %s) (layer "F.SilkS") (uuid %s) (effects (font (size 1 1) (thickness 0.15))))'
-             % (q(p.ref), fmt((x1 + x2) / 2), fmt(y1 - 0.9), fmt(pl.rot), q(uid("fpref", p.ref))))
+    hide_ref = " (hide yes)" if not p.pins else ""      # mounting holes: no silk outside the board
+    o.append('    (property "Reference" %s (at %s %s %s) (layer "F.SilkS")%s (uuid %s) (effects (font (size 1 1) (thickness 0.15))))'
+             % (q(p.ref), fmt((x1 + x2) / 2), fmt(y1 - 0.9), fmt(pl.rot), hide_ref, q(uid("fpref", p.ref))))
     o.append('    (property "Value" %s (at %s %s %s) (layer "F.Fab") (uuid %s) (effects (font (size 1 1) (thickness 0.15))))'
              % (q(p.value), fmt((x1 + x2) / 2), fmt(y2 + 0.9), fmt(pl.rot), q(uid("fpval", p.ref))))
     for k, v in (("Footprint", p.footprint), ("Datasheet", ""), ("Description", p.desc)):

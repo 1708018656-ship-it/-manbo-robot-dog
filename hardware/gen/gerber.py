@@ -189,6 +189,8 @@ def build(placed, tracks, vias, W, H, via_size, via_drill, project, rev):
         for s in ((x1, y1, x2, y1), (x2, y1, x2, y2), (x2, y2, x1, y2), (x1, y2, x1, y1)):
             silk.line(*s)
         ref = pl.part.ref
+        if not pl.part.pins:
+            continue          # mounting holes: outline only
         tx, ty = (x1 + x2) / 2, y1 - 1.0
         if ty < 1.5:
             ty = y2 + 1.0
