@@ -15,8 +15,6 @@
 //***各种状态执行函数***//
 //想让动作执行一次后停止，就在末尾加上“	move_mode = '0';”，否则动作持续反复执行，
 
-extern uint8_t move_mode1 ;//用于接收蓝牙串口数据的变量
-extern uint8_t move_mode3 ;//用于接收语音识别串口数据的变量
 extern uint8_t move_mode ;//决定状态变量
 extern uint8_t previous_mode ;//用于保存上一次接收串口数据的变量
 extern uint16_t bz_flag;//避障标志位 ON/OFF 默认off

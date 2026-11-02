@@ -29,8 +29,10 @@ void SafetyTask_Run(uint32_t now_ms)
 
     if (g_stop_request != 0U)
     {
+        /* Stop the motion now, but leave the request set: main() must also
+         * see it (SafetyTask_ConsumeStopRequest) to cancel continuous walking,
+         * otherwise the dog would start walking again right after the stop. */
         ActionTask_AbortToSafeStop();
-        g_stop_request = 0U;
     }
 }
 

@@ -86,3 +86,16 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/servo_math_tests"
 
 "$BUILD_DIR/servo_math_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/tests/host/stubs_comm" \
+  -I"$ROOT_DIR/User" \
+  -I"$ROOT_DIR/System" \
+  "$ROOT_DIR/User/CommTask.c" \
+  "$ROOT_DIR/System/ByteRing.c" \
+  "$ROOT_DIR/tests/host/test_comm_task.c" \
+  -o "$BUILD_DIR/comm_task_tests"
+
+"$BUILD_DIR/comm_task_tests"

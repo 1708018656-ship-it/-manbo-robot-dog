@@ -149,8 +149,11 @@ static void test_emergency_stop_restores_safe_pose(void)
     EXPECT_EQ_FLOAT(g_angles[1], 90.0f, "safe stop sets servo 2 to 90 degrees");
     EXPECT_EQ_FLOAT(g_angles[2], 90.0f, "safe stop sets servo 3 to 90 degrees");
     EXPECT_EQ_FLOAT(g_angles[3], 90.0f, "safe stop sets servo 4 to 90 degrees");
+    /* main() must still see the stop so it can cancel continuous walking */
+    EXPECT_EQ_UINT(SafetyTask_ConsumeStopRequest(), 1U,
+                   "stop request stays visible to main() after SafetyTask_Run");
     EXPECT_EQ_UINT(SafetyTask_ConsumeStopRequest(), 0U,
-                   "safety task consumes the stop request internally");
+                   "stop request is consumed exactly once");
 }
 
 static void test_communication_fault_latches_and_stops(void)

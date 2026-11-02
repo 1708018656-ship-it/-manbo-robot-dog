@@ -33,8 +33,6 @@
 */
 
 uint8_t RxData;			//用于接收串口数据的变量
-uint8_t move_mode1 = '0';//用于接收蓝牙串口数据的变量
-uint8_t move_mode3 = '0';//用于接收语音识别串口数据的变量
 uint8_t move_mode = '0';//决定状态变量
 uint8_t previous_mode = '0';//用于保存上一次接收串口数据的变量
  uint16_t T=100; // 记录距离 给初值大于10cm(不触发避障) 
@@ -156,19 +154,14 @@ int main(void)
 		 * chain below, which bypassed the PoseStep state machine and then ran
 		 * the gait a second time on the next loop. */
 		{
-			/* 体力 <= 0 时只接受睡觉命令；字节照常取出，避免旧数据在恢复体力后被重放 */
-			uint8_t rx = 0U;
-			move_mode1 = USART1_GetRxData();
-			move_mode3 = USART3_GetRxData();
-			if (USART1_GetRxFlag()) {          /* Bluetooth has priority over voice */
-				rx = move_mode1;
-			}
-			else if (USART3_GetRxFlag()) {
-				rx = move_mode3;
-			}
-			/* 体力耗尽或电池电量过低时只接受睡觉和急停 */
-			if ((rx != 0U) && ((MotionAllowed() != 0U) || (rx == '2') || (rx == 'p') || (rx == '5'))) {
-				move_mode = rx;
+			/* One queued command per loop (CommTask FIFO, Bluetooth before voice).
+			 * 体力耗尽或电池电量过低时只接受睡觉；急停 '5' 走 SafetyTask，不经过这里。 */
+			uint8_t rx;
+			if (CommTask_PopCommand(&rx) != 0U)
+			{
+				if ((MotionAllowed() != 0U) || (rx == '2') || (rx == 'p')) {
+					move_mode = rx;
+				}
 			}
 		}
 
