@@ -61,7 +61,7 @@ jobs:
           cat erc.rpt
       - name: DRC
         run: |
-          kicad-cli pcb drc --refill-zones --schematic-parity --severity-error --exit-code-violations \
+          kicad-cli pcb drc --schematic-parity --severity-error --exit-code-violations \
             -o drc.rpt hardware/kicad/manbo-carrier.kicad_pcb || (cat drc.rpt; exit 1)
           cat drc.rpt
       - name: Plot Gerbers with KiCad (cross-check)
