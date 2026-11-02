@@ -77,3 +77,12 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/sensor_task_tests"
 
 "$BUILD_DIR/sensor_task_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/Hardware" \
+  "$ROOT_DIR/tests/host/test_servo_math.c" \
+  -o "$BUILD_DIR/servo_math_tests"
+
+"$BUILD_DIR/servo_math_tests"

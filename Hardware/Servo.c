@@ -1,40 +1,14 @@
 #include "stm32f10x.h"                  // Device header
 #include "PWM.h"
-// PWM、Servo、Movement三个文件共同为驱动舵机服务
+// PWM + Servo drive the four SG90s; calibration lives in ServoMath.h
 // Servo用于封装舵机的角度设置与读取函数
 
-#define SERVO_MIN_ANGLE       0.0f
-#define SERVO_MAX_ANGLE       180.0f
-#define SERVO_MIN_COMPARE     500U
-#define SERVO_MAX_COMPARE     2500U
-#define SERVO_COMPARE_RANGE   (SERVO_MAX_COMPARE - SERVO_MIN_COMPARE)
+#include "ServoMath.h"
 
-static uint16_t Servo_AngleToCompare(float Angle)
+/* Float API kept for compatibility; gaits use whole degrees anyway. */
+static int16_t Servo_Round(float Angle)
 {
-	if (Angle <= SERVO_MIN_ANGLE)
-	{
-		return SERVO_MIN_COMPARE;
-	}
-	if (Angle >= SERVO_MAX_ANGLE)
-	{
-		return SERVO_MAX_COMPARE;
-	}
-
-	return (uint16_t)(Angle * SERVO_COMPARE_RANGE / SERVO_MAX_ANGLE + SERVO_MIN_COMPARE);
-}
-
-static uint8_t Servo_CompareToAngle(uint16_t Compare)
-{
-	if (Compare <= SERVO_MIN_COMPARE)
-	{
-		return (uint8_t)SERVO_MIN_ANGLE;
-	}
-	if (Compare >= SERVO_MAX_COMPARE)
-	{
-		return (uint8_t)SERVO_MAX_ANGLE;
-	}
-
-	return (uint8_t)(((uint32_t)(Compare - SERVO_MIN_COMPARE) * 180U) / SERVO_COMPARE_RANGE);
+	return (int16_t)((Angle >= 0.0f) ? (Angle + 0.5f) : (Angle - 0.5f));
 }
 
 /**
@@ -54,22 +28,22 @@ void Servo_Init(void)
   */
 void Servo_SetAngle1(float Angle)
 {
-	PWM_SetCompare1(Servo_AngleToCompare(Angle));
+	PWM_SetCompare1(ServoMath_AngleToCompare(0U, Servo_Round(Angle)));
 }
 
 void Servo_SetAngle2(float Angle)
 {
-	PWM_SetCompare2(Servo_AngleToCompare(Angle));
+	PWM_SetCompare2(ServoMath_AngleToCompare(1U, Servo_Round(Angle)));
 }
 
 void Servo_SetAngle3(float Angle)
 {
-	PWM_SetCompare3(Servo_AngleToCompare(Angle));
+	PWM_SetCompare3(ServoMath_AngleToCompare(2U, Servo_Round(Angle)));
 }
 
 void Servo_SetAngle4(float Angle)
 {
-	PWM_SetCompare4(Servo_AngleToCompare(Angle));
+	PWM_SetCompare4(ServoMath_AngleToCompare(3U, Servo_Round(Angle)));
 }
 
 /**
@@ -79,20 +53,20 @@ void Servo_SetAngle4(float Angle)
   */
 uint8_t Servo_GetAngle1(void)
 {
-	return Servo_CompareToAngle(TIM_GetCapture1(TIM3));
+	return ServoMath_CompareToAngle(TIM_GetCapture1(TIM3));
 }
 
 uint8_t Servo_GetAngle2(void)
 {
-	return Servo_CompareToAngle(TIM_GetCapture2(TIM3));
+	return ServoMath_CompareToAngle(TIM_GetCapture2(TIM3));
 }
 
 uint8_t Servo_GetAngle3(void)
 {
-	return Servo_CompareToAngle(TIM_GetCapture3(TIM3));
+	return ServoMath_CompareToAngle(TIM_GetCapture3(TIM3));
 }
 
 uint8_t Servo_GetAngle4(void)
 {
-	return Servo_CompareToAngle(TIM_GetCapture4(TIM3));
+	return ServoMath_CompareToAngle(TIM_GetCapture4(TIM3));
 }
