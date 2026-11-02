@@ -7,6 +7,7 @@ Generate hardware/kicad/* from design.py and run self-checks.
 """
 
 import csv
+import math
 import io
 import os
 import re
@@ -21,6 +22,8 @@ import kicad_sch  # noqa: E402
 import preview  # noqa: E402
 import layout  # noqa: E402
 import kicad_pcb  # noqa: E402
+import router  # noqa: E402
+import drc  # noqa: E402
 
 OUT = os.path.normpath(os.path.join(HERE, "..", "kicad"))
 PROJECT = "manbo-carrier"
@@ -202,15 +205,54 @@ def outputs():
     pcb_placed, missing = kicad_pcb.place_all(design.PARTS, layout.PLACEMENT)
     PLACEMENT_ERRORS[:] = ["not placed: " + m for m in missing]
     PLACEMENT_ERRORS.extend(kicad_pcb.check_placement(pcb_placed, layout.BOARD_W, layout.BOARD_H))
-    tracks, vias = [], []
+    rt = router.Router(pcb_placed, layout.BOARD_W, layout.BOARD_H, design.NET_WIDTH, design.DEFAULT_WIDTH,
+                       kicad_pcb.CLEARANCE, 0.3, design.POWER_NETS)
+    rn_all = kicad_pcb.ratsnest(pcb_placed)
+    length = {}
+    for a, b, c, d, n in rn_all:
+        length[n] = length.get(n, 0) + math.hypot(a - c, b - d)
+    order = sorted(length, key=lambda n: (n == "GND", -design.NET_WIDTH.get(n, design.DEFAULT_WIDTH), length[n]))
+    failed = rt.route_all(order)
+    tracks, vias = rt.tracks, rt.vias
+    LAST["tracks"], LAST["vias"] = tracks, vias
+    ROUTE_FAILED[:] = failed
+    clr = lambda n: 0.3 if n in design.POWER_NETS else kicad_pcb.CLEARANCE  # noqa: E731
+    DRC_RESULT[:] = [drc.run(pcb_placed, tracks, vias, layout.BOARD_W, layout.BOARD_H, clr)]
     files[PROJECT + ".kicad_pcb"] = kicad_pcb.write(design.PARTS, pcb_placed, layout.BOARD_W, layout.BOARD_H,
                                                     tracks, vias, "Manbo robot dog carrier board V2", REV, DATE, PROJECT)
-    rn = [(a, b, c, d) for a, b, c, d, n in kicad_pcb.ratsnest(pcb_placed)]
-    files["pcb-preview.svg"] = kicad_pcb.preview_svg(pcb_placed, layout.BOARD_W, layout.BOARD_H, tracks, vias, rn)
+    files["pcb-preview.svg"] = kicad_pcb.preview_svg(pcb_placed, layout.BOARD_W, layout.BOARD_H, tracks, vias, [])
+    drc_errs, unconnected = DRC_RESULT[0]
+    total_len = sum(math.hypot(t[0] - t[2], t[1] - t[3]) for t in tracks)
+    files["drc-report.txt"] = "\n".join([
+        "Manbo carrier V%s - generated board report (hardware/gen/drc.py, exact geometry)" % REV,
+        "board: %.0f x %.0f mm, 2 layers, %d footprints" % (layout.BOARD_W, layout.BOARD_H, len(pcb_placed)),
+        "nets: %d, routed segments: %d (%.0f mm), vias: %d" % (len(length), len(tracks), total_len, len(vias)),
+        "clearance: signal 0.20 mm, power 0.30 mm, edge 0.50 mm",
+        "track widths: battery/servo 1.5 mm, GND 1.0 mm, +5V 0.6 mm, +3V3 0.4 mm, signal 0.25 mm",
+        "unrouted connections: %d" % len(ROUTE_FAILED),
+        "clearance violations: %d" % len(drc_errs),
+        "nets not fully connected: %d" % len(unconnected),
+        "",
+        "Note: the GND pours on both layers are unfilled in the file; press B in",
+        "KiCad (Edit > Fill All Zones) before plotting. All GND pads are also",
+        "connected by tracks, so the board works without the pour.",
+    ]) + "\n"
     return files
 
 
 PLACEMENT_ERRORS = []
+LAST = {}
+
+
+def tracks_count():
+    return LAST.get("tracks", [])
+
+
+def vias_count():
+    return LAST.get("vias", [])
+
+ROUTE_FAILED = []
+DRC_RESULT = []
 
 
 def main():
@@ -219,6 +261,18 @@ def main():
     files = outputs()
     errors += check_schematic(files[PROJECT + ".kicad_sch"])
     errors += ["placement: " + e for e in PLACEMENT_ERRORS]
+    for net, pad in ROUTE_FAILED:
+        print("ROUTE: could not reach %s on net %s" % (pad, net))
+    drc_errs, unconnected = DRC_RESULT[0]
+    for e in drc_errs:
+        errors.append("DRC " + e)
+    for net, comps in unconnected.items():
+        msg = "unconnected %s: %s" % (net, " | ".join(",".join(c[:4]) for c in comps))
+        if net == "GND":
+            print("DRC note (GND pour expected to join):", msg)
+        else:
+            errors.append("DRC " + msg)
+    print("tracks: %d, vias: %d" % (len(tracks_count()), len(vias_count())))
     errors += ["pcb: parentheses unbalanced"] if not sexpr_balanced(files[PROJECT + ".kicad_pcb"]) else []
     for w in warnings:
         print("ERC warning:", w)

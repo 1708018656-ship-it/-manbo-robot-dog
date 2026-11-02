@@ -1,0 +1,12 @@
+Manbo carrier V2.0 - generated board report (hardware/gen/drc.py, exact geometry)
+board: 100 x 90 mm, 2 layers, 45 footprints
+nets: 36, routed segments: 300 (1301 mm), vias: 22
+clearance: signal 0.20 mm, power 0.30 mm, edge 0.50 mm
+track widths: battery/servo 1.5 mm, GND 1.0 mm, +5V 0.6 mm, +3V3 0.4 mm, signal 0.25 mm
+unrouted connections: 0
+clearance violations: 0
+nets not fully connected: 0
+
+Note: the GND pours on both layers are unfilled in the file; press B in
+KiCad (Edit > Fill All Zones) before plotting. All GND pads are also
+connected by tracks, so the board works without the pour.
