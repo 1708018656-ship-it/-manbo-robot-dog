@@ -871,6 +871,16 @@
               <FilePath>.\User\AudioTask.h</FilePath>
             </File>
             <File>
+              <FileName>Voice.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Voice.c</FilePath>
+            </File>
+            <File>
+              <FileName>Voice.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\Voice.h</FilePath>
+            </File>
+            <File>
               <FileName>SensorTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\SensorTask.c</FilePath>

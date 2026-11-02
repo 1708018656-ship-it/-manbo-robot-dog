@@ -99,3 +99,12 @@ cc=${CC:-cc}
   -o "$BUILD_DIR/comm_task_tests"
 
 "$BUILD_DIR/comm_task_tests"
+
+"$cc" \
+  -std=c99 \
+  -Wall -Wextra -Werror \
+  -I"$ROOT_DIR/User" \
+  "$ROOT_DIR/tests/host/test_voice.c" \
+  -o "$BUILD_DIR/voice_tests"
+
+"$BUILD_DIR/voice_tests"

@@ -45,14 +45,16 @@
 
 /*
  * Feature set.
- *   MANBO_LITE: low-cost build - voice commands (SU-03T on USART3) + motion
- *   only. No OLED, no speech synthesis, no ultrasonic / IR, no stamina game.
+ *   MANBO_LITE: low-cost build - voice commands (SU-03T on USART3), motion,
+ *   OLED faces and voice replies through the SU-03T's own speaker.
+ *   No SYN6288, no ultrasonic / IR, no battery sensing, no stamina game.
  *   Walking stops by itself after MANBO_WALK_TIMEOUT_MS in case the "stop"
  *   phrase is not recognised. Use with the lite board in hardware/lite/.
  */
 #ifdef MANBO_LITE
-  #define MANBO_HAS_OLED       0
-  #define MANBO_HAS_SPEECH     0
+  #define MANBO_HAS_OLED       1
+  #define MANBO_HAS_SPEECH     0      /* no SYN6288 ...                     */
+  #define MANBO_HAS_VOICE_REPLY 1     /* ... replies via SU-03T frames instead */
   #define MANBO_HAS_SENSORS    0
   #define MANBO_HAS_PET_STATS  0
   #ifndef MANBO_WALK_TIMEOUT_MS
@@ -61,6 +63,7 @@
 #else
   #define MANBO_HAS_OLED       1
   #define MANBO_HAS_SPEECH     1
+  #define MANBO_HAS_VOICE_REPLY 1
   #define MANBO_HAS_SENSORS    1
   #define MANBO_HAS_PET_STATS  1
   #ifndef MANBO_WALK_TIMEOUT_MS

@@ -12,6 +12,8 @@ uint8_t USART3_GetRxFlag(void);
 uint8_t USART3_GetRxData(void);
 uint8_t USART3_ReadByte(uint8_t *value);
 uint8_t USART3_RxOverflowed(void);
+uint8_t USART3_SendBytes(const uint8_t *data, uint8_t len);
+uint8_t USART3_TxFree(void);
 
 #endif
 

@@ -24,6 +24,7 @@
 #include "Watchdog.h"
 #include "BatteryTask.h"
 #include "BoardConfig.h"
+#include "Voice.h"
 
 /****************************************************
 *
@@ -155,7 +156,10 @@ int main(void)
 		Delay_s(1);   //唤醒后狗叫一声,音量12适合演示，10适合调试
 	}
 #else
-	(void)Watchdog_CausedLastReset();   /* just clear the reset flags */
+	if (Watchdog_CausedLastReset() == 0U)
+	{
+		(void)Voice_Play(VOICE_BOOT);    /* "小呆来啦" from the SU-03T speaker */
+	}
 	(void)ActionTask_RequestMotion(ACTION_STAND);
 #endif
 	
@@ -210,6 +214,8 @@ int main(void)
 			/* safety net for voice control: stop if "停" was not recognised */
 			continuous_cmd = 0U;
 			(void)ActionTask_RequestMotion(ACTION_STAND);
+			(void)Voice_Play(VOICE_AUTO_STOP);
+			Face_ShowForCommand('5');
 		}
 		else if ((continuous_cmd != 0U) && (MotionAllowed() != 0U) &&
 		         (ActionTask_IsActive() == 0U))
@@ -278,7 +284,7 @@ int main(void)
 		 * mode_forward()/mode_dance()/... branches were unreachable and are gone. */
 		switch (move_mode)
 		{
-#if MANBO_HAS_OLED
+#if MANBO_HAS_PET_STATS
 			case 'n': mode_nanshou();   break;   /* 难受 */
 			case 'K': mode_happiness(); break;   /* 播报开心值 */
 			case 'T': mode_stamina();   break;   /* 播报体力值 */

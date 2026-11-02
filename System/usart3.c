@@ -10,6 +10,12 @@ uint8_t USART3_RxData;		//定义串口接收的数据变量
 uint8_t USART3_RxFlag;		//定义串口接收的标志位变量	
 static ByteRing g_USART3_rx_ring;
 
+/* Non-blocking transmit (used by the LITE build to trigger SU-03T phrases). */
+#define USART3_TX_CAPACITY 64U
+static volatile uint8_t USART3_TxBuffer[USART3_TX_CAPACITY];
+static volatile uint8_t USART3_TxHead;
+static volatile uint8_t USART3_TxTail;
+
 /**
   * 函    数：串口初始化
   * 参    数：无
@@ -113,6 +119,19 @@ void USART3_IRQHandler(void)
 		USART_ClearITPendingBit(USART3, USART_IT_RXNE);			//清除USART1的RXNE标志位
 																//读取数据寄存器会自动清除此标志位
 																//如果已经读取了数据寄存器，也可以不执行此代码
+	}
+
+	if (USART_GetITStatus(USART3, USART_IT_TXE) == SET)
+	{
+		if (USART3_TxHead != USART3_TxTail)
+		{
+			USART_SendData(USART3, USART3_TxBuffer[USART3_TxTail]);
+			USART3_TxTail = (uint8_t)((USART3_TxTail + 1U) % USART3_TX_CAPACITY);
+		}
+		else
+		{
+			USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+		}
 	}
 }
 
