@@ -8,6 +8,7 @@ Solder mask: pads +0.05 mm per side, vias tented.
 
 import math
 
+SHORT = {"TRIG": "TRG", "ECHO": "ECH", "STATE": "STA", "BAT+": "B+", "BAT-": "B-"}  # 3-char pin labels fit 2.54 mm
 POUR_EDGE = 0.8        # pour to board edge
 POUR_CLEAR = 0.35      # pour to other-net copper
 POUR_HOLE_CLEAR = 0.5  # pour to mounting holes
@@ -202,7 +203,7 @@ def build(placed, tracks, vias, W, H, via_size, via_drill, project, rev):
             for pad, net, cx, cy, w, h in pl.pads():
                 horiz = int(round(pl.rot)) % 180 == 90
                 lx, ly = (cx, cy + 2.0) if horiz else (cx + 2.6, cy)
-                for s in text_strokes(names.get(pad.num, "")[:4], lx, ly, 0.7):
+                for s in text_strokes(SHORT.get(names.get(pad.num, ""), names.get(pad.num, ""))[:3], lx, ly, 0.6):
                     silk.line(*s)
     for s in text_strokes("MANBO CARRIER V%s" % rev, 30.0, 88.0, 1.4, anchor="left"):
         silk.aperture("C", 0.2)
