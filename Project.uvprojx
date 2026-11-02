@@ -766,16 +766,6 @@
               <FilePath>.\Hardware\Servo.h</FilePath>
             </File>
             <File>
-              <FileName>Movement.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\Movement.c</FilePath>
-            </File>
-            <File>
-              <FileName>Movement.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\Movement.h</FilePath>
-            </File>
-            <File>
               <FileName>Timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\Timer.c</FilePath>

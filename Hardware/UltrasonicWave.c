@@ -1,10 +1,5 @@
 #include "stm32f10x.h"                  // Device header
-#include "Delay.h"
-#include "Timer.h"
-#include "Movement.h"
-//***超声避障***//
-extern uint16_t T;  //记录距离
-int cf=0;//记录重复次数 解决bug用
+/* HC-SR04 GPIO setup. Ranging itself is done by User/SensorTask.c. */
 
 volatile uint16_t Time; /* written in TIM2 ISR; must match extern in Timer.c */ //记录时间
 void UltrasonicWave_Init(void)
@@ -27,26 +22,4 @@ void UltrasonicWave_Init(void)
 	GPIO_ResetBits(GPIOA, GPIO_Pin_0);
 	
 	
-}
-void UltrasonicWave_Start(void)
-{
-	//给触发信号
-	GPIO_SetBits(GPIOA, GPIO_Pin_0);
-	Delay_us(45);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_0);
-
-	
-	Timer_Init();  //计时 返回时间计算距离
-}
-
-uint16_t UltrasonicWave_Getvalue(void)
-{
-	/* Compatibility wrapper; SensorTask performs asynchronous ranging. */
-	return T;
-}
-
-void Bizhang(void)
-{
-	/* Compatibility wrapper; SensorTask owns obstacle avoidance. */
-	(void)T;
 }
