@@ -1,12 +1,14 @@
 # 曼波机器狗（Manbo Robot Dog）
 
-> 基于 STM32F103C8T6 的桌面四足机器狗：4 个 SG90 舵机、OLED 表情、蓝牙 / 语音控制、SYN6288 语音播报、红外防跌落、超声波避障。
+> 基于 STM32F103C8T6 的低成本桌面四足机器狗：**说口令就能走**。精简版整机约 40–65 元（4 个 SG90 舵机 + SU-03T 离线语音 + 4 节 5 号电池）；完整版另有 OLED 表情、语音播报、超声波避障、红外防跌落。
+
+**维护者：[@1708018656-ship-it](https://github.com/1708018656-ship-it)** · 基于 [RussellCooper-DJZ/manbo-robot-dog](https://github.com/RussellCooper-DJZ/manbo-robot-dog)（MIT）
 
 [![CI](https://img.shields.io/badge/CI-host%20tests%20%7C%20ARM%20GCC%20%7C%20hardware-success)](.github/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![MCU](https://img.shields.io/badge/MCU-STM32F103C8T6-03234B.svg)](https://www.st.com/en/microcontrollers-microprocessors/stm32f103c8.html)
 
-本仓库是在 [RussellCooper-DJZ/manbo-robot-dog](https://github.com/RussellCooper-DJZ/manbo-robot-dog) 基础上的**整体优化版**：修了一批真实 bug，固件全面非阻塞化，新增看门狗、电池检测和舵机校准，并从零设计了一块可直接下单的**扩展底板 V2**。逐条改动见 [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)。
+本仓库是在原项目基础上的**整体优化版**：修了一批真实 bug，固件全面非阻塞化，新增看门狗、电池检测和舵机校准，并从零设计了一块可直接下单的**扩展底板 V2**。逐条改动见 [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)。
 
 ## 两种版本
 
@@ -17,7 +19,7 @@
 | 固件 | `make LITE=1` | `make V2=1`（或原版飞线 `make`） |
 | 大概成本（不含电池、下载器） | 约 40–65 元 | 明显更高（多了语音合成、蓝牙、屏幕、传感器和锂电供电） |
 
-![扩展底板 V2](hardware/kicad/pcb-preview.svg)
+<p align="center"><img src="hardware/lite/kicad/pcb-preview.svg" width="520" alt="精简版底板"><br><sub>精简版底板（70 × 54 mm，12 个元件）。完整版底板见 <a href="hardware/README.md">hardware/</a></sub></p>
 
 ## 这一版改了什么
 
@@ -119,4 +121,4 @@ python3 hardware/gen/build.py --check # 重新生成底板并跑 ERC/DRC，确�
 
 ## 许可证与致谢
 
-MIT 许可证，见 [LICENSE](LICENSE)。原始项目作者 RussellCooper-DJZ；本版优化保留原作者版权声明。
+MIT 许可证，见 [LICENSE](LICENSE)。原始项目作者 RussellCooper-DJZ；本版由 [@1708018656-ship-it](https://github.com/1708018656-ship-it) 维护和优化，保留原作者版权声明。
