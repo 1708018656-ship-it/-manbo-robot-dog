@@ -47,10 +47,6 @@ uint8_t t1=0 ; //存储红外的信号 前
 uint8_t t2=0 ; //存储红外的信号 后
 uint8_t t3=0 ; //存储红外的信号 左
 uint8_t t4=0 ; //存储红外的信号 右
-uint16_t ff=0; //连续前进计数
-uint16_t bb=0; //连续后退计数
-uint16_t ll=0; //连续左转计数
-uint16_t rr=0; //连续右转计数
 static uint8_t continuous_cmd = 0U; /* gait that repeats until a new command */
 static uint16_t gait_repeat = 0U;   /* same gait back-to-back counter */
 
