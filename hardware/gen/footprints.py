@@ -72,6 +72,11 @@ def get(name):
                 Pad("2", "smd", "roundrect", 2.1375, 0, 1.325, 3.4)]
         return Footprint(name, pads, (-3.1, -2.0, 3.1, 2.0), smd=True)
 
+    if fp == "Fuse_2920_7451Metric":
+        pads = [Pad("1", "smd", "roundrect", -3.4, 0, 1.85, 5.35),
+                Pad("2", "smd", "roundrect", 3.4, 0, 1.85, 5.35)]
+        return Footprint(name, pads, (-4.6, -3.0, 4.6, 3.0), smd=True)
+
     if fp.startswith("CP_Radial_D"):
         d = float(fp.split("_D")[1].split("mm")[0])
         p = float(fp.split("_P")[1].split("mm")[0])

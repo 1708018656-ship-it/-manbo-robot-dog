@@ -34,3 +34,12 @@ jobs:
             build/manbo.hex
             build/manbo.bin
             build/manbo.map
+
+  hardware:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install generator deps
+        run: python3 -m pip install --quiet numpy scipy
+      - name: Regenerate board, ERC + DRC, fail if committed files are stale
+        run: python3 hardware/gen/build.py --check

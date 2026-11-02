@@ -16,7 +16,7 @@
 <text x="156.8" y="147.2" font-size="5.2" text-anchor="end" fill="#555">GND</text>
 <rect x="170.2" y="201.3" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
 <text x="190.5" y="197.3" font-size="7.2" text-anchor="middle" font-weight="bold">F1</text>
-<text x="190.5" y="252.3" font-size="6.0" text-anchor="middle" fill="#555">PTC 4A</text>
+<text x="190.5" y="252.3" font-size="6.0" text-anchor="middle" fill="#555">PTC 3A 16V</text>
 <line x1="160.0" y1="216.5" x2="170.2" y2="216.5" stroke="#7d6608" stroke-width="1.5"/>
 <text x="173.4" y="218.3" font-size="4.8" text-anchor="start">1</text>
 <text x="156.8" y="218.3" font-size="5.2" text-anchor="end" fill="#b7950b">VBAT_IN</text>

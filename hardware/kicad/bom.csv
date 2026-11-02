@@ -5,7 +5,7 @@ Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
 1,C4,220uF 10V,CP_Radial_D6.3mm_P2.50mm,220uF 10V 6.3x7,
 1,C7,10uF,C_0805_2012Metric,0805 10uF,
 1,D1,PWR,LED_0805_2012Metric,0805 LED green,Power LED
-1,F1,PTC 4A,Fuse_1812_4532Metric,SMD1812P400TF,"Resettable fuse, 4 A hold (servo stall protection)"
+1,F1,PTC 3A 16V,Fuse_2920_7451Metric,SMD2920P300TF/24,"Resettable fuse, 3 A hold, >=16 V (servo stall protection)"
 4,H1 H2 H3 H4,M3,MountingHole_3.2mm_M3,,M3 mounting hole
 1,J1,BAT 2S 7.4V,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,XH2.54 2P,2S Li-ion/LiPo input (6.4-8.4 V)
 1,J2,SERVO1,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 1 (brown=GND, red=V+, orange=SIG)"

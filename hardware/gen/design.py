@@ -66,8 +66,11 @@ P = PARTS.append
 P(Part("J1", "BAT 2S 7.4V", "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
        [("1", "BAT+"), ("2", "BAT-")], {"1": "VBAT_IN", "2": "GND"},
        "2S Li-ion/LiPo input (6.4-8.4 V)", "XH2.54 2P", group="power"))
-P(two_pin("F1", "PTC 4A", "Fuse:Fuse_1812_4532Metric", "VBAT_IN", "VBAT_F",
-          "Resettable fuse, 4 A hold (servo stall protection)", "SMD1812P400TF", "power"))
+# Worst case: 4x SG90 stall 2.8 A @ 5 V + logic 0.3 A -> ~2.4 A from a 7.4 V pack.
+# 1812-size PTCs top out around 2.6-3 A and are often rated only 6-8 V (< 8.4 V
+# full 2S), so use a 2920 part rated >= 16 V.
+P(two_pin("F1", "PTC 3A 16V", "Fuse:Fuse_2920_7451Metric", "VBAT_IN", "VBAT_F",
+          "Resettable fuse, 3 A hold, >=16 V (servo stall protection)", "SMD2920P300TF/24", "power"))
 # Q2: reverse-polarity protection. P-MOSFET with Drain on the battery side:
 #     body diode conducts first, then Vgs = -VBAT turns the channel on.
 #     Battery reversed -> body diode blocks and Vgs > 0 keeps it off.
