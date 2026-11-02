@@ -1,5 +1,7 @@
 # Hardware Interface Specification
 
+> ⚠️ **早期资料，与当前代码不一致**：本文描述的是早期的扩展设想（如 8/12 个舵机或 STM32F407），当前固件是 STM32F103C8T6 + 4 个舵机。以 [README](../README.md)、[docs/protocol.md](protocol.md) 和源码为准。
+
 ## Overview
 
 This document describes the hardware interfaces used in the Manbo Robot Dog project.

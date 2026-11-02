@@ -1,5 +1,7 @@
 # manbo-robot-dog 潜在 Bug 与性能优化审查报告
 
+> ✅ **已处理**：本报告列出的问题已在后续提交中修复，现状见 [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)。
+
 **审查提交：** `6170864`
 **审查范围：** STM32 主控代码、ESP32/ASRPro 子项目、串口通信、超声波避障、动作控制和构建配置。
 **审查方式：** 静态代码审查、调用关系核对、缓冲区与中断共享变量检查。当前沙箱没有 PlatformIO、Keil 或 ARM GCC 工具链，因此未执行目标板编译和硬件测试。
