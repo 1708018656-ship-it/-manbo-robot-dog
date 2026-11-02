@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "manbo")(type "KiCad")(uri "${KIPRJMOD}/manbo.kicad_sym")(options "")(descr "Manbo generated symbols"))
+)

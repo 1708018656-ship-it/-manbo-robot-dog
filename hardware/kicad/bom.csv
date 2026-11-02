@@ -1,0 +1,37 @@
+Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
+1,C1,1000uF 10V,CP_Radial_D10.0mm_P5.00mm,1000uF 10V 10x13,
+3,C2 C5 C6,100nF,C_0805_2012Metric,0805 100nF,
+1,C3,100uF 16V,CP_Radial_D6.3mm_P2.50mm,100uF 16V 6.3x7,
+1,C4,220uF 10V,CP_Radial_D6.3mm_P2.50mm,220uF 10V 6.3x7,
+1,C7,10uF,C_0805_2012Metric,0805 10uF,
+1,D1,PWR,LED_0805_2012Metric,0805 LED green,Power LED
+1,F1,PTC 4A,Fuse_1812_4532Metric,SMD1812P400TF,"Resettable fuse, 4 A hold (servo stall protection)"
+4,H1 H2 H3 H4,M3,MountingHole_3.2mm_M3,,M3 mounting hole
+1,J1,BAT 2S 7.4V,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,XH2.54 2P,2S Li-ion/LiPo input (6.4-8.4 V)
+1,J2,SERVO1,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 1 (brown=GND, red=V+, orange=SIG)"
+1,J3,SERVO2,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 2 (brown=GND, red=V+, orange=SIG)"
+1,J4,SERVO3,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 3 (brown=GND, red=V+, orange=SIG)"
+1,J5,SERVO4,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"SG90 servo 4 (brown=GND, red=V+, orange=SIG)"
+1,J6,HC-05/06,PinHeader_1x06_P2.54mm_Vertical,2.54mm header 6P,Bluetooth module socket (HC-05 6-pin; HC-06 4-pin plugs into pins 2-5)
+1,J7,SYN6288,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,SYN6288 speech synthesis module
+1,J8,ASR PRO,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,ASR PRO voice recognition module
+1,J9,OLED I2C,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,0.96in SSD1306 I2C OLED (plugs in directly)
+1,J10,HC-SR04,PinHeader_1x04_P2.54mm_Vertical,2.54mm header 4P,Ultrasonic sensor (plugs in directly)
+1,J11,IR FRONT,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"IR cliff sensor front (FC-51 style, VCC GND OUT)"
+1,J12,IR BACK,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"IR cliff sensor back (FC-51 style, VCC GND OUT)"
+1,J13,IR LEFT,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"IR cliff sensor left (FC-51 style, VCC GND OUT)"
+1,J14,IR RIGHT,PinHeader_1x03_P2.54mm_Vertical,2.54mm header 3P,"IR cliff sensor right (FC-51 style, VCC GND OUT)"
+1,J15,POWER SW,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,XH2.54 2P,"External ON/OFF switch (signal level, any small switch)"
+1,Q1,AO4407A,SOIC-8_3.9x4.9mm_P1.27mm,AO4407A,"P-MOSFET -30V -12A, power switch"
+1,Q2,AO4407A,SOIC-8_3.9x4.9mm_P1.27mm,AO4407A,"P-MOSFET -30V -12A, reverse-polarity protection"
+4,R1 R2 R3 R4,220R,R_0805_2012Metric,0805 220R,
+1,R6,2k,R_0805_2012Metric,0805 2k,
+1,R7,100k 1%,R_0805_2012Metric,0805 100k 1%,
+1,R8,33k 1%,R_0805_2012Metric,0805 33k 1%,
+1,R9,100k,R_0805_2012Metric,0805 100k,
+2,R5 R10,1k,R_0805_2012Metric,0805 1k,
+1,R11,2.2k,R_0805_2012Metric,0805 2.2k,
+1,R12,10k,R_0805_2012Metric,0805 10k,
+1,U1,BUCK 5V,BuckModule_2x2_P2.54mm_17.78mm,MP1584 / Mini560 module,"DC-DC buck module, servo rail, >=3 A (e.g. Mini560 5V / MP1584)"
+1,U2,BUCK 5V,BuckModule_2x2_P2.54mm_17.78mm,MP1584 / Mini560 module,"DC-DC buck module, logic rail, >=1 A (e.g. MP1584 / Mini360 set to 5.0 V)"
+1,U3,BluePill STM32F103C8T6,BluePill_Socket_2x20_W15.24mm,Blue Pill STM32F103C8T6,Blue Pill on 2x 1x20 female headers
