@@ -19,6 +19,8 @@ sys.path.insert(0, HERE)
 import design  # noqa: E402
 import kicad_sch  # noqa: E402
 import preview  # noqa: E402
+import layout  # noqa: E402
+import kicad_pcb  # noqa: E402
 
 OUT = os.path.normpath(os.path.join(HERE, "..", "kicad"))
 PROJECT = "manbo-carrier"
@@ -156,6 +158,35 @@ def pinmap_md():
     return "\n".join(lines) + "\n"
 
 
+def kicad_pro():
+    import json
+
+    def cls(name, width, clearance=0.2):
+        return {"name": name, "clearance": clearance, "track_width": width,
+                "via_diameter": 0.8, "via_drill": 0.4, "microvia_diameter": 0.3,
+                "microvia_drill": 0.1, "diff_pair_width": 0.2, "diff_pair_gap": 0.25,
+                "diff_pair_via_gap": 0.25, "wire_width": 6, "bus_width": 12,
+                "line_style": 0, "pcb_color": "rgba(0, 0, 0, 0.000)",
+                "schematic_color": "rgba(0, 0, 0, 0.000)"}
+    pro = {
+        "meta": {"filename": PROJECT + ".kicad_pro", "version": 1},
+        "board": {"design_settings": {"rules": {"min_clearance": 0.2, "min_track_width": 0.2,
+                                                  "min_via_diameter": 0.6, "min_through_hole_diameter": 0.3,
+                                                  "min_copper_edge_clearance": 0.5}}},
+        "net_settings": {
+            "classes": [cls("Default", design.DEFAULT_WIDTH),
+                        cls("Battery", 1.5, 0.3), cls("Servo", 1.5, 0.3),
+                        cls("Logic5V", 0.6), cls("GND", 1.0)],
+            "meta": {"version": 3},
+            "netclass_patterns": [{"netclass": "Battery", "pattern": "VBAT*"},
+                                  {"netclass": "Servo", "pattern": "+5V_SERVO"},
+                                  {"netclass": "Logic5V", "pattern": "+5V"},
+                                  {"netclass": "GND", "pattern": "GND"}]},
+        "sheets": [["%s" % kicad_sch.uid("root", PROJECT), "Root"]],
+    }
+    return json.dumps(pro, indent=2) + "\n"
+
+
 def outputs():
     sch, symlib, placed, titles = kicad_sch.build(design.PARTS, "Manbo robot dog carrier board V2", PROJECT, REV, DATE)
     files = {
@@ -165,8 +196,21 @@ def outputs():
         "bom.csv": bom_csv(),
         "pinmap.md": pinmap_md(),
         "schematic-preview.svg": preview.schematic_svg(placed, titles),
+        PROJECT + ".kicad_pro": kicad_pro(),
+        "fp-lib-table": '(fp_lib_table\n  (version 7)\n)\n',
     }
+    pcb_placed, missing = kicad_pcb.place_all(design.PARTS, layout.PLACEMENT)
+    PLACEMENT_ERRORS[:] = ["not placed: " + m for m in missing]
+    PLACEMENT_ERRORS.extend(kicad_pcb.check_placement(pcb_placed, layout.BOARD_W, layout.BOARD_H))
+    tracks, vias = [], []
+    files[PROJECT + ".kicad_pcb"] = kicad_pcb.write(design.PARTS, pcb_placed, layout.BOARD_W, layout.BOARD_H,
+                                                    tracks, vias, "Manbo robot dog carrier board V2", REV, DATE, PROJECT)
+    rn = [(a, b, c, d) for a, b, c, d, n in kicad_pcb.ratsnest(pcb_placed)]
+    files["pcb-preview.svg"] = kicad_pcb.preview_svg(pcb_placed, layout.BOARD_W, layout.BOARD_H, tracks, vias, rn)
     return files
+
+
+PLACEMENT_ERRORS = []
 
 
 def main():
@@ -174,11 +218,13 @@ def main():
     errors, warnings = erc()
     files = outputs()
     errors += check_schematic(files[PROJECT + ".kicad_sch"])
+    errors += ["placement: " + e for e in PLACEMENT_ERRORS]
+    errors += ["pcb: parentheses unbalanced"] if not sexpr_balanced(files[PROJECT + ".kicad_pcb"]) else []
     for w in warnings:
         print("ERC warning:", w)
     for e in errors:
         print("ERC ERROR:", e)
-    if errors:
+    if errors and "--force" not in sys.argv:
         return 1
     os.makedirs(OUT, exist_ok=True)
     stale = []
