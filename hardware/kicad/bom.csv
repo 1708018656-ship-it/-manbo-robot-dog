@@ -3,8 +3,6 @@ Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
 3,C2 C5 C6,100nF,C_0805_2012Metric,0805 100nF,
 1,C3,100uF 16V,CP_Radial_D6.3mm_P2.50mm,100uF 16V 6.3x7,
 1,C4,220uF 10V,CP_Radial_D6.3mm_P2.50mm,220uF 10V 6.3x7,
-1,C7,10uF,C_0805_2012Metric,0805 10uF,
-1,D1,PWR,LED_0805_2012Metric,0805 LED green,Power LED
 1,F1,PTC 3A 16V,Fuse_2920_7451Metric,SMD2920P300TF/24,"Resettable fuse, 3 A hold, >=16 V (servo stall protection)"
 4,H1 H2 H3 H4,M3,MountingHole_3.2mm_M3,,M3 mounting hole
 1,J1,BAT 2S 7.4V,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,XH2.54 2P,2S Li-ion/LiPo input (6.4-8.4 V)
@@ -24,13 +22,11 @@ Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
 1,J15,POWER SW,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,XH2.54 2P,"External ON/OFF switch (signal level, any small switch)"
 1,Q1,AO4407A,SOIC-8_3.9x4.9mm_P1.27mm,AO4407A,"P-MOSFET -30V -12A, power switch"
 1,Q2,AO4407A,SOIC-8_3.9x4.9mm_P1.27mm,AO4407A,"P-MOSFET -30V -12A, reverse-polarity protection"
-4,R1 R2 R3 R4,220R,R_0805_2012Metric,0805 220R,
 1,R6,2k,R_0805_2012Metric,0805 2k,
 1,R7,100k 1%,R_0805_2012Metric,0805 100k 1%,
 1,R8,33k 1%,R_0805_2012Metric,0805 33k 1%,
 1,R9,100k,R_0805_2012Metric,0805 100k,
 2,R5 R10,1k,R_0805_2012Metric,0805 1k,
-1,R11,2.2k,R_0805_2012Metric,0805 2.2k,
 1,R12,10k,R_0805_2012Metric,0805 10k,
 1,U1,BUCK 5V,BuckModule_2x2_P2.54mm_17.78mm,MP1584 / Mini560 module,"DC-DC buck module, servo rail, >=3 A (e.g. Mini560 5V / MP1584)"
 1,U2,BUCK 5V,BuckModule_2x2_P2.54mm_17.78mm,MP1584 / Mini560 module,"DC-DC buck module, logic rail, >=1 A (e.g. MP1584 / Mini360 set to 5.0 V)"

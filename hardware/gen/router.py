@@ -123,14 +123,22 @@ class Router:
     def _blocked(self, net):
         """bool[2,H,W]: True where the centre of a track of this net may not go."""
         me = self.nid(net)
-        r = self.width(net) / 2 + self.clear(net)
-        rc = int(math.ceil(r / G))
-        yy, xx = np.mgrid[-rc:rc + 1, -rc:rc + 1]
-        disk = (xx * G) ** 2 + (yy * G) ** 2 <= (r + G * 0.5) ** 2
+        power_ids = [self.net_ids[n] for n in self.power_nets if n in self.net_ids]
+
+        def disk_for(clear):
+            r = self.width(net) / 2 + clear
+            rc = int(math.ceil(r / G))
+            yy, xx = np.mgrid[-rc:rc + 1, -rc:rc + 1]
+            return (xx * G) ** 2 + (yy * G) ** 2 <= (r + G * 0.5) ** 2
+        # clearance between two nets = the larger of their classes
+        d_sig = disk_for(self.clear(net))
+        d_pow = disk_for(max(self.clear(net), self.power_clearance))
         blocked = np.zeros_like(self.occ, dtype=bool)
         for L in (0, 1):
             other = (self.occ[L] != 0) & (self.occ[L] != me)
-            blocked[L] = ndimage.binary_dilation(other, structure=disk)
+            is_pow = np.isin(self.occ[L], power_ids) & other
+            blocked[L] = ndimage.binary_dilation(other & ~is_pow, structure=d_sig) | \
+                ndimage.binary_dilation(is_pow, structure=d_pow)
             # board edge: half track width
             ew = int(math.ceil((EDGE + self.width(net) / 2) / G))
             blocked[L, :ew, :] = True
@@ -138,7 +146,7 @@ class Router:
             blocked[L, :, :ew] = True
             blocked[L, :, -ew:] = True
         # via landing needs both layers clear of radius VIA_R + clearance
-        rv = VIA_R + self.clear(net)
+        rv = VIA_R + max(self.clear(net), self.power_clearance)
         rcv = int(math.ceil(rv / G))
         yy, xx = np.mgrid[-rcv:rcv + 1, -rcv:rcv + 1]
         vdisk = (xx * G) ** 2 + (yy * G) ** 2 <= (rv + G * 0.5) ** 2

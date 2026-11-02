@@ -30,10 +30,10 @@ Generated from `hardware/gen/design.py`. Firmware: build with `MANBO_BOARD_V2` (
 | 24 | NRST | - |  |
 | 25 | PB11 | ASR_TXD | J8.4 |
 | 26 | PB10 | ASR_RXD | J8.3 |
-| 27 | PB1 | SERVO4_PWM | R4.1 |
-| 28 | PB0 | SERVO3_PWM | R3.1 |
-| 29 | PA7 | SERVO2_PWM | R2.1 |
-| 30 | PA6 | SERVO1_PWM | R1.1 |
+| 27 | PB1 | SERVO4_PWM | J5.3 |
+| 28 | PB0 | SERVO3_PWM | J4.3 |
+| 29 | PA7 | SERVO2_PWM | J3.3 |
+| 30 | PA6 | SERVO1_PWM | J2.3 |
 | 31 | PA5 | - |  |
 | 32 | PA4 | VBAT_SENSE | R7.2, R8.1, C5.1 |
 | 33 | PA3 | SYN_TXD | J7.4 |

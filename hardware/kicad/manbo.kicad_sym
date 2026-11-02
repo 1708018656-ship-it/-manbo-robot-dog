@@ -105,30 +105,16 @@
         (pin passive line (at -7.62 -3.81 0) (length 2.54) (name "OUT-" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "PWR_8" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "D" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "PWR_8" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "PWR_8_0_1"
-        (rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
-      )
-      (symbol "PWR_8_1_1"
-        (pin passive line (at -7.62 1.27 0) (length 2.54) (name "K" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -7.62 -1.27 0) (length 2.54) (name "A" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-      )
-    )
-    (symbol "BluePill_STM32F103C8T6_9" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "BluePill_STM32F103C8T6_8" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 27.94 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "BluePill_STM32F103C8T6_9" (at 0 -27.94 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "BluePill_STM32F103C8T6_8" (at 0 -27.94 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "BluePill_STM32F103C8T6_9_0_1"
+      (symbol "BluePill_STM32F103C8T6_8_0_1"
         (rectangle (start -10.16 26.67) (end 10.16 -26.67) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "BluePill_STM32F103C8T6_9_1_1"
+      (symbol "BluePill_STM32F103C8T6_8_1_1"
         (pin passive line (at -12.7 24.13 0) (length 2.54) (name "PB12" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -12.7 21.59 0) (length 2.54) (name "PB13" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -12.7 19.05 0) (length 2.54) (name "PB14" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -171,31 +157,31 @@
         (pin passive line (at 12.7 -24.13 180) (length 2.54) (name "VBAT" (effects (font (size 1.27 1.27)))) (number "40" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "SERVO1_10" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "SERVO1_9" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "SERVO1_10" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "SERVO1_9" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "SERVO1_10_0_1"
+      (symbol "SERVO1_9_0_1"
         (rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "SERVO1_10_1_1"
+      (symbol "SERVO1_9_1_1"
         (pin passive line (at -7.62 2.54 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 0 0) (length 2.54) (name "V+" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -2.54 0) (length 2.54) (name "SIG" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "HC_05_06_11" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "HC_05_06_10" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "HC_05_06_11" (at 0 -10.16 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "HC_05_06_10" (at 0 -10.16 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "HC_05_06_11_0_1"
+      (symbol "HC_05_06_10_0_1"
         (rectangle (start -5.08 8.89) (end 5.08 -8.89) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "HC_05_06_11_1_1"
+      (symbol "HC_05_06_10_1_1"
         (pin passive line (at -7.62 6.35 0) (length 2.54) (name "EN" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 3.81 0) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 1.27 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -204,64 +190,64 @@
         (pin passive line (at -7.62 -6.35 0) (length 2.54) (name "STATE" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "SYN6288_12" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "SYN6288_11" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "SYN6288_12" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "SYN6288_11" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "SYN6288_12_0_1"
+      (symbol "SYN6288_11_0_1"
         (rectangle (start -5.08 6.35) (end 5.08 -6.35) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "SYN6288_12_1_1"
+      (symbol "SYN6288_11_1_1"
         (pin passive line (at -7.62 3.81 0) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 1.27 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -1.27 0) (length 2.54) (name "RXD" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -3.81 0) (length 2.54) (name "TXD" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "OLED_I2C_13" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "OLED_I2C_12" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "OLED_I2C_13" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "OLED_I2C_12" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "OLED_I2C_13_0_1"
+      (symbol "OLED_I2C_12_0_1"
         (rectangle (start -5.08 6.35) (end 5.08 -6.35) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "OLED_I2C_13_1_1"
+      (symbol "OLED_I2C_12_1_1"
         (pin passive line (at -7.62 3.81 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 1.27 0) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -1.27 0) (length 2.54) (name "SCL" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -3.81 0) (length 2.54) (name "SDA" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "HC_SR04_14" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "HC_SR04_13" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "HC_SR04_14" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "HC_SR04_13" (at 0 -7.62 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "HC_SR04_14_0_1"
+      (symbol "HC_SR04_13_0_1"
         (rectangle (start -5.08 6.35) (end 5.08 -6.35) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "HC_SR04_14_1_1"
+      (symbol "HC_SR04_13_1_1"
         (pin passive line (at -7.62 3.81 0) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 1.27 0) (length 2.54) (name "TRIG" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -1.27 0) (length 2.54) (name "ECHO" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -3.81 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
-    (symbol "IR_FRONT_15" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
+    (symbol "IR_FRONT_14" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "IR_FRONT_15" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "IR_FRONT_14" (at 0 -6.35 0) (effects (font (size 1.27 1.27))))
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Datasheet" "~" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (property "Description" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-      (symbol "IR_FRONT_15_0_1"
+      (symbol "IR_FRONT_14_0_1"
         (rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "IR_FRONT_15_1_1"
+      (symbol "IR_FRONT_14_1_1"
         (pin passive line (at -7.62 2.54 0) (length 2.54) (name "VCC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 0 0) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -7.62 -2.54 0) (length 2.54) (name "OUT" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))

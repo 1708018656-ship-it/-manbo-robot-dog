@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1498" height="1643" viewBox="0 0 1498 1643" font-family="monospace">
+<svg xmlns="http://www.w3.org/2000/svg" width="1498" height="1480" viewBox="0 0 1498 1480" font-family="monospace">
 <rect width="100%" height="100%" fill="#fffdf6"/>
 <text x="130.5" y="72.0" font-size="10.4" font-weight="bold" fill="#1a5276">POWER (2S -&gt; Q2 reverse prot. -&gt; Q1 switch -&gt; 2x buck)</text>
 <text x="587.7" y="72.0" font-size="10.4" font-weight="bold" fill="#1a5276">MCU: Blue Pill (MANBO_BOARD_V2)</text>
@@ -188,24 +188,6 @@
 <line x1="160.0" y1="1405.2" x2="170.2" y2="1405.2" stroke="#7d6608" stroke-width="1.5"/>
 <text x="173.4" y="1407.0" font-size="4.8" text-anchor="start">2</text>
 <text x="156.8" y="1407.0" font-size="5.2" text-anchor="end" fill="#555">GND</text>
-<rect x="170.2" y="1461.1" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="190.5" y="1457.1" font-size="7.2" text-anchor="middle" font-weight="bold">R11</text>
-<text x="190.5" y="1512.2" font-size="6.0" text-anchor="middle" fill="#555">2.2k</text>
-<line x1="160.0" y1="1476.4" x2="170.2" y2="1476.4" stroke="#7d6608" stroke-width="1.5"/>
-<text x="173.4" y="1478.2" font-size="4.8" text-anchor="start">1</text>
-<text x="156.8" y="1478.2" font-size="5.2" text-anchor="end" fill="#c0392b">+5V</text>
-<line x1="160.0" y1="1486.5" x2="170.2" y2="1486.5" stroke="#7d6608" stroke-width="1.5"/>
-<text x="173.4" y="1488.3" font-size="4.8" text-anchor="start">2</text>
-<text x="156.8" y="1488.3" font-size="5.2" text-anchor="end" fill="#1e8449">LED_PWR</text>
-<rect x="170.2" y="1542.4" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="190.5" y="1538.4" font-size="7.2" text-anchor="middle" font-weight="bold">D1</text>
-<text x="190.5" y="1593.4" font-size="6.0" text-anchor="middle" fill="#555">PWR</text>
-<line x1="160.0" y1="1557.6" x2="170.2" y2="1557.6" stroke="#7d6608" stroke-width="1.5"/>
-<text x="173.4" y="1559.4" font-size="4.8" text-anchor="start">K</text>
-<text x="156.8" y="1559.4" font-size="5.2" text-anchor="end" fill="#555">GND</text>
-<line x1="160.0" y1="1567.8" x2="170.2" y2="1567.8" stroke="#7d6608" stroke-width="1.5"/>
-<text x="173.4" y="1569.6" font-size="4.8" text-anchor="start">A</text>
-<text x="156.8" y="1569.6" font-size="5.2" text-anchor="end" fill="#1e8449">LED_PWR</text>
 <rect x="607.0" y="120.0" width="81.3" height="213.4" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
 <text x="647.7" y="116.0" font-size="7.2" text-anchor="middle" font-weight="bold">U3</text>
 <text x="647.7" y="343.8" font-size="6.0" text-anchor="middle" fill="#555">BluePill STM32F103C8T6</text>
@@ -329,27 +311,21 @@
 <line x1="698.5" y1="323.2" x2="688.3" y2="323.2" stroke="#7d6608" stroke-width="1.5"/>
 <text x="685.1" y="325.0" font-size="4.8" text-anchor="end">VBAT</text>
 <text x="698.5" y="325.0" font-size="5.2" text-anchor="middle" fill="#999">x</text>
-<rect x="627.4" y="374.0" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="647.7" y="370.0" font-size="7.2" text-anchor="middle" font-weight="bold">C7</text>
-<text x="647.7" y="425.0" font-size="6.0" text-anchor="middle" fill="#555">10uF</text>
-<line x1="617.2" y1="389.2" x2="627.4" y2="389.2" stroke="#7d6608" stroke-width="1.5"/>
-<text x="630.6" y="391.0" font-size="4.8" text-anchor="start">1</text>
-<text x="614.0" y="391.0" font-size="5.2" text-anchor="end" fill="#8e44ad">+3V3</text>
-<line x1="617.2" y1="399.4" x2="627.4" y2="399.4" stroke="#7d6608" stroke-width="1.5"/>
-<text x="630.6" y="401.2" font-size="4.8" text-anchor="start">2</text>
-<text x="614.0" y="401.2" font-size="5.2" text-anchor="end" fill="#555">GND</text>
 <rect x="983.0" y="120.0" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="116.0" font-size="7.2" text-anchor="middle" font-weight="bold">R1</text>
-<text x="1003.3" y="171.0" font-size="6.0" text-anchor="middle" fill="#555">220R</text>
-<line x1="972.8" y1="135.2" x2="983.0" y2="135.2" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="137.0" font-size="4.8" text-anchor="start">1</text>
-<text x="969.6" y="137.0" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO1_PWM</text>
-<line x1="972.8" y1="145.4" x2="983.0" y2="145.4" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="147.2" font-size="4.8" text-anchor="start">2</text>
-<text x="969.6" y="147.2" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO1</text>
+<text x="1003.3" y="116.0" font-size="7.2" text-anchor="middle" font-weight="bold">J2</text>
+<text x="1003.3" y="171.0" font-size="6.0" text-anchor="middle" fill="#555">SERVO1</text>
+<line x1="972.8" y1="130.2" x2="983.0" y2="130.2" stroke="#7d6608" stroke-width="1.5"/>
+<text x="986.2" y="132.0" font-size="4.8" text-anchor="start">GND</text>
+<text x="969.6" y="132.0" font-size="5.2" text-anchor="end" fill="#555">GND</text>
+<line x1="972.8" y1="140.3" x2="983.0" y2="140.3" stroke="#7d6608" stroke-width="1.5"/>
+<text x="986.2" y="142.1" font-size="4.8" text-anchor="start">V+</text>
+<text x="969.6" y="142.1" font-size="5.2" text-anchor="end" fill="#d35400">+5V_SERVO</text>
+<line x1="972.8" y1="150.5" x2="983.0" y2="150.5" stroke="#7d6608" stroke-width="1.5"/>
+<text x="986.2" y="152.3" font-size="4.8" text-anchor="start">SIG</text>
+<text x="969.6" y="152.3" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO1_PWM</text>
 <rect x="983.0" y="201.3" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="197.3" font-size="7.2" text-anchor="middle" font-weight="bold">J2</text>
-<text x="1003.3" y="252.3" font-size="6.0" text-anchor="middle" fill="#555">SERVO1</text>
+<text x="1003.3" y="197.3" font-size="7.2" text-anchor="middle" font-weight="bold">J3</text>
+<text x="1003.3" y="252.3" font-size="6.0" text-anchor="middle" fill="#555">SERVO2</text>
 <line x1="972.8" y1="211.4" x2="983.0" y2="211.4" stroke="#7d6608" stroke-width="1.5"/>
 <text x="986.2" y="213.2" font-size="4.8" text-anchor="start">GND</text>
 <text x="969.6" y="213.2" font-size="5.2" text-anchor="end" fill="#555">GND</text>
@@ -358,19 +334,22 @@
 <text x="969.6" y="223.4" font-size="5.2" text-anchor="end" fill="#d35400">+5V_SERVO</text>
 <line x1="972.8" y1="231.8" x2="983.0" y2="231.8" stroke="#7d6608" stroke-width="1.5"/>
 <text x="986.2" y="233.6" font-size="4.8" text-anchor="start">SIG</text>
-<text x="969.6" y="233.6" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO1</text>
+<text x="969.6" y="233.6" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO2_PWM</text>
 <rect x="983.0" y="282.6" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="278.6" font-size="7.2" text-anchor="middle" font-weight="bold">R2</text>
-<text x="1003.3" y="333.6" font-size="6.0" text-anchor="middle" fill="#555">220R</text>
-<line x1="972.8" y1="297.8" x2="983.0" y2="297.8" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="299.6" font-size="4.8" text-anchor="start">1</text>
-<text x="969.6" y="299.6" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO2_PWM</text>
-<line x1="972.8" y1="308.0" x2="983.0" y2="308.0" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="309.8" font-size="4.8" text-anchor="start">2</text>
-<text x="969.6" y="309.8" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO2</text>
+<text x="1003.3" y="278.6" font-size="7.2" text-anchor="middle" font-weight="bold">J4</text>
+<text x="1003.3" y="333.6" font-size="6.0" text-anchor="middle" fill="#555">SERVO3</text>
+<line x1="972.8" y1="292.7" x2="983.0" y2="292.7" stroke="#7d6608" stroke-width="1.5"/>
+<text x="986.2" y="294.5" font-size="4.8" text-anchor="start">GND</text>
+<text x="969.6" y="294.5" font-size="5.2" text-anchor="end" fill="#555">GND</text>
+<line x1="972.8" y1="302.9" x2="983.0" y2="302.9" stroke="#7d6608" stroke-width="1.5"/>
+<text x="986.2" y="304.7" font-size="4.8" text-anchor="start">V+</text>
+<text x="969.6" y="304.7" font-size="5.2" text-anchor="end" fill="#d35400">+5V_SERVO</text>
+<line x1="972.8" y1="313.0" x2="983.0" y2="313.0" stroke="#7d6608" stroke-width="1.5"/>
+<text x="986.2" y="314.8" font-size="4.8" text-anchor="start">SIG</text>
+<text x="969.6" y="314.8" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO3_PWM</text>
 <rect x="983.0" y="363.8" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="359.8" font-size="7.2" text-anchor="middle" font-weight="bold">J3</text>
-<text x="1003.3" y="414.9" font-size="6.0" text-anchor="middle" fill="#555">SERVO2</text>
+<text x="1003.3" y="359.8" font-size="7.2" text-anchor="middle" font-weight="bold">J5</text>
+<text x="1003.3" y="414.9" font-size="6.0" text-anchor="middle" fill="#555">SERVO4</text>
 <line x1="972.8" y1="374.0" x2="983.0" y2="374.0" stroke="#7d6608" stroke-width="1.5"/>
 <text x="986.2" y="375.8" font-size="4.8" text-anchor="start">GND</text>
 <text x="969.6" y="375.8" font-size="5.2" text-anchor="end" fill="#555">GND</text>
@@ -379,49 +358,7 @@
 <text x="969.6" y="386.0" font-size="5.2" text-anchor="end" fill="#d35400">+5V_SERVO</text>
 <line x1="972.8" y1="394.3" x2="983.0" y2="394.3" stroke="#7d6608" stroke-width="1.5"/>
 <text x="986.2" y="396.1" font-size="4.8" text-anchor="start">SIG</text>
-<text x="969.6" y="396.1" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO2</text>
-<rect x="983.0" y="445.1" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="441.1" font-size="7.2" text-anchor="middle" font-weight="bold">R3</text>
-<text x="1003.3" y="496.2" font-size="6.0" text-anchor="middle" fill="#555">220R</text>
-<line x1="972.8" y1="460.4" x2="983.0" y2="460.4" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="462.2" font-size="4.8" text-anchor="start">1</text>
-<text x="969.6" y="462.2" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO3_PWM</text>
-<line x1="972.8" y1="470.5" x2="983.0" y2="470.5" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="472.3" font-size="4.8" text-anchor="start">2</text>
-<text x="969.6" y="472.3" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO3</text>
-<rect x="983.0" y="526.4" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="522.4" font-size="7.2" text-anchor="middle" font-weight="bold">J4</text>
-<text x="1003.3" y="577.4" font-size="6.0" text-anchor="middle" fill="#555">SERVO3</text>
-<line x1="972.8" y1="536.6" x2="983.0" y2="536.6" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="538.4" font-size="4.8" text-anchor="start">GND</text>
-<text x="969.6" y="538.4" font-size="5.2" text-anchor="end" fill="#555">GND</text>
-<line x1="972.8" y1="546.7" x2="983.0" y2="546.7" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="548.5" font-size="4.8" text-anchor="start">V+</text>
-<text x="969.6" y="548.5" font-size="5.2" text-anchor="end" fill="#d35400">+5V_SERVO</text>
-<line x1="972.8" y1="556.9" x2="983.0" y2="556.9" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="558.7" font-size="4.8" text-anchor="start">SIG</text>
-<text x="969.6" y="558.7" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO3</text>
-<rect x="983.0" y="607.7" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="603.7" font-size="7.2" text-anchor="middle" font-weight="bold">R4</text>
-<text x="1003.3" y="658.7" font-size="6.0" text-anchor="middle" fill="#555">220R</text>
-<line x1="972.8" y1="622.9" x2="983.0" y2="622.9" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="624.7" font-size="4.8" text-anchor="start">1</text>
-<text x="969.6" y="624.7" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO4_PWM</text>
-<line x1="972.8" y1="633.1" x2="983.0" y2="633.1" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="634.9" font-size="4.8" text-anchor="start">2</text>
-<text x="969.6" y="634.9" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO4</text>
-<rect x="983.0" y="689.0" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
-<text x="1003.3" y="685.0" font-size="7.2" text-anchor="middle" font-weight="bold">J5</text>
-<text x="1003.3" y="740.0" font-size="6.0" text-anchor="middle" fill="#555">SERVO4</text>
-<line x1="972.8" y1="699.1" x2="983.0" y2="699.1" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="700.9" font-size="4.8" text-anchor="start">GND</text>
-<text x="969.6" y="700.9" font-size="5.2" text-anchor="end" fill="#555">GND</text>
-<line x1="972.8" y1="709.3" x2="983.0" y2="709.3" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="711.1" font-size="4.8" text-anchor="start">V+</text>
-<text x="969.6" y="711.1" font-size="5.2" text-anchor="end" fill="#d35400">+5V_SERVO</text>
-<line x1="972.8" y1="719.4" x2="983.0" y2="719.4" stroke="#7d6608" stroke-width="1.5"/>
-<text x="986.2" y="721.2" font-size="4.8" text-anchor="start">SIG</text>
-<text x="969.6" y="721.2" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO4</text>
+<text x="969.6" y="396.1" font-size="5.2" text-anchor="end" fill="#1e8449">SERVO4_PWM</text>
 <rect x="1287.8" y="120.0" width="40.6" height="71.1" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
 <text x="1308.1" y="116.0" font-size="7.2" text-anchor="middle" font-weight="bold">J6</text>
 <text x="1308.1" y="201.5" font-size="6.0" text-anchor="middle" fill="#555">HC-05/06</text>

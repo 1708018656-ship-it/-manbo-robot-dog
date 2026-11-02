@@ -114,10 +114,6 @@ P(two_pin("C2", "100nF", C0805, "+5V_SERVO", "GND", "Servo rail HF decoupling", 
 P(two_pin("C4", "220uF 10V", "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm", "+5V", "GND",
           "Logic rail bulk", "220uF 10V 6.3x7", "power"))
 P(two_pin("C6", "100nF", C0805, "+5V", "GND", "Logic rail HF decoupling", "0805 100nF", "power"))
-P(two_pin("R11", "2.2k", R0805, "+5V", "LED_PWR", "Power LED resistor", "0805 2.2k", "power"))
-P(Part("D1", "PWR", "LED_SMD:LED_0805_2012Metric", [("1", "K"), ("2", "A")],
-       {"1": "GND", "2": "LED_PWR"}, "Power LED", "0805 LED green", group="power"))
-
 # ------------------------------------------------------------------ MCU ----
 BP_NETS = {
     "PB12": "IR_FRONT", "PB13": "IR_BACK", "PB14": "IR_LEFT", "PB15": "IR_RIGHT",
@@ -140,14 +136,13 @@ for i, name in enumerate(BLUEPILL_LEFT + BLUEPILL_RIGHT):
 P(Part("U3", "BluePill STM32F103C8T6", "manbo:BluePill_Socket_2x20_W15.24mm",
        bp_pins, bp_nets, "Blue Pill on 2x 1x20 female headers", "Blue Pill STM32F103C8T6",
        group="mcu"))
-P(two_pin("C7", "10uF", C0805, "+3V3", "GND", "3V3 rail extra decoupling near OLED/IR", "0805 10uF", "mcu"))
 
 # ---------------------------------------------------------------- servos ---
+# Signals go straight to the headers (no series resistors: an SG90 signal
+# wire shorting to V+ is rare, and the parts only added solder joints).
 for n in range(1, 5):
-    P(two_pin("R%d" % n, "220R", R0805, "SERVO%d_PWM" % n, "SERVO%d" % n,
-              "Servo signal series resistor (ESD / short protection)", "0805 220R", "servo"))
     P(header("J%d" % (n + 1), "SERVO%d" % n, ["GND", "V+", "SIG"],
-             ["GND", "+5V_SERVO", "SERVO%d" % n],
+             ["GND", "+5V_SERVO", "SERVO%d_PWM" % n],
              "SG90 servo %d (brown=GND, red=V+, orange=SIG)" % n, group="servo"))
 
 # --------------------------------------------------------------- modules ---
