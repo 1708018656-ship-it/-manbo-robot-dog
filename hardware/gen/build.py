@@ -24,6 +24,7 @@ import layout  # noqa: E402
 import kicad_pcb  # noqa: E402
 import router  # noqa: E402
 import drc  # noqa: E402
+import gerber  # noqa: E402
 
 OUT = os.path.normpath(os.path.join(HERE, "..", "kicad"))
 PROJECT = "manbo-carrier"
@@ -221,6 +222,11 @@ def outputs():
     files[PROJECT + ".kicad_pcb"] = kicad_pcb.write(design.PARTS, pcb_placed, layout.BOARD_W, layout.BOARD_H,
                                                     tracks, vias, "Manbo robot dog carrier board V2", REV, DATE, PROJECT)
     files["pcb-preview.svg"] = kicad_pcb.preview_svg(pcb_placed, layout.BOARD_W, layout.BOARD_H, tracks, vias, [])
+    fab = gerber.build(pcb_placed, tracks, vias, layout.BOARD_W, layout.BOARD_H,
+                       kicad_pcb.VIA_SIZE, kicad_pcb.VIA_DRILL, PROJECT, REV)
+    for name, content in fab.items():
+        files["../fab/" + name] = content
+    FAB[:] = list(fab.items())
     drc_errs, unconnected = DRC_RESULT[0]
     total_len = sum(math.hypot(t[0] - t[2], t[1] - t[3]) for t in tracks)
     files["drc-report.txt"] = "\n".join([
@@ -240,6 +246,7 @@ def outputs():
     return files
 
 
+FAB = []
 PLACEMENT_ERRORS = []
 LAST = {}
 
@@ -281,6 +288,7 @@ def main():
     if errors and "--force" not in sys.argv:
         return 1
     os.makedirs(OUT, exist_ok=True)
+    os.makedirs(os.path.join(OUT, "..", "fab"), exist_ok=True)
     stale = []
     for name, content in files.items():
         path = os.path.join(OUT, name)
@@ -290,6 +298,14 @@ def main():
             if not check:
                 with open(path, "w", encoding="utf-8", newline="\n") as f:
                     f.write(content)
+    if not check:
+        import zipfile
+        zpath = os.path.join(OUT, "..", "fab", PROJECT + "-gerbers.zip")
+        with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
+            for name, content in FAB:
+                info = zipfile.ZipInfo(name, date_time=(2026, 11, 2, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                z.writestr(info, content)
     nets = design.nets()
     print("parts: %d, nets: %d, connections: %d" % (len(design.PARTS), len(nets), sum(len(v) for v in nets.values())))
     if check and stale:
