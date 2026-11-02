@@ -23,7 +23,8 @@
 |---|---|
 | `fab/manbo-carrier-gerbers.zip` | **直接上传到嘉立创/JLCPCB 等下单** |
 | `kicad/manbo-carrier.kicad_pro` | KiCad 8 工程（原理图 + PCB，可继续修改） |
-| `kicad/bom.csv` | 物料清单（含立创/淘宝搜索关键词） |
+| `kicad/bom.csv` | 板上元件清单（位号、封装，自动生成） |
+| `采购清单.md` | **整机采购清单**（含舵机、模块、电池等） |
 | `kicad/pinmap.md` | Blue Pill 每个引脚接到哪里 |
 | `kicad/schematic-preview.svg` | 原理图预览（手机也能看） |
 | `kicad/drc-report.txt` | 布线和 DRC 结果 |

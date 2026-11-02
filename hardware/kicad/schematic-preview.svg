@@ -88,7 +88,7 @@
 <text x="156.8" y="579.0" font-size="5.2" text-anchor="end" fill="#b7950b">VBAT</text>
 <rect x="170.2" y="628.0" width="40.6" height="40.6" fill="#fef9e7" stroke="#7d6608" stroke-width="2"/>
 <text x="190.5" y="624.0" font-size="7.2" text-anchor="middle" font-weight="bold">R9</text>
-<text x="190.5" y="679.0" font-size="6.0" text-anchor="middle" fill="#555">100k</text>
+<text x="190.5" y="679.0" font-size="6.0" text-anchor="middle" fill="#555">100k 1%</text>
 <line x1="160.0" y1="643.2" x2="170.2" y2="643.2" stroke="#7d6608" stroke-width="1.5"/>
 <text x="173.4" y="645.0" font-size="4.8" text-anchor="start">1</text>
 <text x="156.8" y="645.0" font-size="5.2" text-anchor="end" fill="#b7950b">VBAT_RP</text>

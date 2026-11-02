@@ -93,6 +93,7 @@ python3 hardware/gen/build.py --check # 重新生成底板并跑 ERC/DRC，确�
 |---|---|
 | [docs/protocol.md](docs/protocol.md) | 串口命令协议（STM32 与语音模块共用的唯一权威表） |
 | [hardware/README.md](hardware/README.md) | 扩展底板：下单、焊接、上电检查 |
+| [hardware/采购清单.md](hardware/采购清单.md) | 整机采购清单（板子、模块、舵机、电池） |
 | [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md) | 本次优化的全部改动与原因 |
 | [docs/non_blocking_state_machine.md](docs/non_blocking_state_machine.md) | 非阻塞状态机设计 |
 | [ASRPro_Code/README.md](ASRPro_Code/README.md) | 语音识别子项目 |

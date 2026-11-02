@@ -138,7 +138,7 @@
   )
   (footprint "Resistor_SMD:R_0805_2012Metric" (layer "F.Cu") (uuid "8cd34f67-0841-518a-8fc2-ce168b358458") (at 27 74 0)
     (property "Reference" "R9" (at 0 -1.9 0) (layer "F.SilkS") (uuid "21b45ec0-5e26-5f16-8048-4a901871a576") (effects (font (size 1 1) (thickness 0.15))))
-    (property "Value" "100k" (at 0 1.9 0) (layer "F.Fab") (uuid "8f510fc8-7b2d-5b8d-8895-190d56a85163") (effects (font (size 1 1) (thickness 0.15))))
+    (property "Value" "100k 1%" (at 0 1.9 0) (layer "F.Fab") (uuid "8f510fc8-7b2d-5b8d-8895-190d56a85163") (effects (font (size 1 1) (thickness 0.15))))
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 0 0 0) (layer "F.Fab") (hide yes) (uuid "8ea00f8e-6dc7-58b9-a268-daaf36594958") (effects (font (size 1 1) (thickness 0.15))))
     (property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) (uuid "ac04aaaf-49e1-5555-b06b-d4d7b4042e23") (effects (font (size 1 1) (thickness 0.15))))
     (property "Description" "Gate pull-up: off when switch open" (at 0 0 0) (layer "F.Fab") (hide yes) (uuid "240b7e0b-2904-5255-ae3d-6d8346cf1851") (effects (font (size 1 1) (thickness 0.15))))

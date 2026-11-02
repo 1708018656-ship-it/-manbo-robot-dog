@@ -23,9 +23,8 @@ Qty,References,Value,Footprint,Search keyword (LCSC/Taobao),Notes
 1,Q1,AO4407A,SOIC-8_3.9x4.9mm_P1.27mm,AO4407A,"P-MOSFET -30V -12A, power switch"
 1,Q2,AO4407A,SOIC-8_3.9x4.9mm_P1.27mm,AO4407A,"P-MOSFET -30V -12A, reverse-polarity protection"
 1,R6,2k,R_0805_2012Metric,0805 2k,
-1,R7,100k 1%,R_0805_2012Metric,0805 100k 1%,
 1,R8,33k 1%,R_0805_2012Metric,0805 33k 1%,
-1,R9,100k,R_0805_2012Metric,0805 100k,
+2,R7 R9,100k 1%,R_0805_2012Metric,0805 100k 1%,
 2,R5 R10,1k,R_0805_2012Metric,0805 1k,
 1,R12,10k,R_0805_2012Metric,0805 10k,
 1,U1,BUCK 5V,BuckModule_2x2_P2.54mm_17.78mm,MP1584 / Mini560 module,"DC-DC buck module, servo rail, >=3 A (e.g. Mini560 5V / MP1584)"

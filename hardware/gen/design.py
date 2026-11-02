@@ -91,7 +91,7 @@ P(Part("Q1", "AO4407A", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
        {"1": "VBAT_RP", "2": "VBAT_RP", "3": "VBAT_RP", "4": "Q1_GATE",
         "5": "VBAT", "6": "VBAT", "7": "VBAT", "8": "VBAT"},
        "P-MOSFET -30V -12A, power switch", "AO4407A", group="power"))
-P(two_pin("R9", "100k", R0805, "VBAT_RP", "Q1_GATE", "Gate pull-up: off when switch open", "0805 100k", "power"))
+P(two_pin("R9", "100k 1%", R0805, "VBAT_RP", "Q1_GATE", "Gate pull-up: off when switch open", "0805 100k 1%", "power"))
 P(two_pin("R10", "1k", R0805, "Q1_GATE", "SW_GATE", "Gate series resistor", "0805 1k", "power"))
 P(header("J15", "POWER SW", ["SW", "GND"], ["SW_GATE", "GND"],
          "External ON/OFF switch (signal level, any small switch)",
