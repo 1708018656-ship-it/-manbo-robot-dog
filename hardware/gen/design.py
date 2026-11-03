@@ -181,7 +181,7 @@ POWER_NETS = {"GND", "VBAT_IN", "VBAT_F", "VBAT_RP", "VBAT", "+5V_SERVO", "+5V",
 # Track widths (mm) used by the PCB generator
 NET_WIDTH = {"GND": 1.0, "VBAT_IN": 1.5, "VBAT_F": 1.5, "VBAT_RP": 1.5, "VBAT": 1.5,
              "+5V_SERVO": 1.5, "+5V": 0.6, "+3V3": 0.4}
-DEFAULT_WIDTH = 0.25
+DEFAULT_WIDTH = 0.254   # 10 mil: the usual JLC default rule
 
 
 def nets():

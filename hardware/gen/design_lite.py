@@ -69,7 +69,7 @@ for i in range(1, 5):
 
 POWER_NETS = {"GND", "VBAT_IN", "VSERVO", "VLOGIC", "+3V3"}
 NET_WIDTH = {"GND": 1.0, "VBAT_IN": 1.5, "VSERVO": 1.5, "VLOGIC": 0.6, "+3V3": 0.4}
-DEFAULT_WIDTH = 0.25
+DEFAULT_WIDTH = 0.254   # 10 mil: the usual JLC default rule
 NETCLASS_PATTERNS = [{"netclass": "Battery", "pattern": "VBAT*"},
                      {"netclass": "Servo", "pattern": "VSERVO"},
                      {"netclass": "Logic5V", "pattern": "VLOGIC"},

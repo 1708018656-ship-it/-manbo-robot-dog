@@ -19,7 +19,7 @@ from scipy import ndimage
 
 G = 0.25            # grid pitch, mm
 EDGE = 0.6          # copper to board edge
-VIA_R = 0.4         # via pad radius (0.8 mm)
+VIA_R = 0.5         # via pad radius (1.0 mm pad, 0.5 mm hole - see kicad_pcb.VIA_SIZE)
 VIA_COST = 12.0
 LAYER_CHANGE_ONLY_VIA = True
 TURN_COST = 0.4

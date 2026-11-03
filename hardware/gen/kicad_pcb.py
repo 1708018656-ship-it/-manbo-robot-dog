@@ -9,7 +9,9 @@ import footprints
 from kicad_sch import uid, q, fmt
 
 CLEARANCE = 0.2
-VIA_SIZE, VIA_DRILL = 0.8, 0.4
+# 0.5 mm hole / 1.0 mm pad: passes the default rules of JLCEDA (min hole 0.5 mm)
+# and KiCad; JLC can make smaller, but defaults should not need changing.
+VIA_SIZE, VIA_DRILL = 1.0, 0.5
 
 
 def rot_pt(x, y, deg):
@@ -155,7 +157,7 @@ def footprint_sexpr(pl, nets, project_root):
     if p.ref.startswith("J") and len(p.pins) <= 6:
         names = dict(p.pins)
         for pad in fp.pads:
-            o.append('    (fp_text user %s (at %s %s %s) (layer "F.SilkS") (uuid %s) (effects (font (size 0.7 0.7) (thickness 0.12))))'
+            o.append('    (fp_text user %s (at %s %s %s) (layer "F.SilkS") (uuid %s) (effects (font (size 0.8 0.8) (thickness 0.15))))'
                      % (q(names.get(pad.num, "")), fmt(pad.x + 2.3), fmt(pad.y), fmt(pl.rot), q(uid("pn", p.ref, pad.num))))
     for pad in fp.pads:
         net = p.net_of(pad.num)

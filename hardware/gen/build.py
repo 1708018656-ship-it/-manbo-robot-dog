@@ -176,7 +176,7 @@ def kicad_pro():
 
     def cls(name, width, clearance=0.2):
         return {"name": name, "clearance": clearance, "track_width": width,
-                "via_diameter": 0.8, "via_drill": 0.4, "microvia_diameter": 0.3,
+                "via_diameter": kicad_pcb.VIA_SIZE, "via_drill": kicad_pcb.VIA_DRILL, "microvia_diameter": 0.3,
                 "microvia_drill": 0.1, "diff_pair_width": 0.2, "diff_pair_gap": 0.25,
                 "diff_pair_via_gap": 0.25, "wire_width": 6, "bus_width": 12,
                 "line_style": 0, "pcb_color": "rgba(0, 0, 0, 0.000)",
@@ -184,7 +184,7 @@ def kicad_pro():
     pro = {
         "meta": {"filename": PROJECT + ".kicad_pro", "version": 1},
         "board": {"design_settings": {"rules": {"min_clearance": 0.2, "min_track_width": 0.2,
-                                                  "min_via_diameter": 0.6, "min_through_hole_diameter": 0.3,
+                                                  "min_via_diameter": 0.6, "min_through_hole_diameter": 0.5,
                                                   "min_copper_edge_clearance": 0.5}}},
         "net_settings": {
             "classes": [cls("Default", design.DEFAULT_WIDTH),
@@ -228,7 +228,7 @@ def outputs():
     LAST["tracks"], LAST["vias"] = tracks, vias
     ROUTE_FAILED[:] = failed
     clr = lambda n: 0.3 if n in design.POWER_NETS else kicad_pcb.CLEARANCE  # noqa: E731
-    DRC_RESULT[:] = [drc.run(pcb_placed, tracks, vias, layout.BOARD_W, layout.BOARD_H, clr)]
+    DRC_RESULT[:] = [drc.run(pcb_placed, tracks, vias, layout.BOARD_W, layout.BOARD_H, clr, kicad_pcb.VIA_SIZE / 2)]
     files[PROJECT + ".kicad_pcb"] = kicad_pcb.write(design.PARTS, pcb_placed, layout.BOARD_W, layout.BOARD_H,
                                                     tracks, vias, TITLE, REV, DATE, PROJECT, getattr(layout, "BRAND", None))
     files["pcb-preview.svg"] = kicad_pcb.preview_svg(pcb_placed, layout.BOARD_W, layout.BOARD_H, tracks, vias, [])

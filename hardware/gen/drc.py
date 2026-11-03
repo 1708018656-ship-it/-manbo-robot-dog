@@ -117,7 +117,7 @@ def _bbox(o):
     return x - w / 2, y - h / 2, x + w / 2, y + h / 2
 
 
-def run(placed, tracks, vias, board_w, board_h, clearance_of, via_r=0.4, edge=0.5):
+def run(placed, tracks, vias, board_w, board_h, clearance_of, via_r, edge=0.5):
     objs = _objects(placed, tracks, vias, via_r)
     errors = []
     boxes = [_bbox(o) for o in objs]
